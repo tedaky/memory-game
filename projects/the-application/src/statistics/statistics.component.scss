@@ -1,0 +1,25 @@
+:host {
+  & > mat-card {
+    &:last-of-type {
+      padding: 0;
+    }
+  }
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+
+  @media screen and (min-width: 732px) {
+    flex-wrap: nowrap;
+  }
+
+  mat-card {
+    width: 100%;
+
+    @media screen and (min-width: 732px) {
+      width: 50%;
+    }
+  }
+}

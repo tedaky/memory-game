@@ -1,0 +1,21 @@
+.wrapper {
+  margin: auto;
+  width: 100%;
+  max-width: 992px;
+}
+
+mat-card {
+  &:not(.mat-elevation-z0) {
+    margin-bottom: 10px;
+  }
+
+  mat-card {
+    &:last-of-type {
+      padding: 0;
+    }
+  }
+}
+
+img {
+  width: 100%;
+}
