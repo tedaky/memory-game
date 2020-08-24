@@ -32,8 +32,6 @@ export class CheckForUpdateService {
       environment.production &&
       update.isEnabled
     ) {
-      this.activateUpdate(update, false)
-
       this.available(update, snackBar)
 
       this.activated(update)
@@ -61,7 +59,10 @@ export class CheckForUpdateService {
    */
   private activated(update: SwUpdate): void {
     update.activated.subscribe((event: UpdateActivatedEvent): void => {
-      console.log(event)
+      if (event) {
+        this.previous(event)
+        this.current(event)
+      }
     })
   }
 
@@ -76,7 +77,9 @@ export class CheckForUpdateService {
       .activateUpdate()
       .then<void, never>((): void => {
         if (reload) {
-          window.document.location.reload()
+          window.setTimeout((): void => {
+            window.document.location.reload()
+          }, 500)
         }
       })
       .catch<void>((e): void => {
@@ -90,14 +93,26 @@ export class CheckForUpdateService {
    * @param update `SwUpdate`
    */
   private checkForUpdate(update: SwUpdate): void {
-    update
-      .checkForUpdate()
-      .then(() => {
-        this.activateUpdate(update, false)
-      })
-      .catch((e): void => {
-        console.error(e)
-      })
+    update.checkForUpdate().catch((e): void => {
+      console.error(e)
+    })
+  }
+
+  /**
+   * Log Current.
+   *
+   * @param event `UpdateActivatedEvent`
+   */
+  private current(event: UpdateActivatedEvent): void {
+    if (event.current) {
+      console.log('CURRENT')
+      if (event.current.appData) {
+        console.log(event.current.appData)
+      }
+      if (event.current.hash) {
+        console.log(event.current.hash)
+      }
+    }
   }
 
   /**
@@ -108,11 +123,28 @@ export class CheckForUpdateService {
    */
   private notify(snackBar: MatSnackBar, update: SwUpdate): void {
     snackBar
-      .open('Update available', 'Reload')
+      .open('Update available. Please reload.', 'Reload')
       .onAction()
       .subscribe((): void => {
         this.activateUpdate(update, true)
       })
+  }
+
+  /**
+   * Log previous.
+   *
+   * @param event `UpdateActivatedEvent`
+   */
+  private previous(event: UpdateActivatedEvent): void {
+    if (event.previous) {
+      console.log('PREVIOUS')
+      if (event.previous.appData) {
+        console.log(event.previous.appData)
+      }
+      if (event.previous.hash) {
+        console.log(event.previous.hash)
+      }
+    }
   }
 
   /**

@@ -8,7 +8,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "postinstall": "ngcc"
+    "postinstall": "ngcc",
+    "server": "http-server -p 8080 -c-1 docs/"
   },
   "private": true,
   "dependencies": {
@@ -25,6 +26,7 @@
     "@angular/platform-server": "~10.0.9",
     "@angular/router": "~10.0.9",
     "@angular/service-worker": "~10.0.9",
+    "http-server": "^0.12.3",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"

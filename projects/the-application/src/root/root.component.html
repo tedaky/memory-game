@@ -44,7 +44,13 @@
                   "
                   (click)="flipCard($event, i)"
                   (touchend)="flipCard($event, i)"
-                  aria-label="blank"
+                  [attr.aria-label]="
+                    card.flipped === 0
+                      ? 'blank'
+                      : card.flipped === 1
+                      ? card.name
+                      : card.name
+                  "
                 />
               </mat-grid-tile>
             </ng-container>
