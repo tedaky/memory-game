@@ -25,7 +25,6 @@
     "@angular/platform-server": "~10.0.9",
     "@angular/router": "~10.0.9",
     "@angular/service-worker": "~10.0.9",
-    "dexie": "^3.0.2",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"

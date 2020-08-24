@@ -21,7 +21,7 @@ export class DatabaseService {
    */
   public ready: boolean
 
-  constructor(@Inject(PLATFORM_ID) protected platformId: string) {
+  constructor(@Inject(PLATFORM_ID) readonly platformId: string) {
     if (isPlatformBrowser(platformId)) {
       this.open()
         .then<void, never>((val: IDBDatabase): void => {

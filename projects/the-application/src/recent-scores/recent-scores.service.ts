@@ -24,10 +24,10 @@ export class RecentScoresService extends Score {
   protected storeName: string = 'recentScores'
 
   constructor(
-    protected database: DatabaseService,
-    @Inject(PLATFORM_ID) protected platformId: string
+    @Inject(PLATFORM_ID) readonly platformId: string,
+    database: DatabaseService
   ) {
-    super(database, platformId)
+    super(platformId, database)
   }
 
   /**

@@ -1,9 +1,10 @@
+import { isPlatformBrowser } from '@angular/common'
+import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core'
+
 import { createTime } from '../create-time/create-time'
 import { DatabaseService } from '../database/database.service'
 import { Statistic } from '../statistic/statistic'
 import { IStatistic } from '../statistic/statistic.d'
-import { EventEmitter, PLATFORM_ID, Inject } from '@angular/core'
-import { isPlatformBrowser } from '@angular/common'
 
 /**
  * Functionality for getting, adding, sorting, removing, and clearing
@@ -44,10 +45,11 @@ export class Score {
   }
 
   constructor(
-    protected database: DatabaseService,
-    @Inject(PLATFORM_ID) protected platformId: string
+    @Inject(PLATFORM_ID) readonly platformId: string,
+    protected database: DatabaseService
   ) {
     this.dataChange = new EventEmitter<string>()
+
     if (isPlatformBrowser(platformId)) {
       this.getScores()
     }

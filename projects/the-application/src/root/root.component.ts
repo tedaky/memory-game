@@ -8,6 +8,7 @@ import {
   ViewChild
 } from '@angular/core'
 
+import { BackgroundService } from '../background/background.service'
 import { CardsService } from '../cards/cards.service'
 import { Statistic } from '../statistic/statistic'
 import { StatisticsService } from '../statistics/statistics.service'
@@ -62,9 +63,10 @@ export class RootComponent implements OnInit {
   public stopwatch: StopwatchComponent
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: string,
+    @Inject(PLATFORM_ID) private readonly platformId: string,
     private statistics: StatisticsService,
-    public cards: CardsService
+    public cards: CardsService,
+    background: BackgroundService
   ) {}
 
   /**

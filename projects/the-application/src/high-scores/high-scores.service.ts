@@ -30,9 +30,9 @@ export class HighScoresService extends Score {
   protected sortOnConstruction: boolean = true
 
   constructor(
-    protected database: DatabaseService,
-    @Inject(PLATFORM_ID) protected platformId: string
+    @Inject(PLATFORM_ID) readonly platformId: string,
+    database: DatabaseService
   ) {
-    super(database, platformId)
+    super(platformId, database)
   }
 }
