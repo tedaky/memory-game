@@ -5,6 +5,10 @@ import { ICard } from './card.d'
  */
 export class Card implements ICard {
   /**
+   * Holder for `flipped`
+   */
+  private _flipped: 0 | 1 | 2
+  /**
    * Holder for `image`
    */
   private _image?: string
@@ -31,6 +35,16 @@ export class Card implements ICard {
   }
   public set name(val: string) {
     this._name = val
+  }
+
+  /**
+   * Flipped
+   */
+  public get flipped(): 0 | 1 | 2 {
+    return this._flipped || 0
+  }
+  public set flipped(val: 0 | 1 | 2) {
+    this._flipped = val
   }
 
   /**

@@ -29,29 +29,33 @@
       </mat-card>
       <mat-card class="mat-elevation-z2">
         <mat-card-content>
-          <div #grid>
-            <mat-grid-list cols="4" rowHeight="1:1" gutterSize="10px">
-              <ng-container *ngIf="cardsWon.length < 6">
-                <mat-grid-tile
-                  *ngFor="let card of cards.cardArray; let i = index"
-                >
-                  <img
-                    src="assets/blank.png"
-                    (click)="flipCard($event, i)"
-                    (touchend)="flipCard($event, i)"
-                    aria-label="blank"
-                  />
-                </mat-grid-tile>
-              </ng-container>
-              <ng-container *ngIf="cardsWon.length === 6">
-                <mat-grid-tile colspan="4" rowspan="3">
-                  <h3>
-                    Congratulations You've Won
-                  </h3>
-                </mat-grid-tile>
-              </ng-container>
-            </mat-grid-list>
-          </div>
+          <mat-grid-list cols="4" rowHeight="1:1" gutterSize="10px">
+            <ng-container *ngIf="cardsWon.length < 6">
+              <mat-grid-tile
+                *ngFor="let card of cards.cardArray; let i = index"
+              >
+                <img
+                  [attr.src]="
+                    card.flipped === 0
+                      ? 'assets/blank.png'
+                      : card.flipped === 1
+                      ? card.image
+                      : 'assets/white.png'
+                  "
+                  (click)="flipCard($event, i)"
+                  (touchend)="flipCard($event, i)"
+                  aria-label="blank"
+                />
+              </mat-grid-tile>
+            </ng-container>
+            <ng-container *ngIf="cardsWon.length === 6">
+              <mat-grid-tile colspan="4" rowspan="3">
+                <h3>
+                  Congratulations You've Won
+                </h3>
+              </mat-grid-tile>
+            </ng-container>
+          </mat-grid-list>
         </mat-card-content>
       </mat-card>
       <mat-card class="mat-elevation-z2">

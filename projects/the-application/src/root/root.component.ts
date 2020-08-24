@@ -1,7 +1,5 @@
-import { isPlatformBrowser } from '@angular/common'
 import {
   Component,
-  ElementRef,
   Inject,
   OnInit,
   PLATFORM_ID,
@@ -9,6 +7,7 @@ import {
 } from '@angular/core'
 
 import { BackgroundService } from '../background/background.service'
+import { Card } from '../card/card'
 import { CardsService } from '../cards/cards.service'
 import { Statistic } from '../statistic/statistic'
 import { StatisticsService } from '../statistics/statistics.service'
@@ -27,21 +26,21 @@ import { StopwatchComponent } from '../stopwatch/stopwatch.component'
  */
 export class RootComponent implements OnInit {
   /**
-   * Name of cards flipped.
-   */
-  private cardsChosen: string[]
-  /**
    * Id of cards flipped.
    */
   private cardsChosenId: number[]
+  /**
+   * Tell game that checking is in progress.
+   */
+  private checking: boolean
   /**
    * Tell if the game is in play.
    */
   private playing: boolean
   /**
-   * Tell game that checking is in progress.
+   * Keep track of cards that haven't been flipped.
    */
-  private checking: boolean
+  private unFlipped: number[]
 
   /**
    * Chosen card matches.
@@ -52,10 +51,6 @@ export class RootComponent implements OnInit {
    */
   public flips: number
 
-  /**
-   * Grid of images and end game message.
-   */
-  @ViewChild('grid', { static: true }) public grid: ElementRef<HTMLDivElement>
   /**
    * Stopwatch component.
    */
@@ -83,23 +78,25 @@ export class RootComponent implements OnInit {
     if (typeof self === 'undefined') {
       self = this
     }
-    let cards: NodeListOf<HTMLImageElement>
     let option0: number
     let option1: number
-
-    cards = self.grid.nativeElement.querySelectorAll('img')
+    let cardChosen0: Card
+    let cardChosen1: Card
 
     option0 = self.cardsChosenId[0]
     option1 = self.cardsChosenId[1]
 
-    if (self.cardsChosen[0] === self.cardsChosen[1]) {
-      cards[option0].src = 'assets/white.png'
-      cards[option1].src = 'assets/white.png'
+    cardChosen0 = self.cards.cardArray[option0]
+    cardChosen1 = self.cards.cardArray[option1]
 
-      self.cardsWon.push(self.cardsChosen)
+    if (cardChosen0.name === cardChosen1.name) {
+      cardChosen0.flipped = 2
+      cardChosen1.flipped = 2
+
+      self.cardsWon.push([cardChosen0.name, cardChosen1.name])
     } else {
-      cards[option0].src = 'assets/blank.png'
-      cards[option1].src = 'assets/blank.png'
+      cardChosen0.flipped = 0
+      cardChosen1.flipped = 0
     }
 
     if (self.cardsWon.length === 6) {
@@ -119,7 +116,6 @@ export class RootComponent implements OnInit {
       self.statistics.addStatistic(statistic)
     }
 
-    self.cardsChosen = []
     self.cardsChosenId = []
   }
 
@@ -132,33 +128,73 @@ export class RootComponent implements OnInit {
   public flipCard(event: Event, index: number): void {
     event.preventDefault()
 
-    let flipped: HTMLImageElement
-
-    flipped = event.target as HTMLImageElement
-
     if (!this.playing) {
       this.playing = true
       this.stopwatch.restart()
     }
 
-    if (flipped.src.match(/blank.png/) && !this.checking) {
-      this.flips++
-      this.cardsChosen.push(this.cards.cardArray[index].name)
-      this.cardsChosenId.push(index)
-      flipped.src = this.cards.cardArray[index].image
+    if (!this.cards.cardArray[index].flipped && !this.checking) {
+      let option0: number
+      let option1: number
 
-      if (this.cardsChosen.length === 2) {
+      this.flips++
+      this.cardsChosenId.push(index)
+
+      option0 = this.cardsChosenId[0]
+      option1 = this.cardsChosenId[1]
+
+      if (
+        this.cardsChosenId.length === 2 &&
+        this.cards.cardArray[option0].name ===
+          this.cards.cardArray[option1].name &&
+        this.unFlipped.includes(option1)
+      ) {
+        let swap0: Card
+        let swap1: Card
+        let found: number
+
+        swap0 = this.cards.cardArray[option1]
+
+        found = this.unFlipped.findIndex((item: number): boolean => {
+          return this.cards.cardArray[item].name !== swap0.name
+        })
+
+        if (found !== -1) {
+          swap1 = this.cards.cardArray[this.unFlipped[found]]
+          this.cards.cardArray[this.unFlipped[found]] = swap0
+          this.cards.cardArray[option1] = swap1
+        }
+      }
+
+      this.cards.cardArray[index].flipped = 1
+
+      this.updateFlipped(index)
+
+      if (this.cardsChosenId.length === 2) {
         let self: this
 
         this.checking = true
 
         self = this
 
-        window.setTimeout(() => {
+        window.setTimeout((): void => {
           self.checkForMatch(self)
           self.checking = false
         }, 500)
       }
+    }
+  }
+
+  private updateFlipped(index: number): void {
+    if (this.unFlipped.includes(index)) {
+      let unflipped: number
+
+      unflipped = this.unFlipped.indexOf(index)
+      this.unFlipped.splice(unflipped, 1)
+
+      this.unFlipped.sort((): number => {
+        return 0.5 - Math.random()
+      })
     }
   }
 
@@ -170,18 +206,15 @@ export class RootComponent implements OnInit {
   public reset(event: Event): void {
     event.preventDefault()
 
-    if (isPlatformBrowser(this.platformId)) {
-      let cards: NodeListOf<HTMLImageElement>
+    this.cards.cardArray.forEach((card: Card): void => {
+      card.flipped = 0
+    })
 
-      cards = this.grid.nativeElement.querySelectorAll('img')
-
-      cards.forEach((card: HTMLImageElement): void => {
-        card.src = 'assets/blank.png'
-      })
-    }
-
+    this.unFlipped = [...Array(this.cards.cardArray.length).keys()]
+    this.unFlipped.sort((): number => {
+      return 0.5 - Math.random()
+    })
     this.cardsChosenId = []
-    this.cardsChosen = []
     this.cardsWon = []
     this.flips = 0
 

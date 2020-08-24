@@ -67,17 +67,17 @@ export class CardsService {
    */
   private addCardPair(name: string, image: string): void
   private addCardPair(arg1: string | Card | ICard, arg2?: string): void {
-    let card: Card
+    let cardPair: Card[]
 
     if (typeof arg1 === 'string') {
-      card = new Card(arg1, arg2)
+      cardPair = [new Card(arg1, arg2), new Card(arg1, arg2)]
     } else if (arg1 instanceof Card) {
-      card = arg1
+      cardPair = [new Card(arg1), new Card(arg1)]
     } else {
-      card = new Card(arg1)
+      cardPair = [new Card(arg1), new Card(arg1)]
     }
 
-    this.cardArray.push(card, card)
+    this.cardArray.push(...cardPair)
   }
 
   /**
