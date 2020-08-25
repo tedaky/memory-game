@@ -1,5 +1,10 @@
 {
   "liveServer.settings.port": 5500,
   "liveServer.settings.ignoreFiles": ["**"],
-  "liveServer.settings.root": "/docs/"
+  "liveServer.settings.host": "localhost",
+  "liveServer.settings.proxy": {
+    "enable": true,
+    "baseUri": "/memory-game/",
+    "proxyUri": "http://localhost:8080"
+  }
 }

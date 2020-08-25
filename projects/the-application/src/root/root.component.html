@@ -37,10 +37,10 @@
                 <img
                   [attr.src]="
                     card.flipped === 0
-                      ? 'assets/blank.png'
+                      ? blank
                       : card.flipped === 1
                       ? card.image
-                      : 'assets/white.png'
+                      : white
                   "
                   (click)="flipCard($event, i)"
                   (touchend)="flipCard($event, i)"

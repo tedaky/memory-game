@@ -9,6 +9,7 @@ import {
 import { BackgroundService } from '../background/background.service'
 import { Card } from '../card/card'
 import { CardsService } from '../cards/cards.service'
+import { environment } from '../environments/environment'
 import { Statistic } from '../statistic/statistic'
 import { StatisticsService } from '../statistics/statistics.service'
 import { StopwatchComponent } from '../stopwatch/stopwatch.component'
@@ -43,9 +44,17 @@ export class RootComponent implements OnInit {
   private unFlipped: number[]
 
   /**
+   * Blank image card.
+   */
+  public blank: string = `${environment.location}assets/blank.png`
+  /**
    * Chosen card matches.
    */
   public cardsWon: string[][]
+  /**
+   * White image card.
+   */
+  public white: string = `${environment.location}assets/white.png`
   /**
    * Number of flips.
    */

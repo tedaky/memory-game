@@ -66,6 +66,38 @@
               ],
               "serviceWorker": true,
               "ngswConfigPath": "projects/the-application/ngsw-config.json"
+            },
+            "github": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/the-application/src/environments/environment.ts",
+                  "with": "projects/the-application/src/environments/environment.github.ts"
+                }
+              ],
+              "baseHref": "/memory-game/",
+              "deleteOutputPath": false,
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "projects/the-application/ngsw-config.json"
             }
           }
         },
@@ -148,6 +180,17 @@
               ],
               "sourceMap": false,
               "optimization": true
+            },
+            "github": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "projects/the-application/src/environments/environment.ts",
+                  "with": "projects/the-application/src/environments/environment.github.ts"
+                }
+              ],
+              "sourceMap": false,
+              "optimization": true
             }
           }
         },
@@ -162,6 +205,10 @@
             "production": {
               "browserTarget": "the-application:build:production",
               "serverTarget": "the-application:server:production"
+            },
+            "github": {
+              "browserTarget": "the-application:build:github",
+              "serverTarget": "the-application:server:github"
             }
           }
         }

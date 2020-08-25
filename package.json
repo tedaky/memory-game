@@ -9,7 +9,9 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "postinstall": "ngcc",
-    "server": "http-server -p 8080 -c-1 docs/"
+    "run:server": "http-server -p 8080 -c-1 docs/",
+    "build:shell": "ng run the-application:app-shell:production",
+    "build:shell:github": "ng run the-application:app-shell:github"
   },
   "private": true,
   "dependencies": {

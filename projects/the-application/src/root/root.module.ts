@@ -34,8 +34,9 @@ import { StopwatchComponent } from '../stopwatch/stopwatch.component'
     MaterialModule,
     RootRoutingModule,
     RouterModule,
-    ServiceWorkerModule.register('./ngsw-worker.js', {
-      enabled: environment.production
+    ServiceWorkerModule.register(`${environment.location}ngsw-worker.js`, {
+      enabled: environment.production,
+      scope: environment.location
     })
   ],
   bootstrap: [RootComponent]

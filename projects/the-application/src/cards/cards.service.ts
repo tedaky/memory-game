@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core'
 
 import { Card } from '../card/card'
 import { ICard } from '../card/card.d'
+import { environment } from '../environments/environment'
 
 /**
  * Create and make cards available.
@@ -38,12 +39,21 @@ export class CardsService {
    */
   private createCards(): void {
     if (!this.cardArray.length) {
-      this.addCardPair('cheeseburger', 'assets/cheeseburger.png')
-      this.addCardPair('fries', 'assets/fries.png')
-      this.addCardPair('hotdog', 'assets/hotdog.png')
-      this.addCardPair('ice-cream', 'assets/ice-cream.png')
-      this.addCardPair('milkshake', 'assets/milkshake.png')
-      this.addCardPair('pizza', 'assets/pizza.png')
+      this.addCardPair(
+        'cheeseburger',
+        `${environment.location}assets/cheeseburger.png`
+      )
+      this.addCardPair('fries', `${environment.location}assets/fries.png`)
+      this.addCardPair('hotdog', `${environment.location}assets/hotdog.png`)
+      this.addCardPair(
+        'ice-cream',
+        `${environment.location}assets/ice-cream.png`
+      )
+      this.addCardPair(
+        'milkshake',
+        `${environment.location}assets/milkshake.png`
+      )
+      this.addCardPair('pizza', `${environment.location}assets/pizza.png`)
     }
   }
 
