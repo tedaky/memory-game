@@ -44,17 +44,9 @@ export class RootComponent implements OnInit {
   private unFlipped: number[]
 
   /**
-   * Blank image card.
-   */
-  public blank: string = `${environment.location}assets/blank.png`
-  /**
    * Chosen card matches.
    */
   public cardsWon: string[][]
-  /**
-   * White image card.
-   */
-  public white: string = `${environment.location}assets/white.png`
   /**
    * Number of flips.
    */

@@ -20,6 +20,13 @@ export class CardsService {
   private _cardArray: Card[]
 
   /**
+   * Blank image card.
+   */
+  public get blank(): string {
+    return 'assets/blank.png'
+  }
+
+  /**
    * List of cards
    */
   public get cardArray(): Card[] {
@@ -28,6 +35,13 @@ export class CardsService {
     }
 
     return this._cardArray
+  }
+
+  /**
+   * White image card.
+   */
+  public get white(): string {
+    return 'assets/white.png'
   }
 
   constructor() {
@@ -39,21 +53,12 @@ export class CardsService {
    */
   private createCards(): void {
     if (!this.cardArray.length) {
-      this.addCardPair(
-        'cheeseburger',
-        `${environment.location}assets/cheeseburger.png`
-      )
-      this.addCardPair('fries', `${environment.location}assets/fries.png`)
-      this.addCardPair('hotdog', `${environment.location}assets/hotdog.png`)
-      this.addCardPair(
-        'ice-cream',
-        `${environment.location}assets/ice-cream.png`
-      )
-      this.addCardPair(
-        'milkshake',
-        `${environment.location}assets/milkshake.png`
-      )
-      this.addCardPair('pizza', `${environment.location}assets/pizza.png`)
+      this.addCardPair('cheeseburger', 'assets/cheeseburger.png')
+      this.addCardPair('fries', 'assets/fries.png')
+      this.addCardPair('hotdog', 'assets/hotdog.png')
+      this.addCardPair('ice-cream', 'assets/ice-cream.png')
+      this.addCardPair('milkshake', 'assets/milkshake.png')
+      this.addCardPair('pizza', 'assets/pizza.png')
     }
   }
 
