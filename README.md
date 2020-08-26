@@ -1,27 +1,79 @@
 # MemoryGame
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.6.
+This project is inspired by [Kubowania Memory Game](https://github.com/kubowania/memory-game) from this [YouTube video](https://www.youtube.com/watch?v=lhNdUVh3qCc) and deployed [here](https://tedaky.github.io/memory-game/).
 
-## Development server
+## Requirements
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+* [Node.js](https://nodejs.org/)
+* [Angular CLI](https://angular.io/guide/setup-local) Gobally
 
-## Code scaffolding
+## Recommended
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+* [Visual Studio Code](https://code.visualstudio.com/) IDE
+  * [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) VS Code Extension - For GitHub Pages build mock.
+* Internet browser - Not Internet Explorer.
 
-## Build
+## Getting Started
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+1. Clone/Fork Memory Game [Repository](https://github.com/tedaky/memory-game).
+1. Open repository in an IDE.
+1. Open a Terminal window to the repository root.
+1. Run `npm i` from the Terminal window to install Node Modules.
 
-## Running unit tests
+## Serving
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Using a Terminal window.
 
-## Running end-to-end tests
+### Locally - No Service Worker
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Use any of the following commands to serve the project using Angular serve tools.
 
-## Further help
+* `npm run ng run the-application:serve`
+* `ng run the-application:serve`
+* `ng serve`
+* `ng serve --project=the-application`
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Open the internet browser at [localhost](http://localhost:4200)
+
+### Locally - W/Out Service Worker
+
+Build `the-application` using any of the following *build* commands.
+
+#### Without Service Worker
+
+* `ng build`
+* `ng build --project=the-application`
+* `npm run ng run the-application:build`
+* `ng run the-application:build`
+* `npm run ng run the-application:app-shell`
+* `ng run the-application:app-shell`
+
+#### With Service Worker
+
+**Not GitHub Pages**
+
+* `ng build --prod`
+* `ng build --project=the-application --prod`
+* `npm run ng run the-application:app-shell:production`
+* `npm run ng run the-application:build:production`
+* `ng run the-application:app-shell:production`
+* `ng run the-application:build:production`
+* `npm run build:shell`
+
+**GitHub Pages**
+
+* `ng build --configuration=github`
+* `ng build --project=the-application --configuration=github`
+* `npm run ng run the-application:app-shell:github`
+* `npm run ng run the-application:build:github`
+* `ng run the-application:app-shell:github`
+* `ng run the-application:build:github`
+* `npm run build:shell:github`
+
+**After building the build can be served**
+
+* `npm run run:server`
+
+Open the internet browser at [localhost](http://localhost:8080).
+
+If built for GitHub Pages use the Live Server **Go Live** button after the command directly above. See the Live Server extension [Start/Stop](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer#shortcuts-to-startstop-server) section for more details.
