@@ -1,0 +1,58 @@
+<mat-card class="mat-elevation-z2">
+  <mat-card-title-group>
+    <mat-card-title>
+      Matches: {{ cardsWon.length }} /
+      {{ cards.cardArray.length / 2 }}
+    </mat-card-title>
+    <mat-card-title> Flips: {{ flips }} </mat-card-title>
+    <mat-card-title>
+      <app-stopwatch></app-stopwatch>
+    </mat-card-title>
+  </mat-card-title-group>
+  <mat-card-title-group>
+    <mat-card-subtitle>
+      <button
+        mat-flat-button
+        color="primary"
+        (click)="reset($event)"
+        type="button"
+      >
+        Reset
+      </button>
+    </mat-card-subtitle>
+  </mat-card-title-group>
+</mat-card>
+<mat-card class="mat-elevation-z2">
+  <mat-card-content>
+    <mat-grid-list cols="4" rowHeight="1:1" gutterSize="10px">
+      <ng-container *ngIf="cardsWon.length < 6">
+        <mat-grid-tile *ngFor="let card of cards.cardArray; let i = index">
+          <img
+            [attr.src]="
+              card.flipped === 0
+                ? cards.blank
+                : card.flipped === 1
+                ? card.image
+                : cards.white
+            "
+            (click)="flipCard($event, i)"
+            [attr.aria-label]="
+              card.flipped === 0
+                ? 'blank'
+                : card.flipped === 1
+                ? card.name
+                : card.name
+            "
+          />
+        </mat-grid-tile>
+      </ng-container>
+      <ng-container *ngIf="cardsWon.length === 6">
+        <mat-grid-tile colspan="4" rowspan="3">
+          <h3>
+            Congratulations You've Won
+          </h3>
+        </mat-grid-tile>
+      </ng-container>
+    </mat-grid-list>
+  </mat-card-content>
+</mat-card>

@@ -3,6 +3,7 @@ import { MatTableDataSource } from '@angular/material/table'
 import { Subscription } from 'rxjs'
 
 import { RecentScoresService } from './recent-scores.service'
+import { fadeAnimation } from '../fade-animation/fade-animation'
 import { ScoresTemplateComponent } from '../score/score-template'
 import { Statistic } from '../statistic/statistic'
 
@@ -12,7 +13,8 @@ import { Statistic } from '../statistic/statistic'
 @Component({
   selector: 'app-recent-scores',
   templateUrl: '../score/score-template.component.html',
-  styleUrls: ['../score/score-template.component.scss']
+  styleUrls: ['../score/score-template.component.scss'],
+  animations: [fadeAnimation]
 })
 /**
  * Display the recent scores
@@ -38,6 +40,8 @@ export class RecentScoresComponent
    * Columns
    */
   public displayColumns: string[] = ['column1', 'column2', 'column3']
+
+  public fade: boolean
 
   /**
    * Title to show.
@@ -82,6 +86,8 @@ export class RecentScoresComponent
   }
 
   public ngOnDestroy(): void {
+    this.fade = true
+
     if (this.sub && this.sub instanceof Subscription) {
       this.sub.unsubscribe()
     }

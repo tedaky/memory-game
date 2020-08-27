@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router'
 import { ServiceWorkerModule } from '@angular/service-worker'
 
 import { environment } from '../environments/environment'
+import { GameComponent } from '../game/game.component'
 import { HighScoresComponent } from '../high-scores/high-scores.component'
 import { MainMenuComponent } from '../main-menu/main-menu.component'
 import { MaterialModule } from '../material/material.module'
@@ -20,10 +21,11 @@ import { StopwatchComponent } from '../stopwatch/stopwatch.component'
  */
 @NgModule({
   declarations: [
-    RootComponent,
+    GameComponent,
     HighScoresComponent,
     MainMenuComponent,
     RecentScoresComponent,
+    RootComponent,
     StatisticsComponent,
     StopwatchComponent
   ],

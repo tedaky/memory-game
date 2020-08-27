@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core'
 
 import { Card } from '../card/card'
 import { ICard } from '../card/card.d'
-import { environment } from '../environments/environment'
 
 /**
  * Create and make cards available.

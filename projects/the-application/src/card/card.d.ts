@@ -5,7 +5,7 @@ export interface ICard {
   /**
    * Flipped
    */
-  flipped: 0 | 1 | 2
+  flipped?: 0 | 1 | 2
   /**
    * Image
    */

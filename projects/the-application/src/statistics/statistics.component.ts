@@ -19,7 +19,7 @@ export class StatisticsComponent {
   /**
    * Clear the scores.
    */
-  public clear(event: Event): void {
+  public clear(event: MouseEvent): void {
     event.preventDefault()
 
     this.statistics.clearStatistics()

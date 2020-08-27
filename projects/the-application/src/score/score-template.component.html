@@ -41,9 +41,18 @@
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayColumns"></tr>
   <tr
+    mat-header-row
+    *matHeaderRowDef="displayColumns"
+    [@fadeAnimation]="fade"
+  ></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: displayColumns"
+    [@fadeAnimation]="fade"
+  ></tr>
+  <tr
+    [@fadeAnimation]="fade"
     mat-footer-row
     *matFooterRowDef="displayColumns"
     [style.display]="scores.length === 0 ? 'table-row' : 'none'"

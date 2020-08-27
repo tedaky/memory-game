@@ -1,3 +1,33 @@
-<mat-icon aria-hidden="false" aria-label="Game">view_module</mat-icon>
-<mat-icon aria-hidden="false" aria-label="High Scores">view_headline</mat-icon>
-<mat-icon aria-hidden="false" aria-label="Recent Scores">timelapse</mat-icon>
+<a
+  mat-button
+  aria-label="Game"
+  disableRipple="true"
+  (click)="setTheme('theme-yellow', $event)"
+  [routerLink]="['game']"
+  routerLinkActive="router-link-active"
+>
+  <mat-icon aria-hidden="false">view_module</mat-icon>
+  <span>Game</span>
+</a>
+<a
+  mat-button
+  aria-label="High Scores"
+  disableRipple="true"
+  (click)="setTheme('theme-blue', $event)"
+  [routerLink]="['statistics']"
+  routerLinkActive="router-link-active"
+>
+  <mat-icon aria-hidden="false">view_headline</mat-icon>
+  <span>High Scores</span>
+</a>
+<a
+  mat-button
+  aria-label="Recent Scores"
+  disableRipple="true"
+  (click)="setTheme('theme-red', $event)"
+  [routerLink]="['statistics']"
+  routerLinkActive="router-link-active"
+>
+  <mat-icon aria-hidden="false">timelapse</mat-icon>
+  <span>Recent Scores</span>
+</a>
