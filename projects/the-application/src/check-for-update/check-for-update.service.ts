@@ -123,7 +123,9 @@ export class CheckForUpdateService {
    */
   private notify(snackBar: MatSnackBar, update: SwUpdate): void {
     snackBar
-      .open('Update available. Please reload.', 'Reload')
+      .open('Update available. Please reload.', 'Reload', {
+        panelClass: 'snack-bar-reposition'
+      })
       .onAction()
       .subscribe((): void => {
         this.activateUpdate(update, true)
