@@ -51,7 +51,7 @@
         </mat-grid-tile>
       </ng-container>
       <ng-container *ngIf="cardsWon.length === 6">
-        <mat-grid-tile colspan="4" rowspan="3">
+        <mat-grid-tile [colspan]="mediaMatcherQuery.matches ? 4 : 3" rowspan="3">
           <h3>
             Congratulations You've Won
           </h3>
