@@ -1,11 +1,14 @@
 :host {
-  width: 100%;
+  width: calc(100% - env(safe-area-inset-left) - env(safe-area-inset-right));
   height: 40px;
   display: flex;
   justify-content: space-around;
   align-items: center;
   position: relative;
   z-index: 2;
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 span {

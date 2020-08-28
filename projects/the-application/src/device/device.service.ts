@@ -25,6 +25,7 @@ export class DeviceService {
     if (isPlatformBrowser(platformId)) {
       this.emitResizeFirst()
       this.createResizeListener()
+      this.beforeunload()
     }
   }
 
@@ -62,5 +63,18 @@ export class DeviceService {
     emit = new DeviceSize(height, width)
 
     this.deviceScreen.next(emit)
+  }
+
+  /**
+   * Remove localstorage scroll when the app
+   * closes to prevent scrolling upon open.
+   */
+  private beforeunload(): void {
+    window.addEventListener(
+      'beforeunload',
+      (event: BeforeUnloadEvent): void => {
+        window.localStorage.removeItem('scroll')
+      }
+    )
   }
 }

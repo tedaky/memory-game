@@ -1,3 +1,14 @@
+mat-card {
+  &:first-of-type {
+    margin-bottom: 16px;
+  }
+}
+
+button {
+  float: right;
+  margin-top: -8px;
+}
+
 table {
   width: 100%;
 

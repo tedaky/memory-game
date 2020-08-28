@@ -72,7 +72,7 @@
     },
     {
       "description": "View the statistics.",
-      "name": "Memory Game Statistics",
+      "name": "Memory Game High Scores",
       "icons": [
         {
           "purpose": "maskable any",
@@ -81,7 +81,20 @@
           "type": "image/png"
         }
       ],
-      "url": "./statistics"
+      "url": "./high-scores"
+    },
+    {
+      "description": "View the statistics.",
+      "name": "Memory Game Recent Scores",
+      "icons": [
+        {
+          "purpose": "maskable any",
+          "sizes": "96x96",
+          "src": "assets/icons/icon-96x96.png",
+          "type": "image/png"
+        }
+      ],
+      "url": "./recent-scores"
     }
   ],
   "start_url": "./index.html",

@@ -31,10 +31,13 @@
 
 .content-wrapper {
   flex: 1;
-  width: 100%;
+  width: calc(100% - env(safe-area-inset-left) - env(safe-area-inset-right));
   position: relative;
   z-index: 1;
   overflow: auto;
+  padding-top: env(safe-area-inset-top);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }
 
 .wrapper {

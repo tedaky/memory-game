@@ -80,6 +80,15 @@ export class RecentScoresComponent
     this.dataSource = new MatTableDataSource<Statistic>(this.scores)
   }
 
+  /**
+   * Clear the scores.
+   */
+  public clear(event: MouseEvent): void {
+    event.preventDefault()
+
+    this.recentScores.clear()
+  }
+
   public ngOnInit(): void {
     this.initialiseDataChange()
     this.initialiseDataSource()
