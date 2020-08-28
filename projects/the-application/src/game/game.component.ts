@@ -1,22 +1,25 @@
+import { MediaMatcher } from '@angular/cdk/layout'
 import {
   Component,
-  OnInit,
-  ViewChild,
   Inject,
-  PLATFORM_ID
+  OnDestroy,
+  OnInit,
+  PLATFORM_ID,
+  ViewChild,
+  ChangeDetectorRef
 } from '@angular/core'
-import { StopwatchComponent } from '../stopwatch/stopwatch.component'
-import { StatisticsService } from '../statistics/statistics.service'
-import { CardsService } from '../cards/cards.service'
 import { Card } from '../card/card'
+import { CardsService } from '../cards/cards.service'
 import { Statistic } from '../statistic/statistic'
+import { StatisticsService } from '../statistics/statistics.service'
+import { StopwatchComponent } from '../stopwatch/stopwatch.component'
 
 @Component({
   selector: 'app-game',
   styleUrls: ['./game.component.scss'],
   templateUrl: './game.component.html'
 })
-export class GameComponent implements OnInit {
+export class GameComponent implements OnDestroy, OnInit {
   /**
    * Id of cards flipped.
    */
@@ -33,6 +36,9 @@ export class GameComponent implements OnInit {
    * Keep track of cards that haven't been flipped.
    */
   private unFlipped: number[]
+  private mediaQueryListener(): void {
+    return this.changeDetectorRef.detectChanges()
+  }
 
   /**
    * Chosen card matches.
@@ -42,6 +48,7 @@ export class GameComponent implements OnInit {
    * Number of flips.
    */
   public flips: number
+  public mediaMatcherQuery: MediaQueryList
 
   /**
    * Stopwatch component.
@@ -51,9 +58,18 @@ export class GameComponent implements OnInit {
 
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: string,
+    private changeDetectorRef: ChangeDetectorRef,
+    private mediaMatcher: MediaMatcher,
     private statistics: StatisticsService,
     public cards: CardsService
   ) {}
+
+  private createMediaMatcher(): void {
+    this.mediaMatcherQuery = this.mediaMatcher.matchMedia(
+      '(min-aspect-ratio: 7/10)'
+    )
+    this.mediaMatcherQuery.addListener(this.mediaQueryListener.bind(this))
+  }
 
   /**
    * Check for a match
@@ -190,6 +206,7 @@ export class GameComponent implements OnInit {
   }
 
   public ngOnInit(): void {
+    this.createMediaMatcher()
     this.reset(new Event('click') as MouseEvent)
   }
 
@@ -217,5 +234,9 @@ export class GameComponent implements OnInit {
     this.stopwatch.stop()
     this.stopwatch.clear()
     this.playing = false
+  }
+
+  ngOnDestroy(): void {
+    this.mediaMatcherQuery.removeListener(this.mediaQueryListener)
   }
 }

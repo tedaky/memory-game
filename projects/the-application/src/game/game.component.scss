@@ -4,6 +4,13 @@ mat-card {
   }
 }
 
+mat-card-content {
+  max-width: calc(
+    100vh - 40px - env(safe-area-inset-bottom) - env(safe-area-inset-top)
+  );
+  margin: auto;
+}
+
 img {
   width: 100%;
 }
