@@ -1,0 +1,33 @@
+<h1 mat-dialog-title>🎉 You Won 🎉</h1>
+<div mat-dialog-content>
+  <p>Your results for this game.</p>
+  <p>
+    <b>Flips</b>:
+    <span>{{ data.flips }}</span>
+  </p>
+  <p>
+    <b>Time</b>:
+    <span *ngIf="data.hours"> {{ data.hours | number: '2.0' }} hr </span>
+    <span *ngIf="data.minutes || data.hours">
+      {{ data.minutes | number: '2.0' }} min
+    </span>
+    <span *ngIf="data.seconds || data.minutes || data.hours">
+      {{ data.seconds | number: '2.0' }} sec
+    </span>
+    <span
+      *ngIf="data.milliseconds || data.seconds || data.minutes || data.hours"
+    >
+      {{ data.milliseconds | number: '3.0' }} mil
+    </span>
+  </p>
+</div>
+<div mat-dialog-actions>
+  <button
+    mat-flat-button
+    color="primary"
+    type="button"
+    [mat-dialog-close]="'reset'"
+  >
+    Reset
+  </button>
+</div>

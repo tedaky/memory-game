@@ -7,7 +7,9 @@ import { ServiceWorkerModule } from '@angular/service-worker'
 
 import { environment } from '../environments/environment'
 import { GameComponent } from '../game/game.component'
+import { GameEndComponent } from '../game-end/game-end.component'
 import { HighScoresComponent } from '../high-scores/high-scores.component'
+import { LeaderboardComponent } from '../leaderboard/leaderboard.component'
 import { MainMenuComponent } from '../main-menu/main-menu.component'
 import { MaterialModule } from '../material/material.module'
 import { RecentScoresComponent } from '../recent-scores/recent-scores.component'
@@ -22,7 +24,9 @@ import { StopwatchComponent } from '../stopwatch/stopwatch.component'
 @NgModule({
   declarations: [
     GameComponent,
+    GameEndComponent,
     HighScoresComponent,
+    LeaderboardComponent,
     MainMenuComponent,
     RecentScoresComponent,
     RootComponent,
@@ -40,6 +44,7 @@ import { StopwatchComponent } from '../stopwatch/stopwatch.component'
       enabled: environment.production
     })
   ],
+  entryComponents: [GameEndComponent, RootComponent],
   bootstrap: [RootComponent]
 })
 /**

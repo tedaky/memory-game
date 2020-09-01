@@ -2,13 +2,13 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
 import { Subscription } from 'rxjs'
 
-import { HighScoresService } from './high-scores.service'
+import { LeaderboardService } from './leaderboard.service'
 import { fadeAnimation } from '../fade-animation/fade-animation'
 import { ScoresTemplateComponent } from '../score/score-template'
 import { Statistic } from '../statistic/statistic'
 
 /**
- * Display the high scores
+ * Display the leaderboard
  */
 @Component({
   selector: 'app-high-scores',
@@ -17,9 +17,9 @@ import { Statistic } from '../statistic/statistic'
   animations: [fadeAnimation]
 })
 /**
- * Display the high scores
+ * Display the leaderboard
  */
-export class HighScoresComponent
+export class LeaderboardComponent
   implements OnDestroy, OnInit, ScoresTemplateComponent {
   /**
    * subscription
@@ -46,28 +46,28 @@ export class HighScoresComponent
   /**
    * Title to show.
    */
-  public title: string = 'High Scores'
+  public title: string = 'Leaderboard'
 
-  public showClear: boolean = true
-  public comingSoon: boolean = false
+  public showClear: boolean = false
+  public comingSoon: boolean = true
 
   /**
    * Receive the scores from `HighScoresService`
    */
   public get scores(): Statistic[] {
-    return this.highScores.scores
+    return this.leaderboard.scores
   }
 
   constructor(
     private changeDetectionRef: ChangeDetectorRef,
-    private highScores: HighScoresService
+    private leaderboard: LeaderboardService
   ) {}
 
   /**
    * Set detection of score changes
    */
   private initialiseDataChange(): void {
-    this.sub = this.highScores.dataChange.subscribe((val: string): void => {
+    this.sub = this.leaderboard.dataChange.subscribe((val: string): void => {
       if (typeof val === 'string') {
         this.dataSource.data = this.scores
 
@@ -81,15 +81,6 @@ export class HighScoresComponent
    */
   private initialiseDataSource(): void {
     this.dataSource = new MatTableDataSource<Statistic>(this.scores)
-  }
-
-  /**
-   * Clear the scores.
-   */
-  public clear(event: MouseEvent): void {
-    event.preventDefault()
-
-    this.highScores.clear()
   }
 
   public ngOnInit(): void {

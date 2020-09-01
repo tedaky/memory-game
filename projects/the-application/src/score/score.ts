@@ -1,5 +1,7 @@
 import { isPlatformBrowser } from '@angular/common'
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core'
+import { interval } from 'rxjs'
+import { take } from 'rxjs/operators'
 
 import { createTime } from '../create-time/create-time'
 import { DatabaseService } from '../database/database.service'
@@ -75,13 +77,11 @@ export class Score {
       })
       .catch((error: DOMException): void => {
         if (error.message === 'Database not set') {
-          let self: this
-
-          self = this
-
-          window.setTimeout((): void => {
-            self.getScores()
-          }, 100)
+          interval(100)
+            .pipe<number>(take<number>(1))
+            .subscribe((val: number): void => {
+              this.getScores()
+            })
         } else {
           console.error(error.message)
         }

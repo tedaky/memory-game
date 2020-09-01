@@ -2,6 +2,7 @@
   <mat-card-title>
     {{ title }}
     <button
+      *ngIf="showClear"
       mat-flat-button
       color="primary"
       type="button"
@@ -72,4 +73,7 @@
       ></tr>
     </table>
   </mat-card-content>
+</mat-card>
+<mat-card class="mat-elevation-z2" *ngIf="comingSoon">
+  <mat-card-title>Coming Soon!</mat-card-title>
 </mat-card>

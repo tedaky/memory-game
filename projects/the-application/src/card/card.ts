@@ -7,7 +7,7 @@ export class Card implements ICard {
   /**
    * Holder for `flipped`
    */
-  private _flipped: 0 | 1 | 2
+  private _flipped: 0 | 1 | 2 | 3 | 4
   /**
    * Holder for `image`
    */
@@ -40,10 +40,13 @@ export class Card implements ICard {
   /**
    * Flipped
    */
-  public get flipped(): 0 | 1 | 2 {
-    return this._flipped || 0
+  public get flipped(): 0 | 1 | 2 | 3 | 4 {
+    if (typeof this._flipped === 'undefined') {
+      this._flipped = 0
+    }
+    return this._flipped
   }
-  public set flipped(val: 0 | 1 | 2) {
+  public set flipped(val: 0 | 1 | 2 | 3 | 4) {
     this._flipped = val
   }
 

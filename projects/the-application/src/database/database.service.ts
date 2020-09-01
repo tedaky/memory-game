@@ -46,7 +46,7 @@ export class DatabaseService {
         let request: IDBOpenDBRequest
         let self: this
 
-        request = window.indexedDB.open('MemoryGame', 2)
+        request = window.indexedDB.open('MemoryGame', 3)
 
         request.onsuccess = function(event: Event): void {
           resolve(this.result)
@@ -82,6 +82,15 @@ export class DatabaseService {
               console.log('database upgrading to version 2')
               if (!this.result.objectStoreNames.contains('recentScores')) {
                 this.result.createObjectStore('recentScores', {
+                  keyPath: 'keyID',
+                  autoIncrement: true
+                })
+              }
+
+            case 2:
+              console.log('database upgrading to version 3')
+              if (!this.result.objectStoreNames.contains('leaderboard')) {
+                this.result.createObjectStore('leaderboard', {
                   keyPath: 'keyID',
                   autoIncrement: true
                 })

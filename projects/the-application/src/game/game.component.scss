@@ -1,16 +1,58 @@
-mat-card {
-  &:first-of-type {
-    margin-bottom: 16px;
+mat {
+  &-card {
+    &:first-of-type {
+      margin-bottom: 16px;
+    }
+    &-content {
+      max-width: calc(
+        100vh - 40px - env(safe-area-inset-bottom) - env(safe-area-inset-top)
+      );
+      margin: auto;
+    }
+  }
+
+  &-grid-tile {
+    overflow: visible;
   }
 }
 
-mat-card-content {
-  max-width: calc(
-    100vh - 40px - env(safe-area-inset-bottom) - env(safe-area-inset-top)
-  );
-  margin: auto;
+.card-holder,
+img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.card {
+  &-wrapper {
+    position: absolute;
+    top: 4%;
+    right: 4%;
+    bottom: 4%;
+    left: 4%;
+    perspective-origin: center;
+    perspective: 800px;
+  }
+
+  &-holder {
+    transform-style: preserve-3d;
+    transition: transform 250ms;
+  }
+
+  &-action {
+    transform: rotateY(-180deg);
+  }
+
+  &-blank,
+  &-holder {
+    transform: rotateY(0deg);
+  }
 }
 
 img {
   width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
 }

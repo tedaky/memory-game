@@ -7,7 +7,7 @@ import {
   UpdateAvailableEvent
 } from '@angular/service-worker'
 import { concat, interval, Observable } from 'rxjs'
-import { first } from 'rxjs/operators'
+import { first, take } from 'rxjs/operators'
 
 import { environment } from '../environments/environment'
 
@@ -77,9 +77,11 @@ export class CheckForUpdateService {
       .activateUpdate()
       .then<void, never>((): void => {
         if (reload) {
-          window.setTimeout((): void => {
-            window.document.location.reload()
-          }, 500)
+          interval(500)
+            .pipe<number>(take<number>(1))
+            .subscribe((val: number): void => {
+              window.document.location.reload()
+            })
         }
       })
       .catch<void>((e): void => {

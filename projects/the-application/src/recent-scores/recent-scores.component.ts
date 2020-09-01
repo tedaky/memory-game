@@ -43,6 +43,9 @@ export class RecentScoresComponent
 
   public fade: boolean
 
+  public showClear: boolean = true
+  public comingSoon: boolean = false
+
   /**
    * Title to show.
    */

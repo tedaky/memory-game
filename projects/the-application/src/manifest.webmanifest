@@ -58,7 +58,7 @@
   "short_name": "Memory Game",
   "shortcuts": [
     {
-      "description": "Play the memory game.",
+      "description": "Play Memory Game.",
       "name": "Memory Game Board",
       "icons": [
         {
@@ -71,7 +71,7 @@
       "url": "./game"
     },
     {
-      "description": "View the statistics.",
+      "description": "Memory Game High Scores.",
       "name": "Memory Game High Scores",
       "icons": [
         {
@@ -84,7 +84,20 @@
       "url": "./high-scores"
     },
     {
-      "description": "View the statistics.",
+      "description": "Memory Game Leaderboard.",
+      "name": "Memory Game Leaderboard",
+      "icons": [
+        {
+          "purpose": "maskable any",
+          "sizes": "96x96",
+          "src": "assets/icons/icon-96x96.png",
+          "type": "image/png"
+        }
+      ],
+      "url": "./leaderboard"
+    },
+    {
+      "description": "Memory Game Recent Scores.",
       "name": "Memory Game Recent Scores",
       "icons": [
         {

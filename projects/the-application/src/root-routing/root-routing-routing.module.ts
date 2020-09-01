@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router'
 
 import { GameComponent } from '../game/game.component'
 import { HighScoresComponent } from '../high-scores/high-scores.component'
+import { LeaderboardComponent } from '../leaderboard/leaderboard.component'
 import { RecentScoresComponent } from '../recent-scores/recent-scores.component'
 import { StatisticsComponent } from '../statistics/statistics.component'
 
@@ -15,6 +16,11 @@ const routes: Routes = [
   {
     component: HighScoresComponent,
     path: 'high-scores',
+    pathMatch: 'full'
+  },
+  {
+    component: LeaderboardComponent,
+    path: 'leaderboard',
     pathMatch: 'full'
   },
   {

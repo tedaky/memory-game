@@ -1,15 +1,21 @@
 import { MediaMatcher } from '@angular/cdk/layout'
 import {
+  ChangeDetectorRef,
   Component,
   Inject,
   OnDestroy,
   OnInit,
   PLATFORM_ID,
-  ViewChild,
-  ChangeDetectorRef
+  ViewChild
 } from '@angular/core'
+import { MatDialog } from '@angular/material/dialog'
+import { interval } from 'rxjs'
+import { take } from 'rxjs/operators'
+
 import { Card } from '../card/card'
 import { CardsService } from '../cards/cards.service'
+import { flipAnimation } from '../flip-animation/flip-animation'
+import { GameEndComponent } from '../game-end/game-end.component'
 import { Statistic } from '../statistic/statistic'
 import { StatisticsService } from '../statistics/statistics.service'
 import { StopwatchComponent } from '../stopwatch/stopwatch.component'
@@ -17,7 +23,8 @@ import { StopwatchComponent } from '../stopwatch/stopwatch.component'
 @Component({
   selector: 'app-game',
   styleUrls: ['./game.component.scss'],
-  templateUrl: './game.component.html'
+  templateUrl: './game.component.html',
+  animations: [flipAnimation]
 })
 export class GameComponent implements OnDestroy, OnInit {
   /**
@@ -59,6 +66,7 @@ export class GameComponent implements OnDestroy, OnInit {
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: string,
     private changeDetectorRef: ChangeDetectorRef,
+    private matDialog: MatDialog,
     private mediaMatcher: MediaMatcher,
     private statistics: StatisticsService,
     public cards: CardsService
@@ -71,59 +79,120 @@ export class GameComponent implements OnDestroy, OnInit {
     this.mediaMatcherQuery.addListener(this.mediaQueryListener.bind(this))
   }
 
-  /**
-   * Check for a match
-   */
-  private checkForMatch(): void
-  /**
-   * Check for a match
-   *
-   * @param self `this`
-   */
-  private checkForMatch(self: this): void
-  private checkForMatch(self?: this): void {
-    if (typeof self === 'undefined') {
-      self = this
+  public getCardImage(card: Card): string {
+    if (card.flipped === 4 || card.flipped === 3 || card.flipped === 1) {
+      return card.image
+    } else if (card.flipped === 2) {
+      return this.cards.white
+    } else if (card.flipped === 0) {
+      return this.cards.blank
     }
+  }
+
+  public getCardBack(card: Card): string {
+    if (card.flipped === 3 || card.flipped === 1 || card.flipped === 0) {
+      return this.cards.blank
+    } else if (card.flipped === 4) {
+      return card.image
+    } else if (card.flipped === 2) {
+      return this.cards.white
+    }
+  }
+
+  /**
+   * Check for a match
+   */
+  private checkForMatch(): void {
     let option0: number
     let option1: number
     let cardChosen0: Card
     let cardChosen1: Card
 
-    option0 = self.cardsChosenId[0]
-    option1 = self.cardsChosenId[1]
+    option0 = this.cardsChosenId[0]
+    option1 = this.cardsChosenId[1]
 
-    cardChosen0 = self.cards.cardArray[option0]
-    cardChosen1 = self.cards.cardArray[option1]
+    cardChosen0 = this.cards.cardArray[option0]
+    cardChosen1 = this.cards.cardArray[option1]
 
     if (cardChosen0.name === cardChosen1.name) {
-      cardChosen0.flipped = 2
-      cardChosen1.flipped = 2
+      interval(500)
+        .pipe<number>(take<number>(1))
+        .subscribe((val: number): void => {
+          if (this.playing) {
+            cardChosen0.flipped = 4
+            cardChosen1.flipped = 4
 
-      self.cardsWon.push([cardChosen0.name, cardChosen1.name])
+            interval(250)
+              .pipe<number>(take<number>(1))
+              .subscribe((val: number): void => {
+                if (this.playing) {
+                  cardChosen0.flipped = 2
+                  cardChosen1.flipped = 2
+                }
+              })
+          }
+        })
+
+      this.cardsWon.push([cardChosen0.name, cardChosen1.name])
     } else {
-      cardChosen0.flipped = 0
-      cardChosen1.flipped = 0
+      interval(500)
+        .pipe<number>(take<number>(1))
+        .subscribe((val: number): void => {
+          if (this.playing) {
+            cardChosen0.flipped = 3
+            cardChosen1.flipped = 3
+
+            interval(250)
+              .pipe<number>(take<number>(1))
+              .subscribe((val: number): void => {
+                if (this.playing) {
+                  cardChosen0.flipped = 0
+                  cardChosen1.flipped = 0
+                }
+              })
+          }
+        })
     }
 
-    if (self.cardsWon.length === 6) {
+    if (this.cardsWon.length === 6) {
+      interval(768)
+        .pipe<number>(take<number>(1))
+        .subscribe((val: number): void => {
+          this.playing = false
+        })
+
       let statistic: Statistic
 
-      self.playing = false
-      self.stopwatch.stop()
+      this.stopwatch.stop()
 
       statistic = new Statistic(
-        self.stopwatch.milliseconds,
-        self.stopwatch.seconds,
-        self.stopwatch.minutes,
-        self.stopwatch.hours,
-        self.flips
+        this.stopwatch.milliseconds,
+        this.stopwatch.seconds,
+        this.stopwatch.minutes,
+        this.stopwatch.hours,
+        this.flips
       )
 
-      self.statistics.addStatistic(statistic)
+      interval(500)
+        .pipe<number>(take<number>(1))
+        .subscribe((val: number): void => {
+          this.matDialog
+            .open(GameEndComponent, {
+              data: statistic,
+              disableClose: true
+            })
+            .afterClosed()
+            .subscribe((val: string): void => {
+              if (val === 'reset') {
+                this.reset(new Event('click') as MouseEvent)
+              }
+            })
+        })
+
+      this.statistics.addStatistic(statistic)
     }
 
-    self.cardsChosenId = []
+    this.cardsChosenId = []
   }
 
   private updateFlipped(index: number): void {
@@ -191,16 +260,23 @@ export class GameComponent implements OnDestroy, OnInit {
       this.updateFlipped(index)
 
       if (this.cardsChosenId.length === 2) {
-        let self: this
-
         this.checking = true
 
-        self = this
+        interval(500)
+          .pipe<number>(take<number>(1))
+          .subscribe((val: number): void => {
+            if (this.playing) {
+              this.checkForMatch()
 
-        window.setTimeout((): void => {
-          self.checkForMatch(self)
-          self.checking = false
-        }, 500)
+              interval(500)
+                .pipe<number>(take<number>(1))
+                .subscribe((val: number): void => {
+                  this.checking = false
+                })
+            } else {
+              this.checking = false
+            }
+          })
       }
     }
   }
@@ -236,7 +312,7 @@ export class GameComponent implements OnDestroy, OnInit {
     this.playing = false
   }
 
-  ngOnDestroy(): void {
+  public ngOnDestroy(): void {
     this.mediaMatcherQuery.removeListener(this.mediaQueryListener)
   }
 }

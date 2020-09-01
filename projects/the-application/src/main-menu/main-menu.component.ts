@@ -1,21 +1,70 @@
 import { isPlatformBrowser } from '@angular/common'
-import { Component, Inject, Input, PLATFORM_ID } from '@angular/core'
+import { Component, Inject, Input, PLATFORM_ID, OnInit } from '@angular/core'
 import { MatRipple } from '@angular/material/core'
 
 import { ThemeService } from '../theme/theme.service'
+
+class MenuButton {
+  constructor(
+    public icon: string,
+    public label: string,
+    public route: string,
+    public theme: string
+  ) {}
+}
 
 @Component({
   selector: 'app-main-menu',
   templateUrl: './main-menu.component.html',
   styleUrls: ['./main-menu.component.scss']
 })
-export class MainMenuComponent {
+export class MainMenuComponent implements OnInit {
   @Input() public ripple: MatRipple
+
+  public menuButtons: MenuButton[]
 
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: string,
     public theme: ThemeService
   ) {}
+
+  public ngOnInit(): void {
+    this.menuButtons = []
+
+    const game = new MenuButton('view_module', 'Game', 'game', 'theme-yellow')
+    const highScores = new MenuButton(
+      'view_headline',
+      'High Scores',
+      'high-scores',
+      'theme-blue'
+    )
+    const recentScores = new MenuButton(
+      'timelapse',
+      'Recent Scores',
+      'recent-scores',
+      'theme-red'
+    )
+    const leaderboard = new MenuButton(
+      'leaderboard',
+      'Leaderboard',
+      'leaderboard',
+      'theme-pink'
+    )
+
+    this.menuButtons.push(game, highScores, recentScores, leaderboard)
+  }
+
+  private launchRipple(x: number, y: number, colour: string): void {
+    this.ripple
+      .launch(x, y, {
+        persistent: true,
+        animation: {
+          enterDuration: 700,
+          exitDuration: 700
+        }
+      })
+      .fadeOut()
+  }
 
   public setTheme(theme: string, event: MouseEvent): void {
     event.preventDefault()
@@ -42,17 +91,5 @@ export class MainMenuComponent {
     }
 
     this.launchRipple(x, y, this.theme.colour)
-  }
-
-  private launchRipple(x: number, y: number, colour: string): void {
-    this.ripple
-      .launch(x, y, {
-        persistent: true,
-        animation: {
-          enterDuration: 700,
-          exitDuration: 700
-        }
-      })
-      .fadeOut()
   }
 }
