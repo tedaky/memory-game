@@ -10,8 +10,7 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-.mat-snack-bar-handset {
-  .mat-snack-bar-container.snack-bar-reposition {
-    margin-bottom: calc(48px + env(safe-area-inset-bottom));
-  }
+.mat-snack-bar-handset .mat-snack-bar-container.snack-bar-reposition,
+.mat-snack-bar-container.snack-bar-reposition {
+  margin-bottom: calc(48px + env(safe-area-inset-bottom));
 }

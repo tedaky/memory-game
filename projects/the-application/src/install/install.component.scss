@@ -1,0 +1,18 @@
+:host {
+  &.mat-simple-snackbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    line-height: 20px;
+  }
+}
+
+.mat-simple-snackbar-action {
+  flex-shrink: 0;
+  margin: -8px -8px -8px 8px;
+
+  button {
+    max-height: 36px;
+    min-width: 0;
+  }
+}

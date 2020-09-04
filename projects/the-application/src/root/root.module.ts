@@ -9,6 +9,7 @@ import { environment } from '../environments/environment'
 import { GameComponent } from '../game/game.component'
 import { GameEndComponent } from '../game-end/game-end.component'
 import { HighScoresComponent } from '../high-scores/high-scores.component'
+import { InstallComponent } from '../install/install.component'
 import { LeaderboardComponent } from '../leaderboard/leaderboard.component'
 import { MainMenuComponent } from '../main-menu/main-menu.component'
 import { MaterialModule } from '../material/material.module'
@@ -26,6 +27,7 @@ import { StopwatchComponent } from '../stopwatch/stopwatch.component'
     GameComponent,
     GameEndComponent,
     HighScoresComponent,
+    InstallComponent,
     LeaderboardComponent,
     MainMenuComponent,
     RecentScoresComponent,
@@ -44,7 +46,7 @@ import { StopwatchComponent } from '../stopwatch/stopwatch.component'
       enabled: environment.production
     })
   ],
-  entryComponents: [GameEndComponent, RootComponent],
+  entryComponents: [GameEndComponent, InstallComponent, RootComponent],
   bootstrap: [RootComponent]
 })
 /**

@@ -56,9 +56,14 @@ export class RootComponent implements AfterViewInit, OnInit {
   }
 
   public getRouterOutletState(outlet: RouterOutlet): ActivatedRoute | string {
-    const result: ActivatedRoute | string = outlet.isActivated
-      ? outlet.activatedRoute
-      : ''
+    let result: ActivatedRoute | string
+
+    if (outlet.isActivated) {
+      result = outlet.activatedRoute
+    } else {
+      result = ''
+    }
+
     return result
   }
 
