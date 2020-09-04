@@ -11,6 +11,14 @@ export class InstallComponent {
     return true
   }
 
+  public get isIOS(): boolean {
+    return (
+      /iPhone|iPad|iPod/.test(window.navigator.platform) ||
+      (window.navigator.maxTouchPoints > 2 &&
+        /MacIntel/.test(window.navigator.platform))
+    )
+  }
+
   constructor(private snack: MatSnackBarRef<InstallComponent>) {}
 
   public dismiss(withAction: boolean): void {

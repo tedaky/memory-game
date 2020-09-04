@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { ServiceWorkerModule } from '@angular/service-worker'
 
+import { CheckForUpdateComponent } from '../check-for-update/check-for-update.component'
 import { environment } from '../environments/environment'
 import { GameComponent } from '../game/game.component'
 import { GameEndComponent } from '../game-end/game-end.component'
@@ -24,6 +25,7 @@ import { StopwatchComponent } from '../stopwatch/stopwatch.component'
  */
 @NgModule({
   declarations: [
+    CheckForUpdateComponent,
     GameComponent,
     GameEndComponent,
     HighScoresComponent,
@@ -46,7 +48,12 @@ import { StopwatchComponent } from '../stopwatch/stopwatch.component'
       enabled: environment.production
     })
   ],
-  entryComponents: [GameEndComponent, InstallComponent, RootComponent],
+  entryComponents: [
+    CheckForUpdateComponent,
+    GameEndComponent,
+    InstallComponent,
+    RootComponent
+  ],
   bootstrap: [RootComponent]
 })
 /**

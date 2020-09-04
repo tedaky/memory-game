@@ -2,17 +2,9 @@
   &.mat-simple-snackbar {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     line-height: 20px;
   }
-}
-
-img {
-  height: 1.2em;
-  // vertical-align: text-bottom;
-  filter: invert(1);
-  margin-right: 4px;
-  margin-left: 4px;
 }
 
 .mat-simple-snackbar-action {

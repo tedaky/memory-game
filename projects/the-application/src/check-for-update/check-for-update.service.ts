@@ -9,6 +9,7 @@ import {
 import { concat, interval, Observable } from 'rxjs'
 import { first, take } from 'rxjs/operators'
 
+import { CheckForUpdateComponent } from './check-for-update.component'
 import { environment } from '../environments/environment'
 
 /**
@@ -21,6 +22,8 @@ import { environment } from '../environments/environment'
  * Check for app updates.
  */
 export class CheckForUpdateService {
+  public updateAvailable: boolean
+
   constructor(
     @Inject(PLATFORM_ID) readonly platformId: string,
     appRef: ApplicationRef,
@@ -124,8 +127,10 @@ export class CheckForUpdateService {
    * @param update `SwUpdate`
    */
   private notify(snackBar: MatSnackBar, update: SwUpdate): void {
+    this.updateAvailable = true
+
     snackBar
-      .open('Update available. Please reload.', 'Reload', {
+      .openFromComponent(CheckForUpdateComponent, {
         panelClass: 'snack-bar-reposition'
       })
       .onAction()

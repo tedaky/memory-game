@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs'
 import { DeviceSize } from '../device-size/device-size'
 import { InstallComponent } from '../install/install.component'
 import { BeforeInstallPromptEvent } from '../polyfills/before-install-prompt.event'
+import { CheckForUpdateService } from '../check-for-update/check-for-update.service'
 
 /**
  * Service for device information.
@@ -24,12 +25,13 @@ export class DeviceService {
 
   constructor(
     @Inject(PLATFORM_ID) readonly platformId: string,
+    checkForUpdate: CheckForUpdateService,
     snackBar: MatSnackBar
   ) {
     this.deviceScreen = new BehaviorSubject<DeviceSize>(new DeviceSize(0, 0))
 
     if (isPlatformBrowser(platformId)) {
-      this.install(snackBar)
+      this.install(snackBar, checkForUpdate)
       this.emitResizeFirst()
       this.createResizeListener()
       this.beforeunload()
@@ -90,27 +92,46 @@ export class DeviceService {
    *
    * @param snackBar `MatSnackBar` prompt
    */
-  private install(snackBar: MatSnackBar): void {
+  private install(
+    snackBar: MatSnackBar,
+    checkForUpdate: CheckForUpdateService
+  ): void {
     if (isPlatformBrowser(this.platformId)) {
-      window.addEventListener(
-        'beforeinstallprompt',
-        (event: BeforeInstallPromptEvent): void => {
-          event.preventDefault()
+      if ('onbeforeinstallprompt' in window) {
+        window.addEventListener(
+          'beforeinstallprompt',
+          (event: BeforeInstallPromptEvent): void => {
+            event.preventDefault()
 
-          let deferredPrompt: BeforeInstallPromptEvent
+            let deferredPrompt: BeforeInstallPromptEvent
 
-          deferredPrompt = event
+            deferredPrompt = event
 
-          snackBar
-            .openFromComponent<InstallComponent>(InstallComponent, {
-              panelClass: 'snack-bar-reposition'
-            })
-            .onAction()
-            .subscribe((): void => {
-              deferredPrompt.prompt()
-            })
-        }
-      )
+            if (!checkForUpdate.updateAvailable) {
+              snackBar
+                .openFromComponent<InstallComponent>(InstallComponent, {
+                  panelClass: 'snack-bar-reposition'
+                })
+                .onAction()
+                .subscribe((): void => {
+                  deferredPrompt.prompt()
+                })
+            }
+          }
+        )
+      }
+
+      if (
+        !window.navigator['standalone'] &&
+        (/iPhone|iPad|iPod/.test(window.navigator.platform) ||
+          (window.navigator.maxTouchPoints > 2 &&
+            /MacIntel/.test(window.navigator.platform))) &&
+        !checkForUpdate.updateAvailable
+      ) {
+        snackBar.openFromComponent<InstallComponent>(InstallComponent, {
+          panelClass: 'snack-bar-reposition'
+        })
+      }
     }
   }
 }
