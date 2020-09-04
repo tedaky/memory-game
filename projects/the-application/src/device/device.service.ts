@@ -126,6 +126,7 @@ export class DeviceService {
         (/iPhone|iPad|iPod/.test(window.navigator.platform) ||
           (window.navigator.maxTouchPoints > 2 &&
             /MacIntel/.test(window.navigator.platform))) &&
+        !/Chrome/.test(window.navigator.userAgent) &&
         !checkForUpdate.updateAvailable
       ) {
         snackBar.openFromComponent<InstallComponent>(InstallComponent, {

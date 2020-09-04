@@ -1,11 +1,11 @@
-<span *ngIf="!isIOS">Install Memory Game</span>
-<span *ngIf="isIOS">
+<span *ngIf="!forIOS">Install Memory Game</span>
+<span *ngIf="forIOS">
   Install Memory Game. Tap
   <img src="assets/icons/Navigation_Action_2x.png" />
   then <b>"Add to Home Screen"</b>
 </span>
 <div class="mat-simple-snackbar-action">
-  <button mat-button (click)="dismiss(true)" *ngIf="!isIOS">
+  <button mat-button (click)="dismiss(true)" *ngIf="!forIOS">
     <mat-icon aria-hidden="false">get_app</mat-icon>
   </button>
   <button mat-button (click)="dismiss(false)">
