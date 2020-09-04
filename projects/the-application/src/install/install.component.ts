@@ -13,10 +13,10 @@ export class InstallComponent {
 
   public get forIOS(): boolean {
     return (
-      /iPhone|iPad|iPod/.test(window.navigator.platform) ||
-      (window.navigator.maxTouchPoints > 2 &&
-        /MacIntel/.test(window.navigator.platform) &&
-        !/Chrome/.test(window.navigator.userAgent))
+      (/iPhone|iPad|iPod/.test(window.navigator.platform) ||
+        (window.navigator.maxTouchPoints > 2 &&
+          /MacIntel/.test(window.navigator.platform))) &&
+      !/Chrome/.test(window.navigator.userAgent)
     )
   }
 
