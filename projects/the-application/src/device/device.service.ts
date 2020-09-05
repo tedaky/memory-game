@@ -121,8 +121,9 @@ export class DeviceService {
         )
       }
 
+      const standalone = 'standalone'
       if (
-        !window.navigator['standalone'] &&
+        !window.navigator[standalone] &&
         (/iPhone|iPad|iPod/.test(window.navigator.platform) ||
           (window.navigator.maxTouchPoints > 2 &&
             /MacIntel/.test(window.navigator.platform))) &&

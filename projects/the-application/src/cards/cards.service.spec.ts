@@ -15,7 +15,7 @@ describe('CardsService', () => {
   })
 
   it('should create cards', () => {
-    expect(service.cardArray.length).toEqual(12)
+    expect(service.deck.length).toEqual(12)
   })
 
   it('should shuffle cards', () => {

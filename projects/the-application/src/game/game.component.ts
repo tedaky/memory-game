@@ -44,10 +44,6 @@ export class GameComponent implements OnDestroy, OnInit {
    */
   private unFlipped: number[]
 
-  private mediaQueryListener(): void {
-    return this.changeDetectorRef.detectChanges()
-  }
-
   /**
    * Chosen card matches.
    */
@@ -72,6 +68,10 @@ export class GameComponent implements OnDestroy, OnInit {
     private statistics: StatisticsService,
     public cards: CardsService
   ) {}
+
+  private mediaQueryListener(): void {
+    return this.changeDetectorRef.detectChanges()
+  }
 
   private createMediaMatcher(): void {
     this.mediaMatcherQuery = this.mediaMatcher.matchMedia(
@@ -113,14 +113,14 @@ export class GameComponent implements OnDestroy, OnInit {
     if (cardChosen0.name === cardChosen1.name) {
       interval(500)
         .pipe<number>(take<number>(1))
-        .subscribe((val: number): void => {
+        .subscribe((): void => {
           if (this.playing) {
             cardChosen0.flipped = 4
             cardChosen1.flipped = 4
 
             interval(250)
               .pipe<number>(take<number>(1))
-              .subscribe((val: number): void => {
+              .subscribe((): void => {
                 if (this.playing) {
                   cardChosen0.flipped = 2
                   cardChosen1.flipped = 2
@@ -133,14 +133,14 @@ export class GameComponent implements OnDestroy, OnInit {
     } else {
       interval(500)
         .pipe<number>(take<number>(1))
-        .subscribe((val: number): void => {
+        .subscribe((): void => {
           if (this.playing) {
             cardChosen0.flipped = 3
             cardChosen1.flipped = 3
 
             interval(250)
               .pipe<number>(take<number>(1))
-              .subscribe((val: number): void => {
+              .subscribe((): void => {
                 if (this.playing) {
                   cardChosen0.flipped = 0
                   cardChosen1.flipped = 0
@@ -153,7 +153,7 @@ export class GameComponent implements OnDestroy, OnInit {
     if (this.cardsWon.length === 6) {
       interval(768)
         .pipe<number>(take<number>(1))
-        .subscribe((val: number): void => {
+        .subscribe((): void => {
           this.playing = false
         })
 
@@ -171,7 +171,7 @@ export class GameComponent implements OnDestroy, OnInit {
 
       interval(500)
         .pipe<number>(take<number>(1))
-        .subscribe((val: number): void => {
+        .subscribe((): void => {
           this.matDialog
             .open(GameEndComponent, {
               data: statistic,
