@@ -13,15 +13,24 @@ import { ICard } from '../card/card.d'
  * Create and make cards available.
  */
 export class CardsService {
+  //#region Private Holders
+  //#region _cards
   /**
    * Holder for `cards`.
    */
   private _cards: Card[]
+  //#endregion _cards
+
+  //#region _deck
   /**
    * Holder for `deck`.
    */
   private _deck: Card[]
+  //#endregion _deck
+  //#endregion Private Holders
 
+  //#region get
+  //#region cards
   /**
    * List of unique cards.
    */
@@ -32,14 +41,9 @@ export class CardsService {
 
     return this._cards
   }
+  //#endregion cards
 
-  /**
-   * Blank image card.
-   */
-  public get blank(): string {
-    return 'assets/blank.png'
-  }
-
+  //#region deck
   /**
    * Deck of cards.
    */
@@ -50,25 +54,46 @@ export class CardsService {
 
     return this._deck
   }
+  //#endregion deck
 
+  //#region matchCount
   /**
    * Total number of matches.
    */
   public get matchCount(): number {
     return this.cards.length
   }
+  //#endregion matchCount
+  //#endregion get
 
+  //#region blank, white images
+  //#region blank
+  /**
+   * Blank image card.
+   */
+  public get blank(): string {
+    return 'assets/blank.png'
+  }
+  //#endregion blank
+
+  //#region white
   /**
    * White image card.
    */
   public get white(): string {
     return 'assets/white.png'
   }
+  //#endregion white
+  //#endregion blank, white images
 
+  //#region constructor
   constructor() {
     this.createGame()
   }
+  //#endregion constructor
 
+  //#region createCard
+  //#region overload
   /**
    * Add a unique card.
    *
@@ -88,6 +113,7 @@ export class CardsService {
    * @param image `string` path.
    */
   private createCard(name: string, image: string): void
+  //#endregion overload
   private createCard(arg1: string | Card | ICard, arg2?: string): void {
     let card: Card
     let found: number
@@ -110,7 +136,9 @@ export class CardsService {
       console.warn('Existing card: ', this.cards[found])
     }
   }
+  //#endregion createCard
 
+  //#region createCards
   /**
    * Create a unique set of cards.
    */
@@ -122,7 +150,10 @@ export class CardsService {
     this.createCard('milkshake', 'assets/milkshake.png')
     this.createCard('pizza', 'assets/pizza.png')
   }
+  //#endregion createCards
 
+  //#region createDeck
+  //#region overload
   /**
    * Create a deck pairing each card.
    */
@@ -133,6 +164,7 @@ export class CardsService {
    * @param setCount How many times to copy a card.
    */
   private createDeck(setCount: number): void
+  //#endregion overload
   private createDeck(setCount?: number): void {
     if (typeof setCount === 'undefined') {
       // Create a default of 2 for default game type of pair matching.
@@ -155,16 +187,20 @@ export class CardsService {
       }
     })
   }
+  //#endregion createDeck
 
+  //#region createGame
   /**
    * Create the game by initialising cards and deck.
    */
   private createGame(): void {
     this.createCards()
     // Later use a game mode to create a deck.
-    this.createDeck(2)
+    this.createDeck()
   }
+  //#endregion createGame
 
+  //#region shuffle
   /**
    * Shuffle the cards randomly,
    */
@@ -173,4 +209,5 @@ export class CardsService {
       return 0.5 - Math.random()
     })
   }
+  //#endregion shuffle
 }
