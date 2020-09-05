@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core'
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog'
+import { MAT_DIALOG_DATA } from '@angular/material/dialog'
 
 import { Statistic } from '../statistic/statistic'
 
@@ -8,8 +8,5 @@ import { Statistic } from '../statistic/statistic'
   templateUrl: './game-end.component.html'
 })
 export class GameEndComponent {
-  constructor(
-    public dialogRef: MatDialogRef<GameEndComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Statistic
-  ) {}
+  constructor(@Inject(MAT_DIALOG_DATA) public data: Statistic) {}
 }
