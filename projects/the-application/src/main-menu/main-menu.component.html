@@ -3,11 +3,20 @@
     mat-button
     [attr.aria-label]="menu.label"
     disableRipple="true"
-    (click)="setTheme(menu.theme, $event)"
+    (click)="setTheme($event, menu.theme, rla)"
     [routerLink]="[menu.route]"
     routerLinkActive="router-link-active"
+    #rla="routerLinkActive"
   >
-    <mat-icon aria-hidden="false">{{ menu.icon }}</mat-icon>
-    <span>{{ menu.label }}</span>
+    <mat-icon
+      aria-hidden="false"
+      [fontSet]="rla.isActive ? 'material-icons-outlined' : 'material-icons'"
+      [color]="rla.isActive ? 'primary' : ''"
+    >
+      {{ menu.icon }}
+    </mat-icon>
+    <span>
+      {{ menu.label }}
+    </span>
   </a>
 </ng-container>

@@ -43,6 +43,7 @@ export class GameComponent implements OnDestroy, OnInit {
    * Keep track of cards that haven't been flipped.
    */
   private unFlipped: number[]
+
   private mediaQueryListener(): void {
     return this.changeDetectorRef.detectChanges()
   }
@@ -102,14 +103,9 @@ export class GameComponent implements OnDestroy, OnInit {
   /**
    * Check for a match
    */
-  private checkForMatch(): void {
-    let option0: number
-    let option1: number
+  private checkForMatch(option0: number, option1: number): void {
     let cardChosen0: Card
     let cardChosen1: Card
-
-    option0 = this.cardsChosenId[0]
-    option1 = this.cardsChosenId[1]
 
     cardChosen0 = this.cards.deck[option0]
     cardChosen1 = this.cards.deck[option1]
@@ -191,8 +187,6 @@ export class GameComponent implements OnDestroy, OnInit {
 
       this.statistics.addStatistic(statistic)
     }
-
-    this.cardsChosenId = []
   }
 
   private updateFlipped(index: number): void {
@@ -234,8 +228,7 @@ export class GameComponent implements OnDestroy, OnInit {
 
       if (
         this.cardsChosenId.length === 2 &&
-        this.cards.deck[option0].name ===
-          this.cards.deck[option1].name &&
+        this.cards.deck[option0].name === this.cards.deck[option1].name &&
         this.unFlipped.includes(option1)
       ) {
         let swap0: Card
@@ -266,17 +259,15 @@ export class GameComponent implements OnDestroy, OnInit {
           .pipe<number>(take<number>(1))
           .subscribe((val: number): void => {
             if (this.playing) {
-              this.checkForMatch()
+              this.checkForMatch(option0, option1)
 
-              interval(500)
-                .pipe<number>(take<number>(1))
-                .subscribe((val: number): void => {
-                  this.checking = false
-                })
+              this.checking = false
             } else {
               this.checking = false
             }
           })
+
+        this.cardsChosenId = []
       }
     }
   }

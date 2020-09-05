@@ -1,17 +1,10 @@
 import { isPlatformBrowser } from '@angular/common'
 import { Component, Inject, Input, PLATFORM_ID, OnInit } from '@angular/core'
 import { MatRipple } from '@angular/material/core'
+import { RouterLinkActive } from '@angular/router'
 
+import { MenuButton } from '../menu-button/menu-button'
 import { ThemeService } from '../theme/theme.service'
-
-class MenuButton {
-  constructor(
-    public icon: string,
-    public label: string,
-    public route: string,
-    public theme: string
-  ) {}
-}
 
 @Component({
   selector: 'app-main-menu',
@@ -66,8 +59,16 @@ export class MainMenuComponent implements OnInit {
       .fadeOut()
   }
 
-  public setTheme(theme: string, event: MouseEvent): void {
+  public setTheme(
+    event: MouseEvent,
+    theme: string,
+    routerLinkActive: RouterLinkActive
+  ): void {
     event.preventDefault()
+
+    if (routerLinkActive.isActive) {
+      return
+    }
 
     if (isPlatformBrowser(this.platformId)) {
       window.localStorage.removeItem('scroll')
