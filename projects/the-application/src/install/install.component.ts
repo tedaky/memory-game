@@ -16,7 +16,7 @@ export class InstallComponent {
       (/iPhone|iPad|iPod/.test(window.navigator.platform) ||
         (window.navigator.maxTouchPoints > 2 &&
           /MacIntel/.test(window.navigator.platform))) &&
-      !/Chrome|CriOS/.test(window.navigator.userAgent)
+      !/Chrome|CriOS|Firefox|FxiOS/.test(window.navigator.userAgent)
     )
   }
 
