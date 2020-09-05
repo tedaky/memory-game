@@ -111,8 +111,8 @@ export class GameComponent implements OnDestroy, OnInit {
     option0 = this.cardsChosenId[0]
     option1 = this.cardsChosenId[1]
 
-    cardChosen0 = this.cards.cardArray[option0]
-    cardChosen1 = this.cards.cardArray[option1]
+    cardChosen0 = this.cards.deck[option0]
+    cardChosen1 = this.cards.deck[option1]
 
     if (cardChosen0.name === cardChosen1.name) {
       interval(500)
@@ -222,7 +222,7 @@ export class GameComponent implements OnDestroy, OnInit {
       this.stopwatch.restart()
     }
 
-    if (!this.cards.cardArray[index].flipped && !this.checking) {
+    if (!this.cards.deck[index].flipped && !this.checking) {
       let option0: number
       let option1: number
 
@@ -234,28 +234,28 @@ export class GameComponent implements OnDestroy, OnInit {
 
       if (
         this.cardsChosenId.length === 2 &&
-        this.cards.cardArray[option0].name ===
-          this.cards.cardArray[option1].name &&
+        this.cards.deck[option0].name ===
+          this.cards.deck[option1].name &&
         this.unFlipped.includes(option1)
       ) {
         let swap0: Card
         let swap1: Card
         let found: number
 
-        swap0 = this.cards.cardArray[option1]
+        swap0 = this.cards.deck[option1]
 
         found = this.unFlipped.findIndex((item: number): boolean => {
-          return this.cards.cardArray[item].name !== swap0.name
+          return this.cards.deck[item].name !== swap0.name
         })
 
         if (found !== -1) {
-          swap1 = this.cards.cardArray[this.unFlipped[found]]
-          this.cards.cardArray[this.unFlipped[found]] = swap0
-          this.cards.cardArray[option1] = swap1
+          swap1 = this.cards.deck[this.unFlipped[found]]
+          this.cards.deck[this.unFlipped[found]] = swap0
+          this.cards.deck[option1] = swap1
         }
       }
 
-      this.cards.cardArray[index].flipped = 1
+      this.cards.deck[index].flipped = 1
 
       this.updateFlipped(index)
 
@@ -294,11 +294,11 @@ export class GameComponent implements OnDestroy, OnInit {
   public reset(event: MouseEvent): void {
     event.preventDefault()
 
-    this.cards.cardArray.forEach((card: Card): void => {
+    this.cards.deck.forEach((card: Card): void => {
       card.flipped = 0
     })
 
-    this.unFlipped = [...Array(this.cards.cardArray.length).keys()]
+    this.unFlipped = [...Array(this.cards.deck.length).keys()]
     this.unFlipped.sort((): number => {
       return 0.5 - Math.random()
     })

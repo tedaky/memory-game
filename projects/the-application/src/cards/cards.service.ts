@@ -14,9 +14,24 @@ import { ICard } from '../card/card.d'
  */
 export class CardsService {
   /**
-   * Holder for `cardArray`
+   * Holder for `cards`.
    */
-  private _cardArray: Card[]
+  private _cards: Card[]
+  /**
+   * Holder for `deck`.
+   */
+  private _deck: Card[]
+
+  /**
+   * List of unique cards.
+   */
+  private get cards(): Card[] {
+    if (typeof this._cards === 'undefined') {
+      this._cards = []
+    }
+
+    return this._cards
+  }
 
   /**
    * Blank image card.
@@ -26,14 +41,21 @@ export class CardsService {
   }
 
   /**
-   * List of cards
+   * Deck of cards.
    */
-  public get cardArray(): Card[] {
-    if (typeof this._cardArray === 'undefined') {
-      this._cardArray = []
+  public get deck(): Card[] {
+    if (typeof this._deck === 'undefined') {
+      this._deck = []
     }
 
-    return this._cardArray
+    return this._deck
+  }
+
+  /**
+   * Total number of matches.
+   */
+  public get matchCount(): number {
+    return this.cards.length
   }
 
   /**
@@ -44,61 +66,110 @@ export class CardsService {
   }
 
   constructor() {
-    this.createCards()
+    this.createGame()
   }
 
   /**
-   * Create a deck of cards.
-   */
-  private createCards(): void {
-    if (!this.cardArray.length) {
-      this.addCardPair('cheeseburger', 'assets/cheeseburger.png')
-      this.addCardPair('fries', 'assets/fries.png')
-      this.addCardPair('hotdog', 'assets/hotdog.png')
-      this.addCardPair('ice-cream', 'assets/ice-cream.png')
-      this.addCardPair('milkshake', 'assets/milkshake.png')
-      this.addCardPair('pizza', 'assets/pizza.png')
-    }
-  }
-
-  /**
-   * Add two cards of the same entry for matching.
+   * Add a unique card.
    *
-   * @param card `Card`
+   * @param card `Card`.
    */
-  private addCardPair(card: Card): void
+  private createCard(card: Card): void
   /**
-   * Add two cards of the same entry for matching.
+   * Add a unique card.
    *
-   * @param cardLike `ICard`
+   * @param cardLike `ICard`.
    */
-  private addCardPair(cardLike: ICard): void
+  private createCard(cardLike: ICard): void
   /**
-   * Add two cards of the same entry for matching.
+   * Add a unique card.
    *
-   * @param name `string` title
-   * @param image `string` path
+   * @param name `string` title.
+   * @param image `string` path.
    */
-  private addCardPair(name: string, image: string): void
-  private addCardPair(arg1: string | Card | ICard, arg2?: string): void {
-    let cardPair: Card[]
+  private createCard(name: string, image: string): void
+  private createCard(arg1: string | Card | ICard, arg2?: string): void {
+    let card: Card
+    let found: number
 
     if (typeof arg1 === 'string') {
-      cardPair = [new Card(arg1, arg2), new Card(arg1, arg2)]
-    } else if (arg1 instanceof Card) {
-      cardPair = [new Card(arg1), new Card(arg1)]
+      card = new Card(arg1, arg2)
     } else {
-      cardPair = [new Card(arg1), new Card(arg1)]
+      card = new Card(arg1)
     }
 
-    this.cardArray.push(...cardPair)
+    found = this.cards.findIndex((index: Card): boolean => {
+      return index.name === card.name || index.image === card.image
+    })
+
+    if (found === -1) {
+      this.cards.push(card)
+    } else {
+      console.warn('Card is similar to an existing card.')
+      console.warn('Given card: ', card)
+      console.warn('Existing card: ', this.cards[found])
+    }
   }
 
   /**
-   * Shuffle the cards randomly.
+   * Create a unique set of cards.
+   */
+  private createCards(): void {
+    this.createCard('cheeseburger', 'assets/cheeseburger.png')
+    this.createCard('fries', 'assets/fries.png')
+    this.createCard('hotdog', 'assets/hotdog.png')
+    this.createCard('ice-cream', 'assets/ice-cream.png')
+    this.createCard('milkshake', 'assets/milkshake.png')
+    this.createCard('pizza', 'assets/pizza.png')
+  }
+
+  /**
+   * Create a deck pairing each card.
+   */
+  private createDeck(): void
+  /**
+   * Create a deck by making new cards for matching based on a setCount.
+   *
+   * @param setCount How many times to copy a card.
+   */
+  private createDeck(setCount: number): void
+  private createDeck(setCount?: number): void {
+    if (typeof setCount === 'undefined') {
+      // Create a default of 2 for default game type of pair matching.
+      setCount = 2
+    }
+
+    // Clear the current deck of any cards.
+    this.deck.splice(0, this.deck.length)
+
+    // Loop each individual card.
+    this.cards.forEach((card: Card): void => {
+      let i: number
+
+      i = 0
+
+      // Create new card(s) based on the setCount.
+      for (; i < setCount; i++) {
+        // Push each new card to the deck.
+        this.deck.push(new Card(card))
+      }
+    })
+  }
+
+  /**
+   * Create the game by initialising cards and deck.
+   */
+  private createGame(): void {
+    this.createCards()
+    // Later use a game mode to create a deck.
+    this.createDeck(2)
+  }
+
+  /**
+   * Shuffle the cards randomly,
    */
   public shuffle(): void {
-    this.cardArray.sort((): number => {
+    this.deck.sort((): number => {
       return 0.5 - Math.random()
     })
   }
