@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core'
 import { HighScoresService } from '../high-scores/high-scores.service'
 import { RecentScoresService } from '../recent-scores/recent-scores.service'
 import { Statistic } from '../statistic/statistic'
-import { IStatistic } from '../statistic/statistic.d'
+import { IStatistic, Match, Mode, Count } from '../statistic/statistic.d'
 
 /**
  * Statistics Service that allows quick access to
@@ -109,7 +109,7 @@ export class StatisticsService {
    *
    * @param statistic `Statistic` to add.
    */
-  public addStatistic(statistic: Statistic | IStatistic): void
+  public addStatistic(statistic: Statistic): void
 
   /**
    * Add statistic to high scores and recent scores.
@@ -125,13 +125,19 @@ export class StatisticsService {
    * @param minutes `number` time of minutes
    * @param hours `number` time of hours
    * @param flips `number` amount of flips
+   * @param count `Count` Count
+   * @param match `Match` Match
+   * @param mode `Mode` Mode
    */
   public addStatistic(
     milliseconds: number,
     seconds: number,
     minutes: number,
     hours: number,
-    flips: number
+    flips: number,
+    count: Count,
+    match: Match,
+    mode: Mode
   ): void
   /**
    * Add statistic to high scores and recent scores.
@@ -141,6 +147,9 @@ export class StatisticsService {
    * @param minutes `number` time of minutes
    * @param hours `number` time of hours
    * @param flips `number` amount of flips
+   * @param count `Count` Count
+   * @param match `Match` Match
+   * @param mode `Mode` Mode
    * @param keyID `number` identifier for indexeddb
    */
   public addStatistic(
@@ -149,6 +158,9 @@ export class StatisticsService {
     minutes: number,
     hours: number,
     flips: number,
+    count: Count,
+    match: Match,
+    mode: Mode,
     keyID: number
   ): void
   public addStatistic(
@@ -157,15 +169,18 @@ export class StatisticsService {
     arg3?: number,
     arg4?: number,
     arg5?: number,
-    arg6?: number
+    arg6?: Count,
+    arg7?: Match,
+    arg8?: Mode,
+    arg9?: number
   ): void {
     let value: Statistic
 
     if (typeof arg1 === 'number') {
-      if (typeof arg6 === 'undefined') {
-        value = new Statistic(arg1, arg2, arg3, arg4, arg5)
+      if (typeof arg9 === 'undefined') {
+        value = new Statistic(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
       } else {
-        value = new Statistic(arg1, arg2, arg3, arg4, arg5, arg6)
+        value = new Statistic(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
       }
     } else if (arg1 instanceof Statistic) {
       value = arg1

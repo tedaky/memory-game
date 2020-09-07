@@ -1,15 +1,14 @@
 import { isPlatformBrowser } from '@angular/common'
 import {
+  AfterViewInit,
   Component,
-  Inject,
-  OnInit,
-  PLATFORM_ID,
-  ViewChild,
   ElementRef,
-  AfterViewInit
+  Inject,
+  PLATFORM_ID,
+  ViewChild
 } from '@angular/core'
 import { MatRipple } from '@angular/material/core'
-import { RouterOutlet, ActivatedRoute } from '@angular/router'
+import { ActivatedRoute, RouterOutlet } from '@angular/router'
 
 import { BackgroundService } from '../background/background.service'
 import { CardsService } from '../cards/cards.service'
@@ -28,7 +27,7 @@ import { ThemeService } from '../theme/theme.service'
 /**
  * Root that holds game and statistics.
  */
-export class RootComponent implements AfterViewInit, OnInit {
+export class RootComponent implements AfterViewInit {
   @ViewChild('contentWrapper', { static: true })
   public contentWrapper: ElementRef<HTMLDivElement>
 
@@ -36,24 +35,10 @@ export class RootComponent implements AfterViewInit, OnInit {
 
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: string,
-    public cards: CardsService,
     public theme: ThemeService,
-    background: BackgroundService
+    background: BackgroundService,
+    cards: CardsService
   ) {}
-
-  private webWorker(): void {
-    if (typeof Worker !== 'undefined') {
-      let worker: Worker
-
-      worker = new Worker('./root.worker', { type: 'module' })
-
-      worker.onmessage = (event: MessageEvent): void => {
-        console.log(`page got message: "${event.data}"`)
-      }
-
-      worker.postMessage('Hello!')
-    }
-  }
 
   public getRouterOutletState(outlet: RouterOutlet): ActivatedRoute | string {
     let result: ActivatedRoute | string
@@ -77,10 +62,6 @@ export class RootComponent implements AfterViewInit, OnInit {
         this.contentWrapper.nativeElement.scrollTop = scrollPosition
       }
     }
-  }
-
-  public ngOnInit(): void {
-    this.webWorker()
   }
 
   public scroll(event: Event): void {

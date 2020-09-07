@@ -1,4 +1,4 @@
-import { IStatistic } from './statistic.d'
+import { Count, IStatistic, Match, Mode } from './statistic.d'
 
 /**
  * Statistic model to score.
@@ -24,6 +24,18 @@ export class Statistic implements IStatistic {
    * Holder for `flips`
    */
   private _flips?: number
+  /**
+   * Holder for `count`
+   */
+  private _count?: Count
+  /**
+   * Holder for `match`
+   */
+  private _match?: Match
+  /**
+   * Holder for `mode`
+   */
+  private _mode?: Mode
 
   /**
    * LeyID
@@ -81,6 +93,36 @@ export class Statistic implements IStatistic {
   }
 
   /**
+   * Count
+   */
+  public get count(): Count {
+    return this._count
+  }
+  public set count(val: Count) {
+    this._count = val
+  }
+
+  /**
+   * Match
+   */
+  public get match(): Match {
+    return this._match
+  }
+  public set match(val: Match) {
+    this._match = val
+  }
+
+  /**
+   * Mode
+   */
+  public get mode(): Mode {
+    return this._mode
+  }
+  public set mode(val: Mode) {
+    this._mode = val
+  }
+
+  /**
    * Create Statistic model.
    *
    * @param statistic `IStatistic`
@@ -94,13 +136,19 @@ export class Statistic implements IStatistic {
    * @param minutes `number` Minutes
    * @param hours `number` Hours
    * @param flips `number` Flips
+   * @param count `Count` Count
+   * @param match `Match` Match
+   * @param mode `Mode` Mode
    */
   constructor(
     milliseconds: number,
     seconds: number,
     minutes: number,
     hours: number,
-    flips: number
+    flips: number,
+    count: Count,
+    match: Match,
+    mode: Mode
   )
   /**
    * Create Statistic model.
@@ -110,6 +158,9 @@ export class Statistic implements IStatistic {
    * @param minutes `number` Minutes
    * @param hours `number` Hours
    * @param flips `number` Flips
+   * @param count `Count` Count
+   * @param match `Match` Match
+   * @param mode `Mode` Mode
    * @param keyID `number` keyID
    */
   constructor(
@@ -118,6 +169,9 @@ export class Statistic implements IStatistic {
     minutes: number,
     hours: number,
     flips: number,
+    count: Count,
+    match: Match,
+    mode: Mode,
     keyID: number
   )
   constructor(
@@ -126,7 +180,10 @@ export class Statistic implements IStatistic {
     arg3?: number,
     arg4?: number,
     arg5?: number,
-    arg6?: number
+    arg6?: Count,
+    arg7?: Match,
+    arg8?: Mode,
+    arg9?: number
   ) {
     if (typeof arg1 === 'number') {
       this.milliseconds = arg1
@@ -134,9 +191,12 @@ export class Statistic implements IStatistic {
       this.minutes = arg3
       this.hours = arg4
       this.flips = arg5
+      this.count = arg6
+      this.match = arg7
+      this.mode = arg8
 
-      if (typeof arg6 !== 'undefined') {
-        this.keyID = arg6
+      if (typeof arg9 !== 'undefined') {
+        this.keyID = arg9
       }
     } else {
       this.milliseconds = arg1.milliseconds
@@ -144,6 +204,9 @@ export class Statistic implements IStatistic {
       this.minutes = arg1.minutes
       this.hours = arg1.hours
       this.flips = arg1.flips
+      this.count = arg1.count
+      this.match = arg1.match
+      this.mode = arg1.mode
 
       if (typeof arg1.keyID !== 'undefined') {
         this.keyID = arg1.keyID
@@ -161,11 +224,14 @@ export class Statistic implements IStatistic {
 
     temp = {} as IStatistic
 
-    temp.flips = statistic.flips
-    temp.hours = statistic.hours
-    temp.minutes = statistic.minutes
-    temp.seconds = statistic.seconds
     temp.milliseconds = statistic.milliseconds
+    temp.seconds = statistic.seconds
+    temp.minutes = statistic.minutes
+    temp.hours = statistic.hours
+    temp.flips = statistic.flips
+    temp.count = statistic.count
+    temp.match = statistic.match
+    temp.mode = statistic.mode
 
     if (typeof statistic.keyID !== 'undefined') {
       temp.keyID = statistic.keyID

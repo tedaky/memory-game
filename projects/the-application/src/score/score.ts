@@ -152,8 +152,8 @@ export class Score {
    * Resolve with Statistic[].
    * Reject with error.
    */
-  private async getAll(): Promise<Statistic[]> {
-    return await new Promise(
+  private getAll(): Promise<Statistic[]> {
+    return new Promise(
       (
         resolve: (value: Statistic[]) => void,
         reject: (reason: DOMException) => void
@@ -161,14 +161,10 @@ export class Score {
         if (this.database.database && this.database.ready) {
           let objectStore: IDBObjectStore
           let request: IDBRequest<IStatistic[]>
-          let transation: IDBTransaction
 
-          transation = this.database.database.transaction(
-            this.storeName,
-            'readonly'
-          )
-
-          objectStore = transation.objectStore(this.storeName)
+          objectStore = this.database.database
+            .transaction(this.storeName, 'readonly')
+            .objectStore(this.storeName)
 
           request = objectStore.getAll()
 
@@ -205,14 +201,14 @@ export class Score {
    *
    * @param statistic `Statistic` to add to indexeddb
    */
-  public async add(statistic: Statistic): Promise<Statistic> {
+  public add(statistic: Statistic): Promise<Statistic> {
     let self: this
 
     this.addScoreStatistic(statistic)
 
     self = this
 
-    return await new Promise(
+    return new Promise(
       (
         resolve: (value: Statistic) => void,
         reject: (reason: DOMException) => void
@@ -221,16 +217,12 @@ export class Score {
           let add: IStatistic
           let objectStore: IDBObjectStore
           let request: IDBRequest<IDBValidKey>
-          let transaction: IDBTransaction
 
           add = Statistic.toJSON(statistic)
 
-          transaction = this.database.database.transaction(
-            this.storeName,
-            'readwrite'
-          )
-
-          objectStore = transaction.objectStore(this.storeName)
+          objectStore = this.database.database
+            .transaction(this.storeName, 'readwrite')
+            .objectStore(this.storeName)
 
           request = objectStore.add(add)
 
@@ -261,14 +253,14 @@ export class Score {
    * Resolve with undefined.
    * Reject with error.
    */
-  public async clear(): Promise<void> {
+  public clear(): Promise<void> {
     let self: this
 
     this.clearScores()
 
     self = this
 
-    return await new Promise(
+    return new Promise(
       (
         resolve: (value: void) => void,
         reject: (reason: DOMException) => void
@@ -276,14 +268,10 @@ export class Score {
         if (this.database.database && this.database.ready) {
           let objectStore: IDBObjectStore
           let request: IDBRequest<undefined>
-          let transaction: IDBTransaction
 
-          transaction = this.database.database.transaction(
-            this.storeName,
-            'readwrite'
-          )
-
-          objectStore = transaction.objectStore(this.storeName)
+          objectStore = this.database.database
+            .transaction(this.storeName, 'readwrite')
+            .objectStore(this.storeName)
 
           request = objectStore.clear()
 
@@ -314,12 +302,12 @@ export class Score {
    *
    * @param key `number` to remove from indexeddb
    */
-  public async delete(key: number): Promise<undefined> {
+  public delete(key: number): Promise<undefined> {
     let self: this
 
     self = this
 
-    return await new Promise(
+    return new Promise(
       (
         resolve: (value: undefined) => void,
         reject: (reason: DOMException) => void
@@ -327,14 +315,10 @@ export class Score {
         if (this.database.database && this.database.ready) {
           let objectStore: IDBObjectStore
           let request: IDBRequest<undefined>
-          let transaction: IDBTransaction
 
-          transaction = this.database.database.transaction(
-            this.storeName,
-            'readwrite'
-          )
-
-          objectStore = transaction.objectStore(this.storeName)
+          objectStore = this.database.database
+            .transaction(this.storeName, 'readwrite')
+            .objectStore(this.storeName)
 
           request = objectStore.delete(key)
 

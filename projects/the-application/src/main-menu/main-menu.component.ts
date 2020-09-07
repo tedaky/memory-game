@@ -1,8 +1,9 @@
 import { isPlatformBrowser } from '@angular/common'
-import { Component, Inject, Input, PLATFORM_ID, OnInit } from '@angular/core'
+import { Component, Inject, Input, OnInit, PLATFORM_ID } from '@angular/core'
 import { MatRipple } from '@angular/material/core'
 import { RouterLinkActive } from '@angular/router'
 
+import { GameService } from '../game/game.service'
 import { MenuButton } from '../menu-button/menu-button'
 import { ThemeService } from '../theme/theme.service'
 
@@ -18,6 +19,7 @@ export class MainMenuComponent implements OnInit {
 
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: string,
+    private game: GameService,
     public theme: ThemeService
   ) {}
 
@@ -66,7 +68,7 @@ export class MainMenuComponent implements OnInit {
   ): void {
     event.preventDefault()
 
-    if (routerLinkActive.isActive) {
+    if (routerLinkActive.isActive || this.game.playing.value) {
       return
     }
 

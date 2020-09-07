@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
 
+import { CanDeactivateGame } from '../can-deactivate-game/can-deactivate-game.service'
 import { GameComponent } from '../game/game.component'
 import { HighScoresComponent } from '../high-scores/high-scores.component'
 import { LeaderboardComponent } from '../leaderboard/leaderboard.component'
@@ -11,7 +12,8 @@ const routes: Routes = [
   {
     component: GameComponent,
     path: 'game',
-    pathMatch: 'full'
+    pathMatch: 'full',
+    canDeactivate: [CanDeactivateGame]
   },
   {
     component: HighScoresComponent,

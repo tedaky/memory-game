@@ -1,4 +1,4 @@
-import { ICard } from './card.d'
+import { Flipped, ICard } from './card.d'
 
 /**
  * Card model to match.
@@ -7,7 +7,7 @@ export class Card implements ICard {
   /**
    * Holder for `flipped`
    */
-  private _flipped: 0 | 1 | 2 | 3 | 4
+  private _flipped?: Flipped
   /**
    * Holder for `image`
    */
@@ -40,13 +40,13 @@ export class Card implements ICard {
   /**
    * Flipped
    */
-  public get flipped(): 0 | 1 | 2 | 3 | 4 {
+  public get flipped(): Flipped {
     if (typeof this._flipped === 'undefined') {
       this._flipped = 0
     }
     return this._flipped
   }
-  public set flipped(val: 0 | 1 | 2 | 3 | 4) {
+  public set flipped(val: Flipped) {
     this._flipped = val
   }
 

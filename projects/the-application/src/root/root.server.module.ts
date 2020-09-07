@@ -13,4 +13,4 @@ const routes: Routes = [{ path: 'shell', component: ShellComponent }]
   bootstrap: [RootComponent],
   declarations: [ShellComponent]
 })
-export class AppServerModule {}
+export class RootServerModule {}

@@ -12,4 +12,4 @@ if (environment.production) {
   enableProdMode()
 }
 
-export { AppServerModule } from './root/app.server.module'
+export { RootServerModule as AppServerModule } from './root/root.server.module'

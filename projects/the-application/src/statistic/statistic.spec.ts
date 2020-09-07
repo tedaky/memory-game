@@ -7,7 +7,10 @@ describe('Statistic', () => {
       hours: 0,
       milliseconds: 0,
       minutes: 0,
-      seconds: 0
+      seconds: 0,
+      count: 9,
+      match: 2,
+      mode: 'regular'
     })
     expect(temp).toBeInstanceOf(Statistic)
     expect(temp.flips).toEqual(12)
@@ -22,6 +25,9 @@ describe('Statistic', () => {
       milliseconds: 2,
       minutes: 2,
       seconds: 2,
+      count: 9,
+      match: 2,
+      mode: 'regular',
       keyID: 1
     })
     expect(temp1).toBeInstanceOf(Statistic)

@@ -2,7 +2,7 @@
   <mat-card-title-group>
     <mat-card-title>
       Matches: {{ cardsWon.length }} /
-      {{ cards.matchCount }}
+      {{ game.count.value }}
     </mat-card-title>
     <mat-card-title> Flips: {{ flips }} </mat-card-title>
     <mat-card-title>
@@ -41,11 +41,11 @@
             }"
           >
             <img
-              [attr.src]="getCardImage(card)"
+              [attr.src]="cards.getCardImage(card)"
               [attr.aria-label]="card.flipped === 0 ? 'blank' : card.name"
               class="card-action"
             />
-            <img [attr.src]="getCardBack(card)" class="card-blank" />
+            <img [attr.src]="cards.getCardBack(card)" class="card-blank" />
           </div>
         </div>
       </mat-grid-tile>

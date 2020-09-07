@@ -200,6 +200,40 @@ export class CardsService {
   }
   //#endregion createGame
 
+  //#region getCardBack
+  /**
+   * The back of the card to use based on the flip state.
+   *
+   * @param card `Card` given card
+   */
+  public getCardBack(card: Card): string {
+    if (card.flipped === 3 || card.flipped === 1 || card.flipped === 0) {
+      return this.blank
+    } else if (card.flipped === 4) {
+      return card.image
+    } else if (card.flipped === 2) {
+      return this.white
+    }
+  }
+  //#endregion getCardBack
+
+  //#region getCardImage
+  /**
+   * Return what image to use based on card flip state.
+   *
+   * @param card `Card` given card
+   */
+  public getCardImage(card: Card): string {
+    if (card.flipped === 4 || card.flipped === 3 || card.flipped === 1) {
+      return card.image
+    } else if (card.flipped === 2) {
+      return this.white
+    } else if (card.flipped === 0) {
+      return this.blank
+    }
+  }
+  //#endregion getCardImage
+
   //#region shuffle
   /**
    * Shuffle the cards randomly,

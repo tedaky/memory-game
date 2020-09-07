@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog'
 import { interval } from 'rxjs'
 import { take } from 'rxjs/operators'
 
+import { GameService } from './game.service'
 import { Card } from '../card/card'
 import { CardsService } from '../cards/cards.service'
 import { flipAnimation } from '../flip-animation/flip-animation'
@@ -35,10 +36,6 @@ export class GameComponent implements OnDestroy, OnInit {
    * Tell game that checking is in progress.
    */
   private checking: boolean
-  /**
-   * Tell if the game is in play.
-   */
-  private playing: boolean
   /**
    * Keep track of cards that haven't been flipped.
    */
@@ -66,7 +63,8 @@ export class GameComponent implements OnDestroy, OnInit {
     private matDialog: MatDialog,
     private mediaMatcher: MediaMatcher,
     private statistics: StatisticsService,
-    public cards: CardsService
+    public cards: CardsService,
+    public game: GameService
   ) {}
 
   private mediaQueryListener(): void {
@@ -77,27 +75,10 @@ export class GameComponent implements OnDestroy, OnInit {
     this.mediaMatcherQuery = this.mediaMatcher.matchMedia(
       '(min-aspect-ratio: 7/10)'
     )
-    this.mediaMatcherQuery.addListener(this.mediaQueryListener.bind(this))
-  }
-
-  public getCardImage(card: Card): string {
-    if (card.flipped === 4 || card.flipped === 3 || card.flipped === 1) {
-      return card.image
-    } else if (card.flipped === 2) {
-      return this.cards.white
-    } else if (card.flipped === 0) {
-      return this.cards.blank
-    }
-  }
-
-  public getCardBack(card: Card): string {
-    if (card.flipped === 3 || card.flipped === 1 || card.flipped === 0) {
-      return this.cards.blank
-    } else if (card.flipped === 4) {
-      return card.image
-    } else if (card.flipped === 2) {
-      return this.cards.white
-    }
+    this.mediaMatcherQuery.addEventListener(
+      'change',
+      this.mediaQueryListener.bind(this)
+    )
   }
 
   /**
@@ -114,14 +95,14 @@ export class GameComponent implements OnDestroy, OnInit {
       interval(500)
         .pipe<number>(take<number>(1))
         .subscribe((): void => {
-          if (this.playing) {
+          if (this.game.playing.value) {
             cardChosen0.flipped = 4
             cardChosen1.flipped = 4
 
             interval(250)
               .pipe<number>(take<number>(1))
               .subscribe((): void => {
-                if (this.playing) {
+                if (this.game.playing.value) {
                   cardChosen0.flipped = 2
                   cardChosen1.flipped = 2
                 }
@@ -134,14 +115,14 @@ export class GameComponent implements OnDestroy, OnInit {
       interval(500)
         .pipe<number>(take<number>(1))
         .subscribe((): void => {
-          if (this.playing) {
+          if (this.game.playing.value) {
             cardChosen0.flipped = 3
             cardChosen1.flipped = 3
 
             interval(250)
               .pipe<number>(take<number>(1))
               .subscribe((): void => {
-                if (this.playing) {
+                if (this.game.playing.value) {
                   cardChosen0.flipped = 0
                   cardChosen1.flipped = 0
                 }
@@ -150,11 +131,11 @@ export class GameComponent implements OnDestroy, OnInit {
         })
     }
 
-    if (this.cardsWon.length === 6) {
+    if (this.cardsWon.length === this.cards.matchCount) {
       interval(768)
         .pipe<number>(take<number>(1))
         .subscribe((): void => {
-          this.playing = false
+          this.game.playing.next(false)
         })
 
       let statistic: Statistic
@@ -166,7 +147,10 @@ export class GameComponent implements OnDestroy, OnInit {
         this.stopwatch.seconds,
         this.stopwatch.minutes,
         this.stopwatch.hours,
-        this.flips
+        this.flips,
+        this.game.count.value,
+        this.game.match.value,
+        this.game.mode.value
       )
 
       interval(500)
@@ -211,8 +195,8 @@ export class GameComponent implements OnDestroy, OnInit {
   public flipCard(event: MouseEvent, index: number): void {
     event.preventDefault()
 
-    if (!this.playing) {
-      this.playing = true
+    if (!this.game.playing.value) {
+      this.game.playing.next(true)
       this.stopwatch.restart()
     }
 
@@ -226,8 +210,9 @@ export class GameComponent implements OnDestroy, OnInit {
       option0 = this.cardsChosenId[0]
       option1 = this.cardsChosenId[1]
 
+      // Swap cards if matched on first flip
       if (
-        this.cardsChosenId.length === 2 &&
+        this.cardsChosenId.length === this.game.match.value &&
         this.cards.deck[option0].name === this.cards.deck[option1].name &&
         this.unFlipped.includes(option1)
       ) {
@@ -252,19 +237,17 @@ export class GameComponent implements OnDestroy, OnInit {
 
       this.updateFlipped(index)
 
-      if (this.cardsChosenId.length === 2) {
+      if (this.cardsChosenId.length === this.game.match.value) {
         this.checking = true
 
         interval(500)
           .pipe<number>(take<number>(1))
-          .subscribe((val: number): void => {
-            if (this.playing) {
+          .subscribe((): void => {
+            if (this.game.playing.value) {
               this.checkForMatch(option0, option1)
-
-              this.checking = false
-            } else {
-              this.checking = false
             }
+
+            this.checking = false
           })
 
         this.cardsChosenId = []
@@ -272,11 +255,14 @@ export class GameComponent implements OnDestroy, OnInit {
     }
   }
 
+  //#region ngOnInit
   public ngOnInit(): void {
     this.createMediaMatcher()
     this.reset(new Event('click') as MouseEvent)
   }
+  //#endregion ngOnInit
 
+  //#region reset
   /**
    * Reset the game play.
    *
@@ -300,10 +286,16 @@ export class GameComponent implements OnDestroy, OnInit {
     this.cards.shuffle()
     this.stopwatch.stop()
     this.stopwatch.clear()
-    this.playing = false
+    this.game.playing.next(false)
   }
+  //#endregion reset
 
+  //#region ngOnDestroy
   public ngOnDestroy(): void {
-    this.mediaMatcherQuery.removeListener(this.mediaQueryListener)
+    this.mediaMatcherQuery.removeEventListener(
+      'change',
+      this.mediaQueryListener
+    )
   }
+  //#endregion ngOnDestroy
 }
