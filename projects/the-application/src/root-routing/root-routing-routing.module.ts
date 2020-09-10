@@ -39,6 +39,10 @@ const routes: Routes = [
     path: '',
     pathMatch: 'full',
     redirectTo: 'game'
+  },
+  {
+    path: '**',
+    redirectTo: 'game'
   }
 ]
 

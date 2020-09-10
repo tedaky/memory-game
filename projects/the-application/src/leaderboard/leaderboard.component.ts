@@ -11,7 +11,7 @@ import { Statistic } from '../statistic/statistic'
  * Display the leaderboard
  */
 @Component({
-  selector: 'app-high-scores',
+  selector: 'app-leaderboard',
   templateUrl: '../score/score-template.component.html',
   styleUrls: ['../score/score-template.component.scss'],
   animations: [fadeAnimation]
