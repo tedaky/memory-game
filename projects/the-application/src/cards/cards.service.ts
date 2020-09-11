@@ -2,6 +2,16 @@ import { Injectable } from '@angular/core'
 
 import { Card } from '../card/card'
 import { ICard } from '../card/card.d'
+import { GameService } from '../game/game.service'
+import {
+  useValentinesDay,
+  useStPatricksDay,
+  useEaster,
+  use4thOfJuly,
+  useHalloween,
+  useThanksgiving,
+  useChristmas
+} from '../holiday/holiday'
 
 /**
  * Create and make cards available.
@@ -14,6 +24,13 @@ import { ICard } from '../card/card.d'
  */
 export class CardsService {
   //#region Private Holders
+  //#region _blankSource
+  /**
+   * Holder for `blankSource`.
+   */
+  private _blankSource: string
+  //#endregion _blankSource
+
   //#region _cards
   /**
    * Holder for `cards`.
@@ -72,9 +89,21 @@ export class CardsService {
    * Blank image card.
    */
   public get blank(): string {
-    return 'assets/blank.png'
+    return `assets/${this.blankSource}/blank.png`
   }
   //#endregion blank
+
+  //#region blankSource
+  /**
+   * BlankSource image folder.
+   */
+  public get blankSource(): string {
+    return this._blankSource || 'regular'
+  }
+  public set blankSource(val: string) {
+    this._blankSource = val
+  }
+  //#endregion blankSource
 
   //#region white
   /**
@@ -87,7 +116,7 @@ export class CardsService {
   //#endregion blank, white images
 
   //#region constructor
-  constructor() {
+  constructor(private game: GameService) {
     this.createGame()
   }
   //#endregion constructor
@@ -143,45 +172,120 @@ export class CardsService {
    * Create a unique set of cards.
    */
   private createCards(): void {
-    this.createCard('cheeseburger', 'assets/cheeseburger.png')
-    this.createCard('fries', 'assets/fries.png')
-    this.createCard('hotdog', 'assets/hotdog.png')
-    this.createCard('ice-cream', 'assets/ice-cream.png')
-    this.createCard('milkshake', 'assets/milkshake.png')
-    this.createCard('pizza', 'assets/pizza.png')
+    let holidayCards: boolean
+    holidayCards = false
+
+    // Valentine's Day
+    if (useValentinesDay()) {
+      this.createRegularCards()
+      holidayCards = true
+    }
+
+    // St. Patricks's Day
+    if (useStPatricksDay()) {
+      this.createRegularCards()
+      holidayCards = true
+    }
+
+    // Easter
+    if (useEaster()) {
+      this.createRegularCards()
+      holidayCards = true
+    }
+
+    // 4th of July
+    if (use4thOfJuly()) {
+      this.createRegularCards()
+      holidayCards = true
+    }
+
+    // Halloween
+    if (useHalloween()) {
+      this.createHalloweenCards()
+      holidayCards = true
+    }
+
+    // Thanksgiving
+    if (useThanksgiving()) {
+      this.createRegularCards()
+      holidayCards = true
+    }
+
+    // Christmas
+    if (useChristmas()) {
+      this.createRegularCards()
+      holidayCards = true
+    }
+
+    if (!holidayCards) {
+      this.createRegularCards()
+    }
   }
   //#endregion createCards
 
+  //#region createRegularCards
+  /**
+   * Create a unique set of regular cards.
+   */
+  private createRegularCards(): void {
+    let assets: string
+
+    assets = 'assets/regular/'
+
+    this.blankSource = 'regular'
+
+    this.createCard('cheeseburger', `${assets}cheeseburger.png`)
+    this.createCard('fries', `${assets}fries.png`)
+    this.createCard('hotdog', `${assets}hotdog.png`)
+    this.createCard('ice-cream', `${assets}ice-cream.png`)
+    this.createCard('milkshake', `${assets}milkshake.png`)
+    this.createCard('pizza', `${assets}pizza.png`)
+  }
+  //#endregion createRegularCards
+
+  //#region createHalloweenCards
+  /**
+   * Create a unique set of halloween cards.
+   */
+  private createHalloweenCards(): void {
+    let assets: string
+
+    assets = 'assets/halloween/'
+
+    this.blankSource = 'halloween'
+
+    this.createCard('castle', `${assets}castle.png`)
+    this.createCard('furry monster', `${assets}furry-monster.png`)
+    this.createCard('lantern', `${assets}lantern.png`)
+    this.createCard('pumpkin', `${assets}pumpkin.png`)
+    this.createCard('slug monster', `${assets}slug-monster.png`)
+    this.createCard('witch hat', `${assets}witch-hat.png`)
+  }
+  //#endregion createRegularCards
+
   //#region createDeck
-  //#region overload
   /**
    * Create a deck pairing each card.
    */
-  private createDeck(): void
-  /**
-   * Create a deck by making new cards for matching based on a setCount.
-   *
-   * @param setCount How many times to copy a card.
-   */
-  private createDeck(setCount: number): void
-  //#endregion overload
-  private createDeck(setCount?: number): void {
-    if (typeof setCount === 'undefined') {
-      // Create a default of 2 for default game type of pair matching.
-      setCount = 2
-    }
+  private createDeck(): void {
+    let temp: Card[]
+    temp = []
 
     // Clear the current deck of any cards.
     this.deck.splice(0, this.deck.length)
 
+    this.shuffleCards()
+
+    temp = this.cards.slice(0, this.game.count.value)
+
     // Loop each individual card.
-    this.cards.forEach((card: Card): void => {
+    temp.forEach((card: Card): void => {
       let i: number
 
       i = 0
 
       // Create new card(s) based on the setCount.
-      for (; i < setCount; i++) {
+      for (; i < this.game.match.value; i++) {
         // Push each new card to the deck.
         this.deck.push(new Card(card))
       }
@@ -199,6 +303,17 @@ export class CardsService {
     this.createDeck()
   }
   //#endregion createGame
+
+  //#region shuffleCards
+  /**
+   * Shuffle the list of unique cards
+   */
+  private shuffleCards(): void {
+    this.cards.sort((): number => {
+      return 0.5 - Math.random()
+    })
+  }
+  //#endregion shuffleCards
 
   //#region getCardBack
   /**
