@@ -3,10 +3,10 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core'
 import { MatSnackBar } from '@angular/material/snack-bar'
 import { BehaviorSubject } from 'rxjs'
 
+import { CheckForUpdateService } from '../check-for-update/check-for-update.service'
 import { DeviceSize } from '../device-size/device-size'
 import { InstallComponent } from '../install/install.component'
 import { BeforeInstallPromptEvent } from '../polyfills/before-install-prompt.event'
-import { CheckForUpdateService } from '../check-for-update/check-for-update.service'
 
 /**
  * Service for device information.
@@ -19,6 +19,10 @@ import { CheckForUpdateService } from '../check-for-update/check-for-update.serv
  */
 export class DeviceService {
   /**
+   * Observable for focused/blurred application.
+   */
+  public active: BehaviorSubject<boolean>
+  /**
    * Observable for device size.
    */
   public deviceScreen: BehaviorSubject<DeviceSize>
@@ -28,14 +32,41 @@ export class DeviceService {
     checkForUpdate: CheckForUpdateService,
     snackBar: MatSnackBar
   ) {
+    this.active = new BehaviorSubject<boolean>(true)
     this.deviceScreen = new BehaviorSubject<DeviceSize>(new DeviceSize(0, 0))
 
     if (isPlatformBrowser(platformId)) {
-      this.install(snackBar, checkForUpdate)
-      this.emitResizeFirst()
-      this.createResizeListener()
       this.beforeunload()
+      this.createActiveListener()
+      this.createResizeListener()
+      this.emitResizeFirst()
+      this.install(snackBar, checkForUpdate)
     }
+  }
+
+  /**
+   * Remove localstorage scroll when the app
+   * closes to prevent scrolling upon open.
+   */
+  private beforeunload(): void {
+    window.addEventListener(
+      'beforeunload',
+      (event: BeforeUnloadEvent): void => {
+        window.localStorage.removeItem('scroll')
+      }
+    )
+  }
+
+  /**
+   * Create listeners for if the window is focused or blurred
+   */
+  private createActiveListener(): void {
+    window.addEventListener('blur', (event: FocusEvent) => {
+      this.active.next(false)
+    })
+    window.addEventListener('focus', (event: FocusEvent) => {
+      this.active.next(true)
+    })
   }
 
   /**
@@ -44,7 +75,7 @@ export class DeviceService {
   private createResizeListener(): void {
     window.addEventListener(
       'resize',
-      (event: UIEvent) => {
+      (event: UIEvent): void => {
         let emit: DeviceSize
         let height: number
         let width: number
@@ -72,19 +103,6 @@ export class DeviceService {
     emit = new DeviceSize(height, width)
 
     this.deviceScreen.next(emit)
-  }
-
-  /**
-   * Remove localstorage scroll when the app
-   * closes to prevent scrolling upon open.
-   */
-  private beforeunload(): void {
-    window.addEventListener(
-      'beforeunload',
-      (event: BeforeUnloadEvent): void => {
-        window.localStorage.removeItem('scroll')
-      }
-    )
   }
 
   /**

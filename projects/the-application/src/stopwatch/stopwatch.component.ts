@@ -1,7 +1,8 @@
-import { Component, OnDestroy } from '@angular/core'
+import { Component, OnDestroy, OnInit } from '@angular/core'
 import { interval, Subscription } from 'rxjs'
 
 import { createTime } from '../create-time/create-time'
+import { DeviceService } from '../device/device.service'
 import { Statistic } from '../statistic/statistic'
 
 /**
@@ -18,7 +19,7 @@ import { Statistic } from '../statistic/statistic'
  * `hours`, `minutes`, `seconds`, `milliseconds`
  * with start, stop, continue, and reset functionality.
  */
-export class StopwatchComponent implements OnDestroy {
+export class StopwatchComponent implements OnDestroy, OnInit {
   /**
    * Tells if the stopwatch is paused/stopped or running
    *
@@ -31,9 +32,13 @@ export class StopwatchComponent implements OnDestroy {
    */
   private timeBegan: Date
   /**
-   * The subscription to the timer
+   * The subscription to the timer.
    */
   private timer: Subscription
+  /**
+   * The subscription to the window focus/blur events.
+   */
+  private window: Subscription
 
   /**
    * Hours time. Displayed to 2+ integer places. Shouldn't occur.
@@ -59,6 +64,8 @@ export class StopwatchComponent implements OnDestroy {
    * ex. 000, 024, 050, 120
    */
   public milliseconds: number
+
+  constructor(private device: DeviceService) {}
 
   /**
    * Set stopwatch back to 0 time.
@@ -132,6 +139,22 @@ export class StopwatchComponent implements OnDestroy {
 
   public ngOnDestroy(): void {
     this.unsubscribe()
+
+    if (this.window && this.window instanceof Subscription) {
+      this.window.unsubscribe()
+    }
+  }
+
+  public ngOnInit(): void {
+    this.window = this.device.active.subscribe((val: boolean): void => {
+      if (!val) {
+        this.stop()
+        return
+      }
+      if (val && this.milliseconds + this.seconds) {
+        this.continue()
+      }
+    })
   }
 
   /**
