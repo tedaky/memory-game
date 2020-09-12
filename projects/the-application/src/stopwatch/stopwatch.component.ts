@@ -4,6 +4,7 @@ import { interval, Subscription } from 'rxjs'
 import { createTime } from '../create-time/create-time'
 import { DeviceService } from '../device/device.service'
 import { Statistic } from '../statistic/statistic'
+import { Time } from '../time/time'
 
 /**
  * Display a simple stopwatch with
@@ -118,17 +119,16 @@ export class StopwatchComponent implements OnDestroy, OnInit {
 
     let currentTime: Date
     let pausedTime: number
+    let time: Time
 
     this.unsubscribe()
     this.active = true
 
     currentTime = new Date()
-    pausedTime = createTime({
-      hours: this.hours,
-      minutes: this.minutes,
-      seconds: this.seconds,
-      milliseconds: this.milliseconds
-    } as Statistic)
+
+    time = new Time(this.milliseconds, this.seconds, this.minutes, this.hours)
+
+    pausedTime = createTime(time)
 
     this.timeBegan = new Date(currentTime.getTime() - pausedTime)
 

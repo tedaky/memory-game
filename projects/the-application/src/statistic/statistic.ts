@@ -1,25 +1,19 @@
 import { Count, IStatistic, Match, Mode } from './statistic.d'
+import { Time } from '../time/time'
+import { ITime } from '../time/time.d'
 
 /**
  * Statistic model to score.
  */
 export class Statistic implements IStatistic {
   /**
-   * Holder for `milliseconds`
+   * Holder for `complete`
    */
-  private _milliseconds?: number
+  private _complete?: Time
   /**
-   * Holder for `seconds`
+   * Holder for `memory`
    */
-  private _seconds?: number
-  /**
-   * Holder for `minutes`
-   */
-  private _minutes?: number
-  /**
-   * Holder for `hours`
-   */
-  private _hours?: number
+  private _memory?: Time
   /**
    * Holder for `flips`
    */
@@ -38,48 +32,42 @@ export class Statistic implements IStatistic {
   private _mode?: Mode
 
   /**
-   * LeyID
+   * KeyID
    */
   public keyID?: number
 
   /**
-   * Milliseconds
+   * Complete
    */
-  public get milliseconds(): number {
-    return this._milliseconds
+  public get complete(): Time {
+    if (typeof this._complete === 'undefined') {
+      this.complete = null
+    }
+    return this._complete
   }
-  public set milliseconds(val: number) {
-    this._milliseconds = val
+  public set complete(val: Time) {
+    if (val instanceof Time) {
+      this._complete = val
+    } else {
+      this._complete = new Time(val)
+    }
   }
 
   /**
-   * Seconds
+   * Memory
    */
-  public get seconds(): number {
-    return this._seconds
+  public get memory(): Time {
+    if (typeof this._memory === 'undefined') {
+      this.memory = null
+    }
+    return this._memory
   }
-  public set seconds(val: number) {
-    this._seconds = val
-  }
-
-  /**
-   * Minutes
-   */
-  public get minutes(): number {
-    return this._minutes
-  }
-  public set minutes(val: number) {
-    this._minutes = val
-  }
-
-  /**
-   * Hours
-   */
-  public get hours(): number {
-    return this._hours
-  }
-  public set hours(val: number) {
-    this._hours = val
+  public set memory(val: Time) {
+    if (val instanceof Time) {
+      this._memory = val
+    } else {
+      this._memory = new Time(val)
+    }
   }
 
   /**
@@ -131,84 +119,155 @@ export class Statistic implements IStatistic {
   /**
    * Create Statistic model.
    *
-   * @param milliseconds `number` Milliseconds
-   * @param seconds `number` Seconds
-   * @param minutes `number` Minutes
-   * @param hours `number` Hours
+   * @param mode `Mode` Mode
+   * @param match `Match` Match
    * @param flips `number` Flips
    * @param count `Count` Count
-   * @param match `Match` Match
-   * @param mode `Mode` Mode
+   * @param complete `ITime` Complete
+   * @param memory `ITime` Memory
    */
   constructor(
-    milliseconds: number,
-    seconds: number,
-    minutes: number,
-    hours: number,
+    mode: Mode,
+    match: Match,
     flips: number,
     count: Count,
-    match: Match,
-    mode: Mode
+    complete: ITime,
+    memory: ITime
   )
   /**
    * Create Statistic model.
    *
-   * @param milliseconds `number` Milliseconds
-   * @param seconds `number` Seconds
-   * @param minutes `number` Minutes
-   * @param hours `number` Hours
+   * @param mode `Mode` Mode
+   * @param match `Match` Match
    * @param flips `number` Flips
    * @param count `Count` Count
-   * @param match `Match` Match
-   * @param mode `Mode` Mode
-   * @param keyID `number` keyID
+   * @param complete `ITime` Complete
+   * @param memory `ITime` Memory
+   * @param keyID `number` KeyID
    */
   constructor(
-    milliseconds: number,
-    seconds: number,
-    minutes: number,
-    hours: number,
+    mode: Mode,
+    match: Match,
     flips: number,
     count: Count,
-    match: Match,
+    complete: ITime,
+    memory: ITime,
+    keyID: number
+  )
+  /**
+   * Create Statistic model.
+   *
+   * @param mode `Mode` Mode
+   * @param match `Match` Match
+   * @param flips `number` Flips
+   * @param count `Count` Count
+   * @param completeMilliseconds `number` Complete Milliseconds
+   * @param completeSeconds `number` Complete Seconds
+   * @param completeMinutes `number` Complete Minutes
+   * @param completeHours `number` Complete Hours
+   * @param memoryMilliseconds `number` Complete Milliseconds
+   * @param memorySeconds `number` Complete Seconds
+   * @param memoryMinutes` number` Complete Minutes
+   * @param memoryHours `number` Complete Hours
+   */
+  constructor(
     mode: Mode,
+    match: Match,
+    flips: number,
+    count: Count,
+    completeMilliseconds: number,
+    completeSeconds: number,
+    completeMinutes: number,
+    completeHours: number,
+    memoryMilliseconds: number,
+    memorySeconds: number,
+    memoryMinutes: number,
+    memoryHours: number
+  )
+  /**
+   * Create Statistic model.
+   *
+   * @param mode `Mode` Mode
+   * @param match `Match` Match
+   * @param flips `number` Flips
+   * @param count `Count` Count
+   * @param completeMilliseconds `number` Complete Milliseconds
+   * @param completeSeconds `number` Complete Seconds
+   * @param completeMinutes `number` Complete Minutes
+   * @param completeHours `number` Complete Hours
+   * @param memoryMilliseconds `number` Complete Milliseconds
+   * @param memorySeconds `number` Complete Seconds
+   * @param memoryMinutes` number` Complete Minutes
+   * @param memoryHours `number` Complete Hours
+   * @param keyID `number` KeyID
+   */
+  constructor(
+    mode: Mode,
+    match: Match,
+    flips: number,
+    count: Count,
+    completeMilliseconds: number,
+    completeSeconds: number,
+    completeMinutes: number,
+    completeHours: number,
+    memoryMilliseconds: number,
+    memorySeconds: number,
+    memoryMinutes: number,
+    memoryHours: number,
     keyID: number
   )
   constructor(
-    arg1: number | IStatistic,
-    arg2?: number,
+    arg1: Mode | IStatistic,
+    arg2?: Match,
     arg3?: number,
-    arg4?: number,
-    arg5?: number,
-    arg6?: Count,
-    arg7?: Match,
-    arg8?: Mode,
-    arg9?: number
+    arg4?: Count,
+    arg5?: ITime | number,
+    arg6?: ITime | number,
+    arg7?: number,
+    arg8?: number,
+    arg9?: number,
+    arg10?: number,
+    arg11?: number,
+    arg12?: number,
+    arg13?: number
   ) {
-    if (typeof arg1 === 'number') {
-      this.milliseconds = arg1
-      this.seconds = arg2
-      this.minutes = arg3
-      this.hours = arg4
-      this.flips = arg5
-      this.count = arg6
-      this.match = arg7
-      this.mode = arg8
+    if (typeof arg1 === 'string') {
+      this.mode = arg1
+      this.match = arg2
+      this.flips = arg3
+      this.count = arg4
 
-      if (typeof arg9 !== 'undefined') {
-        this.keyID = arg9
+      if (typeof arg5 === 'number') {
+        this.complete.milliseconds = arg5
+        this.complete.seconds = arg6 as number
+        this.complete.minutes = arg7
+        this.complete.hours = arg8
+
+        this.memory.milliseconds = arg9
+        this.memory.seconds = arg10
+        this.memory.minutes = arg11
+        this.memory.hours = arg12
+
+        if (typeof arg13 === 'number') {
+          this.keyID = arg13
+        }
+      } else {
+        this.complete = arg5
+        this.memory = arg6 as ITime
+
+        if (typeof arg7 === 'number') {
+          this.keyID = arg7
+        }
       }
     } else {
-      this.milliseconds = arg1.milliseconds
-      this.seconds = arg1.seconds
-      this.minutes = arg1.minutes
-      this.hours = arg1.hours
+      this.mode = arg1.mode
+      this.match = arg1.match
       this.flips = arg1.flips
       this.count = arg1.count
-      this.match = arg1.match
-      this.mode = arg1.mode
+      this.complete = arg1.complete
+      this.memory = arg1.memory
 
-      if (typeof arg1.keyID !== 'undefined') {
+      if (typeof arg1.keyID === 'number') {
         this.keyID = arg1.keyID
       }
     }
@@ -224,10 +283,8 @@ export class Statistic implements IStatistic {
 
     temp = {} as IStatistic
 
-    temp.milliseconds = statistic.milliseconds
-    temp.seconds = statistic.seconds
-    temp.minutes = statistic.minutes
-    temp.hours = statistic.hours
+    temp.complete = Time.toJSON(statistic.complete)
+    temp.memory = Time.toJSON(statistic.memory)
     temp.flips = statistic.flips
     temp.count = statistic.count
     temp.match = statistic.match

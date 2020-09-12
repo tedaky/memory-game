@@ -1,4 +1,5 @@
 import { MediaMatcher } from '@angular/cdk/layout'
+import { isPlatformBrowser } from '@angular/common'
 import {
   ChangeDetectorRef,
   Component,
@@ -72,13 +73,17 @@ export class GameComponent implements OnDestroy, OnInit {
   }
 
   private createMediaMatcher(): void {
-    this.mediaMatcherQuery = this.mediaMatcher.matchMedia(
-      '(min-aspect-ratio: 7/10)'
-    )
-    this.mediaMatcherQuery.addEventListener(
-      'change',
-      this.mediaQueryListener.bind(this)
-    )
+    if (isPlatformBrowser(this.platformId)) {
+      this.mediaMatcherQuery = this.mediaMatcher.matchMedia(
+        '(min-aspect-ratio: 7/10)'
+      )
+      this.mediaMatcherQuery.addListener(this.mediaQueryListener.bind(this))
+      // `addListener` is deprecated but Safari doesn't support `addEventListener`
+      // this.mediaMatcherQuery.addEventListener(
+      //   'change',
+      //   this.mediaQueryListener.bind(this)
+      // )
+    }
   }
 
   /**
@@ -143,14 +148,18 @@ export class GameComponent implements OnDestroy, OnInit {
       this.stopwatch.stop()
 
       statistic = new Statistic(
+        this.game.mode.value,
+        this.game.match.value,
+        this.flips,
+        this.game.count.value,
         this.stopwatch.milliseconds,
         this.stopwatch.seconds,
         this.stopwatch.minutes,
         this.stopwatch.hours,
-        this.flips,
-        this.game.count.value,
-        this.game.match.value,
-        this.game.mode.value
+        null,
+        null,
+        null,
+        null
       )
 
       interval(500)
@@ -292,10 +301,14 @@ export class GameComponent implements OnDestroy, OnInit {
 
   //#region ngOnDestroy
   public ngOnDestroy(): void {
-    this.mediaMatcherQuery.removeEventListener(
-      'change',
-      this.mediaQueryListener
-    )
+    if (isPlatformBrowser(this.platformId)) {
+      this.mediaMatcherQuery.removeListener(this.mediaQueryListener)
+      // `removeListener` is deprecated but Safari doesn't support `removeEventListener`
+      // this.mediaMatcherQuery.removeEventListener(
+      //   'change',
+      //   this.mediaQueryListener
+      // )
+    }
   }
   //#endregion ngOnDestroy
 }

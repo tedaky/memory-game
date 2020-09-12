@@ -3,6 +3,8 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core'
 
 import { Statistic } from '../statistic/statistic'
 import { IStatistic } from '../statistic/statistic.d'
+import { Time } from '../time/time'
+import { ITime } from '../time/time.d'
 
 /**
  * Database and database creation.
@@ -138,6 +140,13 @@ export class DatabaseService {
                         res.count = 6
                         res.match = 2
                         res.mode = 'regular'
+                        res.complete = new Time(
+                          ((res as unknown) as ITime).milliseconds,
+                          ((res as unknown) as ITime).seconds,
+                          ((res as unknown) as ITime).minutes,
+                          ((res as unknown) as ITime).hours
+                        )
+                        res.memory = new Time()
 
                         statistic = new Statistic(res)
                         json = Statistic.toJSON(statistic)

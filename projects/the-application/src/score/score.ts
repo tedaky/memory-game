@@ -98,8 +98,8 @@ export class Score {
       let aWeight: number
       let bWeight: number
 
-      aTime = createTime(a)
-      bTime = createTime(b)
+      aTime = createTime(a.complete)
+      bTime = createTime(b.complete)
 
       aWeight = a.flips * aTime
       bWeight = b.flips * bTime

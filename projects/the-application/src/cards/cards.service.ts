@@ -172,6 +172,9 @@ export class CardsService {
    * Create a unique set of cards.
    */
   private createCards(): void {
+    // Clear unique cards.
+    this.cards.splice(0, this.cards.length)
+
     let holidayCards: boolean
     holidayCards = false
 
@@ -274,6 +277,10 @@ export class CardsService {
     // Clear the current deck of any cards.
     this.deck.splice(0, this.deck.length)
 
+    // Replenish unique cards.
+    // Allows for holiday cards without closing and reopening.
+    this.createCards()
+
     this.shuffleCards()
 
     temp = this.cards.slice(0, this.game.count.value)
@@ -298,8 +305,6 @@ export class CardsService {
    * Create the game by initialising cards and deck.
    */
   private createGame(): void {
-    this.createCards()
-    // Later use a game mode to create a deck.
     this.createDeck()
   }
   //#endregion createGame
@@ -351,9 +356,12 @@ export class CardsService {
 
   //#region shuffle
   /**
-   * Shuffle the cards randomly,
+   * Shuffle the deck randomly,
    */
   public shuffle(): void {
+    // Reset the deck.
+    this.createDeck()
+
     this.deck.sort((): number => {
       return 0.5 - Math.random()
     })

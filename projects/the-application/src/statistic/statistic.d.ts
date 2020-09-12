@@ -1,23 +1,17 @@
+import { ITime } from '../time/time.d'
+
 /**
  * Statistic interface implementation
  */
 export interface IStatistic {
   /**
-   * Milliseconds
+   * Mode
    */
-  milliseconds: number
+  mode: Mode
   /**
-   * Seconds
+   * Match
    */
-  seconds: number
-  /**
-   * Minutes
-   */
-  minutes: number
-  /**
-   * Hours
-   */
-  hours: number
+  match: Match
   /**
    * Flips
    */
@@ -27,13 +21,13 @@ export interface IStatistic {
    */
   count: Count
   /**
-   * Match
+   * Complete Time
    */
-  match: Match
+  complete: ITime
   /**
-   * Mode
+   * Memory Time
    */
-  mode: Mode
+  memory: ITime
   /**
    * KeyID
    */

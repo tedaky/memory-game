@@ -28,13 +28,13 @@
       <ng-container matColumnDef="column2">
         <th mat-header-cell *matHeaderCellDef>Time:</th>
         <td mat-cell *matCellDef="let element">
-          {{ element.hours | number: '2.0' }}
+          {{ element.complete.hours | number: '2.0' }}
           :
-          {{ element.minutes | number: '2.0' }}
+          {{ element.complete.minutes | number: '2.0' }}
           :
-          {{ element.seconds | number: '2.0' }}
+          {{ element.complete.seconds | number: '2.0' }}
           :
-          {{ element.milliseconds | number: '3.0' }}
+          {{ element.complete.milliseconds | number: '3.0' }}
         </td>
         <td mat-footer-cell *matFooterCellDef>
           {{ 0 | number: '2.0' }}

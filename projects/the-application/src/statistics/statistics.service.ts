@@ -3,7 +3,8 @@ import { Injectable } from '@angular/core'
 import { HighScoresService } from '../high-scores/high-scores.service'
 import { RecentScoresService } from '../recent-scores/recent-scores.service'
 import { Statistic } from '../statistic/statistic'
-import { IStatistic, Match, Mode, Count } from '../statistic/statistic.d'
+import { Count, IStatistic, Match, Mode } from '../statistic/statistic.d'
+import { ITime } from '../time/time.d'
 
 /**
  * Statistics Service that allows quick access to
@@ -120,72 +121,163 @@ export class StatisticsService {
   /**
    * Add statistic to high scores and recent scores.
    *
-   * @param milliseconds `number` time of milliseconds
-   * @param seconds `number` time of seconds
-   * @param minutes `number` time of minutes
-   * @param hours `number` time of hours
-   * @param flips `number` amount of flips
-   * @param count `Count` Count
-   * @param match `Match` Match
    * @param mode `Mode` Mode
+   * @param match `Match` Match
+   * @param flips `number` Flips
+   * @param count `Count` Count
+   * @param complete `ITime` Complete
+   * @param memory `ITime` Memory
    */
   public addStatistic(
-    milliseconds: number,
-    seconds: number,
-    minutes: number,
-    hours: number,
+    mode: Mode,
+    match: Match,
     flips: number,
     count: Count,
-    match: Match,
-    mode: Mode
+    complete: ITime,
+    memory: ITime
   ): void
   /**
    * Add statistic to high scores and recent scores.
    *
-   * @param milliseconds `number` time of milliseconds
-   * @param seconds `number` time of seconds
-   * @param minutes `number` time of minutes
-   * @param hours `number` time of hours
-   * @param flips `number` amount of flips
-   * @param count `Count` Count
-   * @param match `Match` Match
    * @param mode `Mode` Mode
-   * @param keyID `number` identifier for indexeddb
+   * @param match `Match` Match
+   * @param flips `number` Flips
+   * @param count `Count` Count
+   * @param complete `ITime` Complete
+   * @param memory `ITime` Memory
+   * @param keyID `number` KeyID identifier for indexeddb
    */
   public addStatistic(
-    milliseconds: number,
-    seconds: number,
-    minutes: number,
-    hours: number,
+    mode: Mode,
+    match: Match,
     flips: number,
     count: Count,
-    match: Match,
+    complete: ITime,
+    memory: ITime,
+    keyID: number
+  ): void
+  /**
+   * Add statistic to high scores and recent scores.
+   *
+   * @param mode `Mode` Mode
+   * @param match `Match` Match
+   * @param flips `number` Flips
+   * @param count `Count` Count
+   * @param completeMilliseconds `number` Complete Milliseconds
+   * @param completeSeconds `number` Complete Seconds
+   * @param completeMinutes `number` Complete Minutes
+   * @param completeHours `number` Complete Hours
+   * @param memoryMilliseconds `number` Complete Milliseconds
+   * @param memorySeconds `number` Complete Seconds
+   * @param memoryMinutes` number` Complete Minutes
+   * @param memoryHours `number` Complete Hours
+   */
+  public addStatistic(
     mode: Mode,
+    match: Match,
+    flips: number,
+    count: Count,
+    completeMilliseconds: number,
+    completeSeconds: number,
+    completeMinutes: number,
+    completeHours: number,
+    memoryMilliseconds: number,
+    memorySeconds: number,
+    memoryMinutes: number,
+    memoryHours: number
+  ): void
+  /**
+   * Add statistic to high scores and recent scores.
+   *
+   * @param mode `Mode` Mode
+   * @param match `Match` Match
+   * @param flips `number` Flips
+   * @param count `Count` Count
+   * @param completeMilliseconds `number` Complete Milliseconds
+   * @param completeSeconds `number` Complete Seconds
+   * @param completeMinutes `number` Complete Minutes
+   * @param completeHours `number` Complete Hours
+   * @param memoryMilliseconds `number` Complete Milliseconds
+   * @param memorySeconds `number` Complete Seconds
+   * @param memoryMinutes` number` Complete Minutes
+   * @param memoryHours `number` Complete Hours
+   * @param keyID `number` KeyID identifier for indexeddb
+   */
+  public addStatistic(
+    mode: Mode,
+    match: Match,
+    flips: number,
+    count: Count,
+    completeMilliseconds: number,
+    completeSeconds: number,
+    completeMinutes: number,
+    completeHours: number,
+    memoryMilliseconds: number,
+    memorySeconds: number,
+    memoryMinutes: number,
+    memoryHours: number,
     keyID: number
   ): void
   public addStatistic(
-    arg1: number | Statistic | IStatistic,
-    arg2?: number,
+    arg1: Mode | Statistic | IStatistic,
+    arg2?: Match,
     arg3?: number,
-    arg4?: number,
-    arg5?: number,
-    arg6?: Count,
-    arg7?: Match,
-    arg8?: Mode,
-    arg9?: number
+    arg4?: Count,
+    arg5?: ITime | number,
+    arg6?: ITime | number,
+    arg7?: number,
+    arg8?: number,
+    arg9?: number,
+    arg10?: number,
+    arg11?: number,
+    arg12?: number,
+    arg13?: number
   ): void {
     let value: Statistic
 
-    if (typeof arg1 === 'number') {
-      if (typeof arg9 === 'undefined') {
-        value = new Statistic(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)
+    if (typeof arg1 === 'string' && typeof arg5 === 'number') {
+      if (typeof arg13 === 'undefined') {
+        value = new Statistic(
+          arg1,
+          arg2,
+          arg3,
+          arg4,
+          arg5,
+          arg6 as number,
+          arg7,
+          arg8,
+          arg9,
+          arg10,
+          arg11,
+          arg12
+        )
       } else {
-        value = new Statistic(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)
+        value = new Statistic(
+          arg1,
+          arg2,
+          arg3,
+          arg4,
+          arg5,
+          arg6 as number,
+          arg7,
+          arg8,
+          arg9,
+          arg10,
+          arg11,
+          arg12,
+          arg13
+        )
+      }
+    } else if (typeof arg1 === 'string' && typeof arg5 === 'object') {
+      if (typeof arg7 === 'undefined') {
+        value = new Statistic(arg1, arg2, arg3, arg4, arg5, arg6 as ITime)
+      } else {
+        value = new Statistic(arg1, arg2, arg3, arg4, arg5, arg6 as ITime, arg7)
       }
     } else if (arg1 instanceof Statistic) {
       value = arg1
     } else {
-      value = new Statistic(arg1)
+      value = new Statistic(arg1 as IStatistic)
     }
 
     this.addHighScoreStatistic(value)

@@ -1,52 +1,51 @@
 import { createTime } from './create-time'
-import { Statistic } from '../statistic/statistic'
-import { IStatistic } from '../statistic/statistic.d'
+import { Time } from '../time/time'
 
 describe('#createTime', () => {
   it('should create a time', () => {
-    const statistic = new Statistic({
+    const time = new Time({
       hours: 0,
       minutes: 0,
       seconds: 0,
       milliseconds: 0
-    } as IStatistic)
-    const temp = createTime(statistic)
+    })
+    const temp = createTime(time)
     expect(temp).toEqual(0)
 
-    const statistic1 = new Statistic({
+    const time1 = new Time({
       hours: 0,
       minutes: 0,
       seconds: 3,
       milliseconds: 0
-    } as IStatistic)
-    const temp1 = createTime(statistic1)
+    })
+    const temp1 = createTime(time1)
     expect(temp1).toEqual(3000)
 
-    const statistic2 = new Statistic({
+    const time2 = new Time({
       hours: 0,
       minutes: 0,
       seconds: 35,
       milliseconds: 50
-    } as IStatistic)
-    const temp2 = createTime(statistic2)
+    })
+    const temp2 = createTime(time2)
     expect(temp2).toEqual(35050)
 
-    const statistic3 = new Statistic({
+    const time3 = new Time({
       hours: 0,
       minutes: 50,
       seconds: 55,
       milliseconds: 750
-    } as IStatistic)
-    const temp3 = createTime(statistic3)
+    })
+    const temp3 = createTime(time3)
     expect(temp3).toEqual(3055750)
 
-    const statistic4 = new Statistic({
+    const time4 = new Time({
       hours: 2,
       minutes: 2,
       seconds: 4,
       milliseconds: 5
-    } as IStatistic)
-    const temp4 = createTime(statistic4)
+    })
+    const temp4 = createTime(time4)
     expect(temp4).toEqual(7324005)
   })
 })

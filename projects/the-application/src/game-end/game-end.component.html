@@ -7,17 +7,28 @@
   </p>
   <p>
     <b>Time</b>:
-    <span *ngIf="data.hours"> {{ data.hours | number: '2.0' }} hr </span>
-    <span *ngIf="data.minutes || data.hours">
-      {{ data.minutes | number: '2.0' }} min
+    <span *ngIf="data.complete.hours">
+      {{ data.complete.hours | number: '2.0' }} hr
     </span>
-    <span *ngIf="data.seconds || data.minutes || data.hours">
-      {{ data.seconds | number: '2.0' }} sec
+    <span *ngIf="data.complete.minutes || data.complete.hours">
+      {{ data.complete.minutes | number: '2.0' }} min
     </span>
     <span
-      *ngIf="data.milliseconds || data.seconds || data.minutes || data.hours"
+      *ngIf="
+        data.complete.seconds || data.complete.minutes || data.complete.hours
+      "
     >
-      {{ data.milliseconds | number: '3.0' }} mil
+      {{ data.complete.seconds | number: '2.0' }} sec
+    </span>
+    <span
+      *ngIf="
+        data.complete.milliseconds ||
+        data.complete.seconds ||
+        data.complete.minutes ||
+        data.complete.hours
+      "
+    >
+      {{ data.complete.milliseconds | number: '3.0' }} mil
     </span>
   </p>
 </div>
