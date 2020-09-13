@@ -180,25 +180,25 @@ export class CardsService {
 
     // Valentine's Day
     if (useValentinesDay()) {
-      this.createRegularCards()
+      this.createValentinesDayCards()
       holidayCards = true
     }
 
     // St. Patricks's Day
     if (useStPatricksDay()) {
-      this.createRegularCards()
+      this.createStPatricksDayCards()
       holidayCards = true
     }
 
     // Easter
     if (useEaster()) {
-      this.createRegularCards()
+      this.createEasterCards()
       holidayCards = true
     }
 
     // 4th of July
     if (use4thOfJuly()) {
-      this.createRegularCards()
+      this.create4thOfJulyCards()
       holidayCards = true
     }
 
@@ -210,13 +210,13 @@ export class CardsService {
 
     // Thanksgiving
     if (useThanksgiving()) {
-      this.createRegularCards()
+      this.createThanksgivingCards()
       holidayCards = true
     }
 
     // Christmas
     if (useChristmas()) {
-      this.createRegularCards()
+      this.createChristmasCards()
       holidayCards = true
     }
 
@@ -246,6 +246,89 @@ export class CardsService {
   }
   //#endregion createRegularCards
 
+  //#region createValentinesDayCards
+  /**
+   * Create a unique set of valentines day cards.
+   */
+  private createValentinesDayCards(): void {
+    let assets: string
+
+    assets = 'assets/valentines-day/'
+
+    this.blankSource = 'valentines-day'
+
+    this.createCard('be my valentine', `${assets}be-my-valentine.png`)
+    this.createCard('bear boy', `${assets}bear-boy.png`)
+    this.createCard('bear girl', `${assets}bear-girl.png`)
+    this.createCard('butterfly', `${assets}butterfly.png`)
+    this.createCard('heart', `${assets}heart.png`)
+    this.createCard('heart box', `${assets}heart-box.png`)
+  }
+  //#endregion createValentinesDayCards
+
+  //#region createStPatricksDayCards
+  /**
+   * Create a unique set of st patricks day cards.
+   */
+  private createStPatricksDayCards(): void {
+    let assets: string
+
+    assets = 'assets/st-patricks-day/'
+
+    this.blankSource = 'st-patricks-day'
+
+    this.createCard('green hat', `${assets}green-hat.png`)
+    this.createCard(
+      'happy saint patricks day',
+      `${assets}happy-saint-patricks-day.png`
+    )
+    this.createCard('lucky', `${assets}lucky.png`)
+    this.createCard('lucky horse shoe', `${assets}lucky-horse-shoe.png`)
+    this.createCard('pot of gold', `${assets}pot-of-gold.png`)
+    this.createCard('shamrock', `${assets}shamrock.png`)
+  }
+  //#endregion createStPatricksDayCards
+
+  //#region createEasterCards
+  /**
+   * Create a unique set of easter cards.
+   */
+  private createEasterCards(): void {
+    let assets: string
+
+    assets = 'assets/easter/'
+
+    this.blankSource = 'easter'
+
+    this.createCard('basket of eggs', `${assets}basket-of-eggs.png`)
+    this.createCard('bear basket', `${assets}bear-basket.png`)
+    this.createCard('bunny carrot', `${assets}bunny-carrot.png`)
+    this.createCard('egg outline', `${assets}egg-outline.png`)
+    this.createCard('egg paisley', `${assets}egg-paisley.png`)
+    this.createCard('rabbit basket', `${assets}rabbit-basket.png`)
+  }
+  //#endregion createEasterCards
+
+  //#region create4thOfJulyCards
+  /**
+   * Create a unique set of 4th of july cards.
+   */
+  private create4thOfJulyCards(): void {
+    let assets: string
+
+    assets = 'assets/4th-of-july/'
+
+    this.blankSource = '4th-of-july'
+
+    this.createCard('flag hat', `${assets}flag-hat.png`)
+    this.createCard('flag horn', `${assets}flag-horn.png`)
+    this.createCard('flag pencil', `${assets}flag-pencil.png`)
+    this.createCard('flag scallop', `${assets}flag-scallop.png`)
+    this.createCard('flag star', `${assets}flag-star.png`)
+    this.createCard('sam smile', `${assets}sam-smile.png`)
+  }
+  //#endregion create4thOfJulyCards
+
   //#region createHalloweenCards
   /**
    * Create a unique set of halloween cards.
@@ -264,7 +347,47 @@ export class CardsService {
     this.createCard('slug monster', `${assets}slug-monster.png`)
     this.createCard('witch hat', `${assets}witch-hat.png`)
   }
-  //#endregion createRegularCards
+  //#endregion createHalloweenCards
+
+  //#region createThanksgivingCards
+  /**
+   * Create a unique set of thanksgiving cards.
+   */
+  private createThanksgivingCards(): void {
+    let assets: string
+
+    assets = 'assets/thanksgiving/'
+
+    this.blankSource = 'thanksgiving'
+
+    this.createCard('autumn tree', `${assets}autumn-tree.png`)
+    this.createCard('candy corn', `${assets}candy-corn.png`)
+    this.createCard('cornucopia', `${assets}cornucopia.png`)
+    this.createCard('leaf', `${assets}leaf.png`)
+    this.createCard('scarecrow', `${assets}scarecrow.png`)
+    this.createCard('turkey', `${assets}turkey.png`)
+  }
+  //#endregion createThanksgivingCards
+
+  //#region createChristmasCards
+  /**
+   * Create a unique set of christmas cards.
+   */
+  private createChristmasCards(): void {
+    let assets: string
+
+    assets = 'assets/christmas/'
+
+    this.blankSource = 'christmas'
+
+    this.createCard('bell', `${assets}bell.png`)
+    this.createCard('candy cane', `${assets}candy-cane.png`)
+    this.createCard('ornament', `${assets}ornament.png`)
+    this.createCard('sled', `${assets}sled.png`)
+    this.createCard('snowflake', `${assets}snowflake.png`)
+    this.createCard('wreath', `${assets}wreath.png`)
+  }
+  //#endregion createChristmasCards
 
   //#region createDeck
   /**
