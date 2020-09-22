@@ -1,3 +1,4 @@
+import { MakeGetSet } from '../utilities/make-get-set'
 import { IDeviceSize } from './device-size.d'
 
 /**
@@ -5,33 +6,16 @@ import { IDeviceSize } from './device-size.d'
  */
 export class DeviceSize implements IDeviceSize {
   /**
-   * Holder for height
-   */
-  private _height?: number
-  /**
-   * Holder for width
-   */
-  private _width?: number
-
-  /**
    * Height
    */
-  public get height(): number {
-    return this._height || 0
-  }
-  public set height(val: number) {
-    this._height = val
-  }
+  @MakeGetSet(null, 0)
+  public height: number
 
   /**
    * Width
    */
-  public get width(): number {
-    return this._width || 0
-  }
-  public set width(val: number) {
-    this._width = val
-  }
+  @MakeGetSet(null, 0)
+  public width: number
 
   /**
    * Create `DeviceSize` by deviceSizeLike

@@ -7,6 +7,7 @@ import { LeaderboardService } from '../leaderboard/leaderboard.service'
 import { GameService } from '../game/game.service'
 import { HighScoresService } from '../high-scores/high-scores.service'
 import { RecentScoresService } from '../recent-scores/recent-scores.service'
+import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
 
 /**
  * Background service simply used to gather injectables with no calls.
@@ -31,7 +32,7 @@ export class BackgroundService {
   }
 
   private webWorker(): void {
-    if (typeof Worker !== 'undefined') {
+    if (!isNullOrUndefined(Worker)) {
       let worker: Worker
 
       worker = new Worker('../root/root.worker', { type: 'module' })

@@ -1,36 +1,13 @@
 import { Count, IStatistic, Match, Mode } from './statistic.d'
 import { Time } from '../time/time'
 import { ITime } from '../time/time.d'
+import { MakeGetSet } from '../utilities/make-get-set'
+import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
 
 /**
  * Statistic model to score.
  */
 export class Statistic implements IStatistic {
-  /**
-   * Holder for `complete`
-   */
-  private _complete?: Time
-  /**
-   * Holder for `memory`
-   */
-  private _memory?: Time
-  /**
-   * Holder for `flips`
-   */
-  private _flips?: number
-  /**
-   * Holder for `count`
-   */
-  private _count?: Count
-  /**
-   * Holder for `match`
-   */
-  private _match?: Match
-  /**
-   * Holder for `mode`
-   */
-  private _mode?: Mode
-
   /**
    * KeyID
    */
@@ -39,76 +16,38 @@ export class Statistic implements IStatistic {
   /**
    * Complete
    */
-  public get complete(): Time {
-    if (typeof this._complete === 'undefined') {
-      this.complete = null
-    }
-    return this._complete
-  }
-  public set complete(val: Time) {
-    if (val instanceof Time) {
-      this._complete = val
-    } else {
-      this._complete = new Time(val)
-    }
-  }
+  @MakeGetSet(Time)
+  public complete: Time
 
   /**
    * Memory
    */
-  public get memory(): Time {
-    if (typeof this._memory === 'undefined') {
-      this.memory = null
-    }
-    return this._memory
-  }
-  public set memory(val: Time) {
-    if (val instanceof Time) {
-      this._memory = val
-    } else {
-      this._memory = new Time(val)
-    }
-  }
+  @MakeGetSet(Time)
+  public memory: Time
 
   /**
    * Flips
    */
-  public get flips(): number {
-    return this._flips
-  }
-  public set flips(val: number) {
-    this._flips = val
-  }
+  @MakeGetSet()
+  public flips: number
 
   /**
    * Count
    */
-  public get count(): Count {
-    return this._count
-  }
-  public set count(val: Count) {
-    this._count = val
-  }
+  @MakeGetSet()
+  public count: Count
 
   /**
    * Match
    */
-  public get match(): Match {
-    return this._match
-  }
-  public set match(val: Match) {
-    this._match = val
-  }
+  @MakeGetSet()
+  public match: Match
 
   /**
    * Mode
    */
-  public get mode(): Mode {
-    return this._mode
-  }
-  public set mode(val: Mode) {
-    this._mode = val
-  }
+  @MakeGetSet()
+  public mode: Mode
 
   /**
    * Create Statistic model.
@@ -290,7 +229,7 @@ export class Statistic implements IStatistic {
     temp.match = statistic.match
     temp.mode = statistic.mode
 
-    if (typeof statistic.keyID !== 'undefined') {
+    if (!isNullOrUndefined(statistic.keyID)) {
       temp.keyID = statistic.keyID
     }
 

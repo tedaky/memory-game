@@ -6,6 +6,7 @@ import { RouterLinkActive } from '@angular/router'
 import { GameService } from '../game/game.service'
 import { MenuButton } from '../menu-button/menu-button'
 import { ThemeService } from '../theme/theme.service'
+import { MakeArray } from '../utilities/make-array'
 
 @Component({
   selector: 'app-main-menu',
@@ -15,6 +16,7 @@ import { ThemeService } from '../theme/theme.service'
 export class MainMenuComponent implements OnInit {
   @Input() public ripple: MatRipple
 
+  @MakeArray<MainMenuComponent, MenuButton>()
   public menuButtons: MenuButton[]
 
   constructor(
@@ -46,7 +48,7 @@ export class MainMenuComponent implements OnInit {
       'theme-pink'
     )
 
-    this.menuButtons.push(game, highScores, recentScores, leaderboard)
+    this.menuButtons = [game, highScores, recentScores, leaderboard]
   }
 
   private launchRipple(x: number, y: number, colour: string): void {

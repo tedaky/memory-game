@@ -1,62 +1,31 @@
 import { ITime } from './time.d'
+import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
+import { MakeGetSet } from '../utilities/make-get-set'
 
 export class Time implements ITime {
   /**
-   * Holder for `milliseconds`
-   */
-  private _milliseconds?: number
-  /**
-   * Holder for `seconds`
-   */
-  private _seconds?: number
-  /**
-   * Holder for `minutes`
-   */
-  private _minutes?: number
-  /**
-   * Holder for `hours`
-   */
-  private _hours?: number
-
-  /**
    * Milliseconds
    */
-  public get milliseconds(): number {
-    return this._milliseconds || 0
-  }
-  public set milliseconds(val: number) {
-    this._milliseconds = val || 0
-  }
+  @MakeGetSet(null, 0)
+  public milliseconds: number
 
   /**
    * Seconds
    */
-  public get seconds(): number {
-    return this._seconds || 0
-  }
-  public set seconds(val: number) {
-    this._seconds = val || 0
-  }
+  @MakeGetSet(null, 0)
+  public seconds: number
 
   /**
    * Minutes
    */
-  public get minutes(): number {
-    return this._minutes || 0
-  }
-  public set minutes(val: number) {
-    this._minutes = val || 0
-  }
+  @MakeGetSet(null, 0)
+  public minutes: number
 
   /**
    * Hours
    */
-  public get hours(): number {
-    return this._hours || 0
-  }
-  public set hours(val: number) {
-    this._hours = val || 0
-  }
+  @MakeGetSet(null, 0)
+  public hours: number
 
   /**
    * Create Time model.
@@ -88,7 +57,7 @@ export class Time implements ITime {
     arg3?: number,
     arg4?: number
   ) {
-    if (typeof arg1 !== 'undefined' && arg1 !== null) {
+    if (!isNullOrUndefined(arg1)) {
       if (typeof arg1 === 'number') {
         this.milliseconds = arg1
         this.seconds = arg2

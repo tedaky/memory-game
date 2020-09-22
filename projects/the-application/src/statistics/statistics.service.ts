@@ -5,6 +5,7 @@ import { RecentScoresService } from '../recent-scores/recent-scores.service'
 import { Statistic } from '../statistic/statistic'
 import { Count, IStatistic, Match, Mode } from '../statistic/statistic.d'
 import { ITime } from '../time/time.d'
+import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
 
 /**
  * Statistics Service that allows quick access to
@@ -236,7 +237,7 @@ export class StatisticsService {
     let value: Statistic
 
     if (typeof arg1 === 'string' && typeof arg5 === 'number') {
-      if (typeof arg13 === 'undefined') {
+      if (isNullOrUndefined(arg13)) {
         value = new Statistic(
           arg1,
           arg2,
@@ -269,7 +270,7 @@ export class StatisticsService {
         )
       }
     } else if (typeof arg1 === 'string' && typeof arg5 === 'object') {
-      if (typeof arg7 === 'undefined') {
+      if (isNullOrUndefined(arg7)) {
         value = new Statistic(arg1, arg2, arg3, arg4, arg5, arg6 as ITime)
       } else {
         value = new Statistic(arg1, arg2, arg3, arg4, arg5, arg6 as ITime, arg7)

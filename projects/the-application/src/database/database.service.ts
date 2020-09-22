@@ -56,10 +56,12 @@ export class DatabaseService {
         request = window.indexedDB.open('MemoryGame', 5)
 
         request.onerror = function(event: Event): void {
+          this.result.close()
           reject(this.error)
         }
 
         request.onblocked = function(event: Event): void {
+          this.result.close()
           console.log('blocked')
           console.log(event)
           console.log(this)

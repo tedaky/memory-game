@@ -164,8 +164,8 @@ export class CheckForUpdateService {
    */
   private timer(appRef: ApplicationRef, update: SwUpdate): void {
     let appIsStable$: Observable<boolean>
-    let everyTenMinutes$: Observable<number>
-    let everyTenMinutesOnceAppIsStable$: Observable<number | boolean>
+    let everySixHours$: Observable<number>
+    let everySixHoursOnceAppIsStable$: Observable<number | boolean>
 
     appIsStable$ = appRef.isStable.pipe<boolean>(
       first<boolean, boolean>((isStable: boolean): boolean => {
@@ -173,13 +173,13 @@ export class CheckForUpdateService {
       })
     )
 
-    everyTenMinutes$ = interval(10 * 60 * 1000)
-    everyTenMinutesOnceAppIsStable$ = concat<
+    everySixHours$ = interval(6 * 60 * 60 * 1000)
+    everySixHoursOnceAppIsStable$ = concat<
       Observable<boolean>,
       Observable<number>
-    >(appIsStable$, everyTenMinutes$)
+    >(appIsStable$, everySixHours$)
 
-    everyTenMinutesOnceAppIsStable$.subscribe((val: number | boolean): void => {
+    everySixHoursOnceAppIsStable$.subscribe((val: number | boolean): void => {
       this.checkForUpdate(update)
     })
   }

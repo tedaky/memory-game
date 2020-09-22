@@ -12,6 +12,8 @@ import {
   useThanksgiving,
   useChristmas
 } from '../holiday/holiday'
+import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
+import { MakeGetSet } from '../utilities/make-get-set'
 
 /**
  * Create and make cards available.
@@ -24,12 +26,6 @@ import {
  */
 export class CardsService {
   //#region Private Holders
-  //#region _blankSource
-  /**
-   * Holder for `blankSource`.
-   */
-  private _blankSource: string
-  //#endregion _blankSource
 
   //#region _cards
   /**
@@ -52,7 +48,7 @@ export class CardsService {
    * List of unique cards.
    */
   private get cards(): Card[] {
-    if (typeof this._cards === 'undefined') {
+    if (isNullOrUndefined(this._cards)) {
       this._cards = []
     }
 
@@ -65,7 +61,7 @@ export class CardsService {
    * Deck of cards.
    */
   public get deck(): Card[] {
-    if (typeof this._deck === 'undefined') {
+    if (isNullOrUndefined(this._deck)) {
       this._deck = []
     }
 
@@ -97,12 +93,8 @@ export class CardsService {
   /**
    * BlankSource image folder.
    */
-  public get blankSource(): string {
-    return this._blankSource || 'regular'
-  }
-  public set blankSource(val: string) {
-    this._blankSource = val
-  }
+  @MakeGetSet<CardsService, string>(null, 'regular')
+  public blankSource: string
   //#endregion blankSource
 
   //#region white

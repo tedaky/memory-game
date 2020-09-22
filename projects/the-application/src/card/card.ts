@@ -1,54 +1,27 @@
 import { Flipped, ICard } from './card.d'
+import { MakeGetSet } from '../utilities/make-get-set'
 
 /**
  * Card model to match.
  */
 export class Card implements ICard {
   /**
-   * Holder for `flipped`
+   * Flipped
    */
-  private _flipped?: Flipped
-  /**
-   * Holder for `image`
-   */
-  private _image?: string
-  /**
-   * Holder for `name`
-   */
-  private _name?: string
+  @MakeGetSet<Card, Flipped>(null, 0)
+  public flipped: Flipped
 
   /**
    * image
    */
-  public get image(): string {
-    return this._image
-  }
-  public set image(val: string) {
-    this._image = val
-  }
+  @MakeGetSet<Card, string>()
+  public image: string
 
   /**
    * Name
    */
-  public get name(): string {
-    return this._name
-  }
-  public set name(val: string) {
-    this._name = val
-  }
-
-  /**
-   * Flipped
-   */
-  public get flipped(): Flipped {
-    if (typeof this._flipped === 'undefined') {
-      this._flipped = 0
-    }
-    return this._flipped
-  }
-  public set flipped(val: Flipped) {
-    this._flipped = val
-  }
+  @MakeGetSet<Card, string>()
+  public name: string
 
   /**
    * Create Card model.

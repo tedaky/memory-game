@@ -7,6 +7,7 @@ import { createTime } from '../create-time/create-time'
 import { DatabaseService } from '../database/database.service'
 import { Statistic } from '../statistic/statistic'
 import { IStatistic } from '../statistic/statistic.d'
+import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
 
 /**
  * Functionality for getting, adding, sorting, removing, and clearing
@@ -37,7 +38,7 @@ export class Score {
    * List of scores.
    */
   public get scores(): Statistic[] {
-    if (typeof this._scores === 'undefined') {
+    if (isNullOrUndefined(this._scores)) {
       this._scores = []
     } else if (!Array.isArray(this._scores)) {
       this._scores = [this._scores]
