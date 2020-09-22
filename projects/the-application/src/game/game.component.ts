@@ -21,6 +21,7 @@ import { GameEndComponent } from '../game-end/game-end.component'
 import { Statistic } from '../statistic/statistic'
 import { StatisticsService } from '../statistics/statistics.service'
 import { StopwatchComponent } from '../stopwatch/stopwatch.component'
+import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
 
 @Component({
   selector: 'app-game',
@@ -29,6 +30,7 @@ import { StopwatchComponent } from '../stopwatch/stopwatch.component'
   animations: [flipAnimation]
 })
 export class GameComponent implements OnDestroy, OnInit {
+  private _clickSound: HTMLAudioElement
   /**
    * Id of cards flipped.
    */
@@ -42,6 +44,16 @@ export class GameComponent implements OnDestroy, OnInit {
    */
   private unFlipped: number[]
 
+  private get clickSound(): HTMLAudioElement {
+    if (isNullOrUndefined(this._clickSound)) {
+      try {
+        this._clickSound = new Audio('assets/audio/click.mp3')
+      } catch (error) {
+        this._clickSound = new Audio('assets/audio/click.ogg')
+      }
+    }
+    return this._clickSound
+  }
   /**
    * Chosen card matches.
    */
@@ -130,6 +142,9 @@ export class GameComponent implements OnDestroy, OnInit {
                 if (this.game.playing.value) {
                   cardChosen0.flipped = 0
                   cardChosen1.flipped = 0
+
+                  this.clickSound.volume = 0.25
+                  this.clickSound.play()
                 }
               })
           }
@@ -255,18 +270,26 @@ export class GameComponent implements OnDestroy, OnInit {
             if (this.game.playing.value) {
               this.checkForMatch(option0, option1)
             }
+          })
 
+        interval(250)
+          .pipe<number>(take<number>(1))
+          .subscribe((): void => {
             this.checking = false
           })
 
         this.cardsChosenId = []
       }
+
+      this.clickSound.volume = 1
+      this.clickSound.play()
     }
   }
 
   //#region ngOnInit
   public ngOnInit(): void {
     this.createMediaMatcher()
+
     this.reset(new Event('click') as MouseEvent)
   }
   //#endregion ngOnInit

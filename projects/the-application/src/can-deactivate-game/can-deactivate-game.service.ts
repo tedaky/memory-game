@@ -11,7 +11,7 @@ import { GameService } from '../game/game.service'
 export class CanDeactivateGame implements CanDeactivate<GameComponent> {
   constructor(private game: GameService, private snackBar: MatSnackBar) {}
 
-  canDeactivate(): boolean {
+  public canDeactivate(): boolean {
     if (this.game.playing.value) {
       this.snackBar.open('Please finish or reset game.', 'Close', {
         duration: 8000,
