@@ -12,7 +12,7 @@ import {
   useThanksgiving,
   useChristmas
 } from '../holiday/holiday'
-import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
+import { MakeArray } from '../utilities/make-array'
 import { MakeGetSet } from '../utilities/make-get-set'
 
 /**
@@ -25,48 +25,21 @@ import { MakeGetSet } from '../utilities/make-get-set'
  * Create and make cards available.
  */
 export class CardsService {
-  //#region Private Holders
-
-  //#region _cards
-  /**
-   * Holder for `cards`.
-   */
-  private _cards: Card[]
-  //#endregion _cards
-
-  //#region _deck
-  /**
-   * Holder for `deck`.
-   */
-  private _deck: Card[]
-  //#endregion _deck
-  //#endregion Private Holders
-
   //#region get
   //#region cards
   /**
    * List of unique cards.
    */
-  private get cards(): Card[] {
-    if (isNullOrUndefined(this._cards)) {
-      this._cards = []
-    }
-
-    return this._cards
-  }
+  @MakeArray<CardsService, Card>()
+  private cards: Card[]
   //#endregion cards
 
   //#region deck
   /**
    * Deck of cards.
    */
-  public get deck(): Card[] {
-    if (isNullOrUndefined(this._deck)) {
-      this._deck = []
-    }
-
-    return this._deck
-  }
+  @MakeArray<CardsService, Card>()
+  public deck: Card[]
   //#endregion deck
 
   //#region matchCount

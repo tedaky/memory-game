@@ -10,7 +10,7 @@ import { isNullOrUndefined } from './is-null-or-undefined'
  *
  * ```ts
  * export class MyClass {
- *   ＠MakeArray<MyClass, string[]>()
+ *   ＠MakeArray<MyClass, string>()
  *   public myProperty: string[]
  * }
  * ```
