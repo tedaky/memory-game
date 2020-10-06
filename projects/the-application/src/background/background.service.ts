@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core'
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core'
 
 import { CheckForUpdateService } from '../check-for-update/check-for-update.service'
 import { DatabaseService } from '../database/database.service'
@@ -8,6 +8,7 @@ import { GameService } from '../game/game.service'
 import { HighScoresService } from '../high-scores/high-scores.service'
 import { RecentScoresService } from '../recent-scores/recent-scores.service'
 import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
+import { isPlatformBrowser } from '@angular/common'
 
 /**
  * Background service simply used to gather injectables with no calls.
@@ -20,6 +21,7 @@ import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
  */
 export class BackgroundService {
   constructor(
+    @Inject(PLATFORM_ID) readonly platformId: string,
     checkForUpdate: CheckForUpdateService,
     database: DatabaseService,
     device: DeviceService,
@@ -28,20 +30,22 @@ export class BackgroundService {
     leaderboard: LeaderboardService,
     recentScores: RecentScoresService
   ) {
-    this.webWorker()
+    this.webWorker(platformId)
   }
 
-  private webWorker(): void {
-    if (!isNullOrUndefined(Worker)) {
-      let worker: Worker
+  private webWorker(platformId: string): void {
+    if (isPlatformBrowser(platformId)) {
+      if (!isNullOrUndefined(Worker)) {
+        let worker: Worker
 
-      worker = new Worker('../root/root.worker', { type: 'module' })
+        worker = new Worker('../root/root.worker', { type: 'module' })
 
-      worker.onmessage = (event: MessageEvent): void => {
-        console.log(`page got message: "${event.data}"`)
+        worker.onmessage = (event: MessageEvent): void => {
+          console.log(`page got message: "${event.data}"`)
+        }
+
+        worker.postMessage('Hello!')
       }
-
-      worker.postMessage('Hello!')
     }
   }
 }

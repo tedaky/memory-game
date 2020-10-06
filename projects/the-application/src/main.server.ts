@@ -4,12 +4,13 @@
 import '@angular/localize/init'
 
 import { enableProdMode } from '@angular/core'
-export { renderModule, renderModuleFactory } from '@angular/platform-server'
 
 import { environment } from './environments/environment'
 
 if (environment.production) {
   enableProdMode()
 }
+
+export { renderModule, renderModuleFactory } from '@angular/platform-server'
 
 export { RootServerModule as AppServerModule } from './root/root.server.module'

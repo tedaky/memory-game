@@ -5,20 +5,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
 import { ServiceWorkerModule } from '@angular/service-worker'
 
+import { RootComponent } from './root.component'
 import { CheckForUpdateComponent } from '../check-for-update/check-for-update.component'
 import { environment } from '../environments/environment'
-import { GameComponent } from '../game/game.component'
-import { GameEndComponent } from '../game-end/game-end.component'
-import { HighScoresComponent } from '../high-scores/high-scores.component'
 import { InstallComponent } from '../install/install.component'
-import { LeaderboardComponent } from '../leaderboard/leaderboard.component'
 import { MainMenuComponent } from '../main-menu/main-menu.component'
 import { MaterialModule } from '../material/material.module'
-import { RecentScoresComponent } from '../recent-scores/recent-scores.component'
-import { RootComponent } from './root.component'
-import { RootRoutingModule } from '../root-routing/root-routing-routing.module'
-import { StatisticsComponent } from '../statistics/statistics.component'
-import { StopwatchComponent } from '../stopwatch/stopwatch.component'
+import { RootRoutingModule } from '../root-routing/root-routing.module'
 
 /**
  * Entry Module
@@ -26,16 +19,9 @@ import { StopwatchComponent } from '../stopwatch/stopwatch.component'
 @NgModule({
   declarations: [
     CheckForUpdateComponent,
-    GameComponent,
-    GameEndComponent,
-    HighScoresComponent,
     InstallComponent,
-    LeaderboardComponent,
     MainMenuComponent,
-    RecentScoresComponent,
-    RootComponent,
-    StatisticsComponent,
-    StopwatchComponent
+    RootComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -48,12 +34,7 @@ import { StopwatchComponent } from '../stopwatch/stopwatch.component'
       enabled: environment.production
     })
   ],
-  entryComponents: [
-    CheckForUpdateComponent,
-    GameEndComponent,
-    InstallComponent,
-    RootComponent
-  ],
+  entryComponents: [CheckForUpdateComponent, InstallComponent, RootComponent],
   bootstrap: [RootComponent]
 })
 /**
