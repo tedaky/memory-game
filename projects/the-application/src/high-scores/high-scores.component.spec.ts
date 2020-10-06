@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing'
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing'
 
 import { HighScoresComponent } from './high-scores.component'
 
@@ -6,11 +6,13 @@ describe('HighScoresComponent', () => {
   let component: HighScoresComponent
   let fixture: ComponentFixture<HighScoresComponent>
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [HighScoresComponent]
-    }).compileComponents()
-  }))
+  beforeEach(
+    waitForAsync(() => {
+      TestBed.configureTestingModule({
+        declarations: [HighScoresComponent]
+      }).compileComponents()
+    })
+  )
 
   beforeEach(() => {
     fixture = TestBed.createComponent(HighScoresComponent)
