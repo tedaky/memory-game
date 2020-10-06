@@ -108,6 +108,19 @@
         }
       ],
       "url": "./recent-scores"
+    },
+    {
+      "description": "Memory Game Settings.",
+      "name": "Memory Game Settings",
+      "icons": [
+        {
+          "purpose": "maskable any",
+          "sizes": "96x96",
+          "src": "assets/icons/icon-96x96.png",
+          "type": "image/png"
+        }
+      ],
+      "url": "./settings"
     }
   ],
   "start_url": "./index.html",
