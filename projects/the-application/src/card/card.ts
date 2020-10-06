@@ -1,5 +1,5 @@
 import { Flipped, ICard } from './card.d'
-import { MakeGetSet } from '../utilities/make-get-set'
+import { MakeProperty } from '../utilities/make-property'
 
 /**
  * Card model to match.
@@ -8,19 +8,19 @@ export class Card implements ICard {
   /**
    * Flipped
    */
-  @MakeGetSet<Card, Flipped>(null, 0)
+  @MakeProperty<Card, Flipped>(null, 0)
   public flipped: Flipped
 
   /**
    * image
    */
-  @MakeGetSet<Card, string>()
+  @MakeProperty<Card, string>()
   public image: string
 
   /**
    * Name
    */
-  @MakeGetSet<Card, string>()
+  @MakeProperty<Card, string>()
   public name: string
 
   /**

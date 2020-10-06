@@ -5,6 +5,7 @@ import { MatRippleModule } from '@angular/material/core'
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatGridListModule } from '@angular/material/grid-list'
 import { MatIconModule } from '@angular/material/icon'
+import { MatSliderModule } from '@angular/material/slider'
 import { MatSnackBarModule } from '@angular/material/snack-bar'
 import { MatTableModule } from '@angular/material/table'
 
@@ -19,6 +20,7 @@ import { MatTableModule } from '@angular/material/table'
     MatGridListModule,
     MatIconModule,
     MatRippleModule,
+    MatSliderModule,
     MatSnackBarModule,
     MatTableModule
   ]

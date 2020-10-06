@@ -1,0 +1,10 @@
+mat-card {
+  margin-bottom: 16px;
+
+  &:last-of-type {
+    margin-bottom: 0px;
+  }
+}
+mat-slider {
+  width: 100%
+}

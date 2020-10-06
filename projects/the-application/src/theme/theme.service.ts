@@ -26,6 +26,9 @@ export class ThemeService {
         case 'theme-yellow':
           colour = '#ffed75'
           break
+        case 'theme-purple':
+          colour = '#9c27b0'
+          break
       }
 
       this.colour = colour

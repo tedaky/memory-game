@@ -87,8 +87,8 @@ export class CheckForUpdateService {
             })
         }
       })
-      .catch<void>((e): void => {
-        console.error(e)
+      .catch<void>((error): void => {
+        console.error(error)
       })
   }
 

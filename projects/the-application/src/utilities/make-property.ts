@@ -27,7 +27,7 @@ import { isNullOrUndefined } from './is-null-or-undefined'
  * }
  * ```
  */
-export function MakeGetSet<T, S>(): (target: T, key: string) => void
+export function MakeProperty<T, S>(): (target: T, key: string) => void
 /**
  * Decorator Function for creating class property get and set for `Model` types.
  *
@@ -86,7 +86,7 @@ export function MakeGetSet<T, S>(): (target: T, key: string) => void
  *
  * @param Model `S` - `Get` will return `Model`; `Set` will assign `Model`
  */
-export function MakeGetSet<T, S>(
+export function MakeProperty<T, S>(
   Model: Constructor<S>
 ): (target: T, key: string) => void
 /**
@@ -122,7 +122,7 @@ export function MakeGetSet<T, S>(
  * @param Model is `null` to indicate primitives
  * @param base `any` default value for `get`
  */
-export function MakeGetSet<T, S>(
+export function MakeProperty<T, S>(
   Model: null,
   base: any
 ): (target: T, key: string) => void
@@ -186,12 +186,12 @@ export function MakeGetSet<T, S>(
  * @param Model `S` - `Get` will return `Model`; `Set` will assign `Model`
  * @param base `any` default value for `get`
  */
-export function MakeGetSet<T, S>(
+export function MakeProperty<T, S>(
   Model: Constructor<S>,
   base: any
 ): (target: T, key: string) => void
 
-export function MakeGetSet<T, S>(
+export function MakeProperty<T, S>(
   Model?: Constructor<S> | null,
   base?: any
 ): (target: T, key: string) => void {

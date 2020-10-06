@@ -29,6 +29,11 @@ const routes: Routes = [
     path: 'recent-scores'
   },
   {
+    loadChildren: () =>
+      import('../settings/settings.module').then(m => m.SettingsModule),
+    path: 'settings'
+  },
+  {
     path: '',
     pathMatch: 'full',
     redirectTo: 'game'

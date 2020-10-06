@@ -13,7 +13,7 @@ import {
   useChristmas
 } from '../holiday/holiday'
 import { MakeArray } from '../utilities/make-array'
-import { MakeGetSet } from '../utilities/make-get-set'
+import { MakeProperty } from '../utilities/make-property'
 
 /**
  * Create and make cards available.
@@ -66,7 +66,7 @@ export class CardsService {
   /**
    * BlankSource image folder.
    */
-  @MakeGetSet<CardsService, string>(null, 'regular')
+  @MakeProperty<CardsService, string>(null, 'regular')
   public blankSource: string
   //#endregion blankSource
 

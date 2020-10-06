@@ -1,7 +1,7 @@
 import { Count, IStatistic, Match, Mode } from './statistic.d'
 import { Time } from '../time/time'
 import { ITime } from '../time/time.d'
-import { MakeGetSet } from '../utilities/make-get-set'
+import { MakeProperty } from '../utilities/make-property'
 import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
 
 /**
@@ -16,37 +16,37 @@ export class Statistic implements IStatistic {
   /**
    * Complete
    */
-  @MakeGetSet(Time)
+  @MakeProperty(Time)
   public complete: Time
 
   /**
    * Memory
    */
-  @MakeGetSet(Time)
+  @MakeProperty(Time)
   public memory: Time
 
   /**
    * Flips
    */
-  @MakeGetSet()
+  @MakeProperty()
   public flips: number
 
   /**
    * Count
    */
-  @MakeGetSet()
+  @MakeProperty()
   public count: Count
 
   /**
    * Match
    */
-  @MakeGetSet()
+  @MakeProperty()
   public match: Match
 
   /**
    * Mode
    */
-  @MakeGetSet()
+  @MakeProperty()
   public mode: Mode
 
   /**

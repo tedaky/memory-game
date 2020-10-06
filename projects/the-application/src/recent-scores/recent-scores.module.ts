@@ -3,11 +3,11 @@ import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router'
 
 import { RecentScoresComponent } from './recent-scores.component'
-import { RecentScoresRoutingModule } from '../recent-scores-routing/recent-scores-routing.module'
 import { MaterialModule } from '../material/material.module'
+import { RecentScoresRoutingModule } from '../recent-scores-routing/recent-scores-routing.module'
 
 /**
- * Entry Module
+ * Recent Scores Module
  */
 @NgModule({
   declarations: [RecentScoresComponent],
@@ -21,6 +21,6 @@ import { MaterialModule } from '../material/material.module'
   bootstrap: [RecentScoresComponent]
 })
 /**
- * Entry Module
+ * Recent Scores Module
  */
 export class RecentScoresModule {}

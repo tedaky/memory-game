@@ -1,0 +1,25 @@
+<mat-card class="mat-elevation-z2">
+  <mat-card-title>
+    Settings
+  </mat-card-title>
+</mat-card>
+<mat-card class="mat-elevation-z2">
+  <mat-card-title>
+    Volume
+  </mat-card-title>
+  <mat-card-content>
+    <ng-container *ngFor="let settingOption of settingOptions">
+      <h3>{{ settingOption.title }}</h3>
+      <mat-slider
+        [min]="0"
+        [thumbLabel]="true"
+        [step]="0.02"
+        [max]="1"
+        [displayWith]="formatLabel"
+        [tickInterval]="0.02"
+        [(ngModel)]="settingOption.value"
+        (input)="inputChange($event, settingOption.key)"
+      ></mat-slider>
+    </ng-container>
+  </mat-card-content>
+</mat-card>

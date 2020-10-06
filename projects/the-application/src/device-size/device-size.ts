@@ -1,5 +1,5 @@
-import { MakeGetSet } from '../utilities/make-get-set'
 import { IDeviceSize } from './device-size.d'
+import { MakeProperty } from '../utilities/make-property'
 
 /**
  * Device Height and Width.
@@ -8,13 +8,13 @@ export class DeviceSize implements IDeviceSize {
   /**
    * Height
    */
-  @MakeGetSet(null, 0)
+  @MakeProperty(null, 0)
   public height: number
 
   /**
    * Width
    */
-  @MakeGetSet(null, 0)
+  @MakeProperty(null, 0)
   public width: number
 
   /**

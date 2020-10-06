@@ -41,10 +41,28 @@ export class GameService {
    */
   public playing: BehaviorSubject<boolean>
 
+  /**
+   * Master Volume level
+   */
+  public masterVolume: BehaviorSubject<number>
+
+  /**
+   * Effects Volume level
+   */
+  public effectsVolume: BehaviorSubject<number>
+
+  /**
+   * Ambient Volume level
+   */
+  public ambientVolume: BehaviorSubject<number>
+
   constructor() {
     this.count = new BehaviorSubject<Count>(6)
     this.match = new BehaviorSubject<Match>(2)
     this.mode = new BehaviorSubject<Mode>('regular')
     this.playing = new BehaviorSubject<boolean>(false)
+    this.masterVolume = new BehaviorSubject<number>(0)
+    this.effectsVolume = new BehaviorSubject<number>(0)
+    this.ambientVolume = new BehaviorSubject<number>(0)
   }
 }

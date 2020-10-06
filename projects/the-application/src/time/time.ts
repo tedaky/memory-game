@@ -1,30 +1,30 @@
 import { ITime } from './time.d'
 import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
-import { MakeGetSet } from '../utilities/make-get-set'
+import { MakeProperty } from '../utilities/make-property'
 
 export class Time implements ITime {
   /**
    * Milliseconds
    */
-  @MakeGetSet(null, 0)
+  @MakeProperty(null, 0)
   public milliseconds: number
 
   /**
    * Seconds
    */
-  @MakeGetSet(null, 0)
+  @MakeProperty(null, 0)
   public seconds: number
 
   /**
    * Minutes
    */
-  @MakeGetSet(null, 0)
+  @MakeProperty(null, 0)
   public minutes: number
 
   /**
    * Hours
    */
-  @MakeGetSet(null, 0)
+  @MakeProperty(null, 0)
   public hours: number
 
   /**

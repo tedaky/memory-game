@@ -13,7 +13,7 @@ import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
  * Functionality for getting, adding, sorting, removing, and clearing
  * for indexeddb and scores list.
  */
-export class Score {
+export abstract class Score {
   /**
    * Holder for `scores`
    */

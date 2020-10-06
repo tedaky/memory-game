@@ -43,6 +43,15 @@ export class GameComponent implements OnDestroy, OnInit {
    * Keep track of cards that haven't been flipped.
    */
   private unFlipped: number[]
+  /**
+   * Chosen card matches.
+   */
+  public cardsWon: string[][]
+  /**
+   * Number of flips.
+   */
+  public flips: number
+  public mediaMatcherQuery: MediaQueryList
 
   private get clickSound(): HTMLAudioElement {
     if (isNullOrUndefined(this._clickSound)) {
@@ -54,15 +63,10 @@ export class GameComponent implements OnDestroy, OnInit {
     }
     return this._clickSound
   }
-  /**
-   * Chosen card matches.
-   */
-  public cardsWon: string[][]
-  /**
-   * Number of flips.
-   */
-  public flips: number
-  public mediaMatcherQuery: MediaQueryList
+
+  private get effectsVolume(): number {
+    return this.game.masterVolume.value * this.game.effectsVolume.value
+  }
 
   /**
    * Stopwatch component.
@@ -143,7 +147,7 @@ export class GameComponent implements OnDestroy, OnInit {
                   cardChosen0.flipped = 0
                   cardChosen1.flipped = 0
 
-                  this.clickSound.volume = 0.25
+                  this.clickSound.volume = 0.25 * this.effectsVolume
                   this.clickSound.play()
                 }
               })
@@ -281,7 +285,7 @@ export class GameComponent implements OnDestroy, OnInit {
         this.cardsChosenId = []
       }
 
-      this.clickSound.volume = 1
+      this.clickSound.volume = this.effectsVolume
       this.clickSound.play()
     }
   }
