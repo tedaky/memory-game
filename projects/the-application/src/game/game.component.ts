@@ -30,7 +30,6 @@ import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
   animations: [flipAnimation]
 })
 export class GameComponent implements OnDestroy, OnInit {
-  private _clickSound: HTMLAudioElement
   /**
    * Id of cards flipped.
    */
@@ -53,17 +52,6 @@ export class GameComponent implements OnDestroy, OnInit {
   public flips: number
   public mediaMatcherQuery: MediaQueryList
 
-  private get clickSound(): HTMLAudioElement {
-    if (isNullOrUndefined(this._clickSound)) {
-      try {
-        this._clickSound = new Audio('assets/audio/click.mp3')
-      } catch (error) {
-        this._clickSound = new Audio('assets/audio/click.ogg')
-      }
-    }
-    return this._clickSound
-  }
-
   private get effectsVolume(): number {
     return this.game.masterVolume.value * this.game.effectsVolume.value
   }
@@ -83,6 +71,19 @@ export class GameComponent implements OnDestroy, OnInit {
     public cards: CardsService,
     public game: GameService
   ) {}
+
+  private clickSound(volume: number): void {
+    let clickSound: HTMLAudioElement
+
+    try {
+      clickSound = new Audio('assets/audio/click.mp3')
+    } catch (error) {
+      clickSound = new Audio('assets/audio/click.ogg')
+    }
+
+    clickSound.volume = volume
+    clickSound.play()
+  }
 
   private mediaQueryListener(): void {
     return this.changeDetectorRef.detectChanges()
@@ -147,8 +148,7 @@ export class GameComponent implements OnDestroy, OnInit {
                   cardChosen0.flipped = 0
                   cardChosen1.flipped = 0
 
-                  this.clickSound.volume = 0.25 * this.effectsVolume
-                  this.clickSound.play()
+                  this.clickSound(0.2 * this.effectsVolume)
                 }
               })
           }
@@ -285,8 +285,7 @@ export class GameComponent implements OnDestroy, OnInit {
         this.cardsChosenId = []
       }
 
-      this.clickSound.volume = this.effectsVolume
-      this.clickSound.play()
+      this.clickSound(this.effectsVolume)
     }
   }
 

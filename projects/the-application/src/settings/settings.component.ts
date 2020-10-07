@@ -17,11 +17,7 @@ class SettingOption {
   @MakeProperty()
   public key: string
 
-  constructor(
-    title: string,
-    value: number,
-    key: string
-  ) {
+  constructor(title: string, value: number, key: string) {
     this.title = title
     this.value = value
     this.key = key
