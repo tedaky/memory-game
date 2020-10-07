@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
+import { HttpClientModule } from '@angular/common/http'
 import { RouterModule } from '@angular/router'
 
 import { GameComponent } from '../game/game.component'
@@ -13,7 +14,13 @@ import { GameRoutingModule } from '../game-routing/game-routing.module'
  */
 @NgModule({
   declarations: [GameComponent, GameEndComponent, StopwatchComponent],
-  imports: [CommonModule, GameRoutingModule, MaterialModule, RouterModule],
+  imports: [
+    CommonModule,
+    GameRoutingModule,
+    HttpClientModule,
+    MaterialModule,
+    RouterModule
+  ],
   entryComponents: [GameEndComponent],
   bootstrap: [GameComponent]
 })

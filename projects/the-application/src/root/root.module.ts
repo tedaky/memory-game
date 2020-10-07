@@ -12,6 +12,7 @@ import { InstallComponent } from '../install/install.component'
 import { MainMenuComponent } from '../main-menu/main-menu.component'
 import { MaterialModule } from '../material/material.module'
 import { RootRoutingModule } from '../root-routing/root-routing.module'
+import { HttpClientModule } from '@angular/common/http'
 
 /**
  * Entry Module
@@ -27,6 +28,7 @@ import { RootRoutingModule } from '../root-routing/root-routing.module'
     BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'MemoryGameApp' }),
     CommonModule,
+    HttpClientModule,
     MaterialModule,
     RootRoutingModule,
     RouterModule,

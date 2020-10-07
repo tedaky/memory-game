@@ -1,5 +1,6 @@
 import { MediaMatcher } from '@angular/cdk/layout'
 import { isPlatformBrowser } from '@angular/common'
+import { HttpClient } from '@angular/common/http'
 import {
   ChangeDetectorRef,
   Component,
@@ -21,7 +22,6 @@ import { GameEndComponent } from '../game-end/game-end.component'
 import { Statistic } from '../statistic/statistic'
 import { StatisticsService } from '../statistics/statistics.service'
 import { StopwatchComponent } from '../stopwatch/stopwatch.component'
-import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
 
 @Component({
   selector: 'app-game',
@@ -65,6 +65,7 @@ export class GameComponent implements OnDestroy, OnInit {
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: string,
     private changeDetectorRef: ChangeDetectorRef,
+    private httpClient: HttpClient,
     private matDialog: MatDialog,
     private mediaMatcher: MediaMatcher,
     private statistics: StatisticsService,
@@ -72,17 +73,88 @@ export class GameComponent implements OnDestroy, OnInit {
     public game: GameService
   ) {}
 
-  private clickSound(volume: number): void {
-    let clickSound: HTMLAudioElement
+  // private clickSound(volume: number): void {
+  //   let clickSound: HTMLAudioElement
 
-    try {
-      clickSound = new Audio('assets/audio/click.mp3')
-    } catch (error) {
-      clickSound = new Audio('assets/audio/click.ogg')
+  //   try {
+  //     clickSound = new Audio('assets/audio/click.mp3')
+  //   } catch (error) {
+  //     clickSound = new Audio('assets/audio/click.ogg')
+  //   }
+
+  //   function playListener(): void {
+  //     let audioContext: AudioContext
+  //     let gainNode: GainNode
+  //     let source: MediaElementAudioSourceNode
+  //     let AC: {
+  //       new (contextOptions?: AudioContextOptions): AudioContext
+  //       prototype: AudioContext
+  //     }
+
+  //     AC = window.AudioContext || (window as any).webkitAudioContext
+
+  //     audioContext = new AC()
+
+  //     if (!audioContext.createGain) {
+  //       audioContext.createGain = (audioContext as any).createGainNode
+  //     }
+
+  //     source = audioContext.createMediaElementSource(clickSound)
+  //     gainNode = audioContext.createGain()
+  //     gainNode.gain.value = volume
+  //     clickSound.volume = volume
+  //     source.connect(gainNode)
+  //     gainNode.connect(audioContext.destination)
+  //   }
+
+  //   clickSound.addEventListener('play', playListener, false)
+
+  //   clickSound.play()
+  // }
+
+  private clickSound(volume: number): void {
+    let AC: {
+      new (contextOptions?: AudioContextOptions): AudioContext
+      prototype: AudioContext
+    }
+    let audioContext: AudioContext
+    let bufferSource: AudioBufferSourceNode
+    let gainNode: GainNode
+
+    AC = window.AudioContext || (window as any).webkitAudioContext
+
+    audioContext = new AC()
+
+    if (!audioContext.createGain) {
+      audioContext.createGain = (audioContext as any).createGainNode
     }
 
-    clickSound.volume = volume
-    clickSound.play()
+    gainNode = audioContext.createGain()
+    gainNode.gain.value = volume
+
+    bufferSource = audioContext.createBufferSource()
+
+    bufferSource.connect(gainNode)
+
+    this.game.clickSoundBuffer().then((res: ArrayBuffer): void => {
+      audioContext.decodeAudioData(
+        res,
+        (decoded: AudioBuffer): void => {
+          bufferSource.buffer = decoded
+
+          gainNode.connect(audioContext.destination)
+
+          if (!bufferSource.start) {
+            bufferSource.start = (bufferSource as any).noteOn
+          }
+
+          bufferSource.start(0)
+        },
+        (error): void => {
+          console.log(error)
+        }
+      )
+    })
   }
 
   private mediaQueryListener(): void {
@@ -148,7 +220,7 @@ export class GameComponent implements OnDestroy, OnInit {
                   cardChosen0.flipped = 0
                   cardChosen1.flipped = 0
 
-                  this.clickSound(0.2 * this.effectsVolume)
+                  this.clickSound(0.25 * this.effectsVolume)
                 }
               })
           }

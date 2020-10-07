@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
 
@@ -56,7 +57,32 @@ export class GameService {
    */
   public ambientVolume: BehaviorSubject<number>
 
-  constructor() {
+  /**
+   * Click sound buffer
+   */
+  public clickSoundBuffer(): Promise<ArrayBuffer> {
+    return new Promise(
+      (
+        resolve: (value?: ArrayBuffer) => void,
+        reject: (reason?: any) => void
+      ): void => {
+        this.httpClient
+          .get('assets/audio/click.mp3', {
+            responseType: 'arraybuffer'
+          })
+          .subscribe(
+            (res: ArrayBuffer): void => {
+              resolve(res)
+            },
+            (error): void => {
+              reject(error)
+            }
+          )
+      }
+    )
+  }
+
+  constructor(private httpClient: HttpClient) {
     this.count = new BehaviorSubject<Count>(6)
     this.match = new BehaviorSubject<Match>(2)
     this.mode = new BehaviorSubject<Mode>('regular')
