@@ -336,7 +336,9 @@ export class GameComponent implements OnDestroy, OnInit {
       option1 = this.cardsChosenId[1]
 
       // Swap cards if matched on first flip
-      // this.swapFirstMatch(option0, option1)
+      // if (this.game.mode.value === 'regular' && this.game.match.value === 2) {
+      //   this.swapFirstMatch(option0, option1)
+      // }
 
       this.cards.deck[index].flipped = 1
 
