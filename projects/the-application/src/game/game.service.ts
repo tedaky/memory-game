@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http'
 import { Injectable } from '@angular/core'
 import { BehaviorSubject } from 'rxjs'
+import { shareReplay } from 'rxjs/operators'
 
 import { Count, Match, Mode } from '../statistic/statistic.d'
 
@@ -20,7 +21,7 @@ export class GameService {
   /**
    * Flip first then start
    *
-   * * 'flip'
+   * * 'memorize'
    *
    * Regular type of matching
    *
@@ -57,6 +58,16 @@ export class GameService {
    */
   public ambientVolume: BehaviorSubject<number>
 
+  constructor(private httpClient: HttpClient) {
+    this.count = new BehaviorSubject<Count>(6)
+    this.match = new BehaviorSubject<Match>(2)
+    this.mode = new BehaviorSubject<Mode>('regular')
+    this.playing = new BehaviorSubject<boolean>(false)
+    this.masterVolume = new BehaviorSubject<number>(0)
+    this.effectsVolume = new BehaviorSubject<number>(0)
+    this.ambientVolume = new BehaviorSubject<number>(0)
+  }
+
   /**
    * Click sound buffer
    */
@@ -70,6 +81,7 @@ export class GameService {
           .get('assets/audio/click.mp3', {
             responseType: 'arraybuffer'
           })
+          .pipe(shareReplay(1))
           .subscribe(
             (res: ArrayBuffer): void => {
               resolve(res)
@@ -80,15 +92,5 @@ export class GameService {
           )
       }
     )
-  }
-
-  constructor(private httpClient: HttpClient) {
-    this.count = new BehaviorSubject<Count>(6)
-    this.match = new BehaviorSubject<Match>(2)
-    this.mode = new BehaviorSubject<Mode>('regular')
-    this.playing = new BehaviorSubject<boolean>(false)
-    this.masterVolume = new BehaviorSubject<number>(0)
-    this.effectsVolume = new BehaviorSubject<number>(0)
-    this.ambientVolume = new BehaviorSubject<number>(0)
   }
 }

@@ -49,6 +49,6 @@ export type Match = 2 | 3 | 4
 
 /**
  * * regular = regular classic memory type game
- * * flip = cards start face up then face down
+ * * memorize = cards start face up then face down
  */
-export type Mode = 'flip' | 'regular'
+export type Mode = 'memorize' | 'regular'

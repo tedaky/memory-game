@@ -53,8 +53,71 @@ export class GameComponent implements OnDestroy, OnInit {
   public flips: number
   public mediaMatcherQuery: MediaQueryList
 
+  /**
+   * The total value of effects volume.
+   */
   private get effectsVolume(): number {
     return this.game.masterVolume.value * this.game.effectsVolume.value
+  }
+
+  /**
+   * Columns to display cards in by screen size and deck card count.
+   */
+  public get columns(): number {
+    let cardCount: number
+    let num: number
+    let pair: { is: number; not: number }
+
+    cardCount = this.cards.deck.length
+
+    switch (cardCount) {
+      // case 27:
+      //   pair = {
+      //     is: 5,
+      //     not: 4
+      //   }
+      //   break
+
+      // case 24:
+      //   pair = {
+      //     is: 5,
+      //     not: 5
+      //   }
+      //   break
+
+      // case 18:
+      //   pair = {
+      //     is: 5,
+      //     not: 4
+      //   }
+      //   break
+
+      // case 12:
+      //   pair = {
+      //     is: 4,
+      //     not: 3
+      //   }
+      //   break
+
+      default:
+        pair = {
+          is: 4,
+          not: 3
+        }
+        break
+    }
+
+    if (!this.mediaMatcherQuery) {
+      return pair.is
+    }
+
+    if (this.mediaMatcherQuery.matches) {
+      num = pair.is
+    } else {
+      num = pair.not
+    }
+
+    return num
   }
 
   /**
@@ -273,27 +336,7 @@ export class GameComponent implements OnDestroy, OnInit {
       option1 = this.cardsChosenId[1]
 
       // Swap cards if matched on first flip
-      if (
-        this.cardsChosenId.length === this.game.match.value &&
-        this.cards.deck[option0].name === this.cards.deck[option1].name &&
-        this.unFlipped.includes(option1)
-      ) {
-        let swap0: Card
-        let swap1: Card
-        let found: number
-
-        swap0 = this.cards.deck[option1]
-
-        found = this.unFlipped.findIndex((item: number): boolean => {
-          return this.cards.deck[item].name !== swap0.name
-        })
-
-        if (found !== -1) {
-          swap1 = this.cards.deck[this.unFlipped[found]]
-          this.cards.deck[this.unFlipped[found]] = swap0
-          this.cards.deck[option1] = swap1
-        }
-      }
+      // this.swapFirstMatch(option0, option1)
 
       this.cards.deck[index].flipped = 1
 
@@ -320,6 +363,36 @@ export class GameComponent implements OnDestroy, OnInit {
       }
 
       this.clickSound(this.effectsVolume)
+    }
+  }
+
+  /**
+   * Swap cards if cards match on the very first flip
+   *
+   * @param option0 `number` index of card deck
+   * @param option1 `number` index of card deck
+   */
+  private swapFirstMatch(option0: number, option1: number): void {
+    if (
+      this.cardsChosenId.length === this.game.match.value &&
+      this.cards.deck[option0].name === this.cards.deck[option1].name &&
+      this.unFlipped.includes(option1)
+    ) {
+      let swap0: Card
+      let swap1: Card
+      let found: number
+
+      swap0 = this.cards.deck[option1]
+
+      found = this.unFlipped.findIndex((item: number): boolean => {
+        return this.cards.deck[item].name !== swap0.name
+      })
+
+      if (found !== -1) {
+        swap1 = this.cards.deck[this.unFlipped[found]]
+        this.cards.deck[this.unFlipped[found]] = swap0
+        this.cards.deck[option1] = swap1
+      }
     }
   }
 

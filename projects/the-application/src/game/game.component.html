@@ -24,12 +24,10 @@
 </mat-card>
 <mat-card class="mat-elevation-z2">
   <mat-card-content>
-    <mat-grid-list
-      [cols]="mediaMatcherQuery ? (mediaMatcherQuery.matches ? 4 : 3) : 4"
-      rowHeight="1:1"
-      gutterSize="10px"
-    >
-      <mat-grid-tile *ngFor="let card of cards.deck; let i = index; trackBy: trackBy">
+    <mat-grid-list [cols]="columns" rowHeight="1:1" gutterSize="10px">
+      <mat-grid-tile
+        *ngFor="let card of cards.deck; let i = index; trackBy: trackBy"
+      >
         <div class="card-wrapper" (click)="flipCard($event, i)">
           <div
             class="card-holder mat-elevation-z4"
