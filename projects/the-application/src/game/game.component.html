@@ -29,7 +29,7 @@
       rowHeight="1:1"
       gutterSize="10px"
     >
-      <mat-grid-tile *ngFor="let card of cards.deck; let i = index">
+      <mat-grid-tile *ngFor="let card of cards.deck; let i = index; trackBy: trackBy">
         <div class="card-wrapper" (click)="flipCard($event, i)">
           <div
             class="card-holder mat-elevation-z4"

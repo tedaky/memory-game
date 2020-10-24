@@ -1,4 +1,9 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit
+} from '@angular/core'
 import { MatSliderChange } from '@angular/material/slider'
 import { Subscription } from 'rxjs'
 
@@ -27,7 +32,8 @@ class SettingOption {
 @Component({
   selector: 'app-settings',
   styleUrls: ['./settings.component.scss'],
-  templateUrl: './settings.component.html'
+  templateUrl: './settings.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsComponent implements OnDestroy, OnInit {
   @MakeArray()
@@ -104,5 +110,9 @@ export class SettingsComponent implements OnDestroy, OnInit {
       .catch((error: DOMException): void => {
         console.error(error.message)
       })
+  }
+
+  public trackBy(index: number, name: SettingOption): string {
+    return name.key
   }
 }

@@ -1,7 +1,7 @@
 import { MediaMatcher } from '@angular/cdk/layout'
 import { isPlatformBrowser } from '@angular/common'
-import { HttpClient } from '@angular/common/http'
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   Inject,
@@ -27,7 +27,8 @@ import { StopwatchComponent } from '../stopwatch/stopwatch.component'
   selector: 'app-game',
   styleUrls: ['./game.component.scss'],
   templateUrl: './game.component.html',
-  animations: [flipAnimation]
+  animations: [flipAnimation],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameComponent implements OnDestroy, OnInit {
   /**
@@ -65,52 +66,12 @@ export class GameComponent implements OnDestroy, OnInit {
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: string,
     private changeDetectorRef: ChangeDetectorRef,
-    private httpClient: HttpClient,
     private matDialog: MatDialog,
     private mediaMatcher: MediaMatcher,
     private statistics: StatisticsService,
     public cards: CardsService,
     public game: GameService
   ) {}
-
-  // private clickSound(volume: number): void {
-  //   let clickSound: HTMLAudioElement
-
-  //   try {
-  //     clickSound = new Audio('assets/audio/click.mp3')
-  //   } catch (error) {
-  //     clickSound = new Audio('assets/audio/click.ogg')
-  //   }
-
-  //   function playListener(): void {
-  //     let audioContext: AudioContext
-  //     let gainNode: GainNode
-  //     let source: MediaElementAudioSourceNode
-  //     let AC: {
-  //       new (contextOptions?: AudioContextOptions): AudioContext
-  //       prototype: AudioContext
-  //     }
-
-  //     AC = window.AudioContext || (window as any).webkitAudioContext
-
-  //     audioContext = new AC()
-
-  //     if (!audioContext.createGain) {
-  //       audioContext.createGain = (audioContext as any).createGainNode
-  //     }
-
-  //     source = audioContext.createMediaElementSource(clickSound)
-  //     gainNode = audioContext.createGain()
-  //     gainNode.gain.value = volume
-  //     clickSound.volume = volume
-  //     source.connect(gainNode)
-  //     gainNode.connect(audioContext.destination)
-  //   }
-
-  //   clickSound.addEventListener('play', playListener, false)
-
-  //   clickSound.play()
-  // }
 
   private clickSound(volume: number): void {
     let AC: {
@@ -158,7 +119,7 @@ export class GameComponent implements OnDestroy, OnInit {
   }
 
   private mediaQueryListener(): void {
-    return this.changeDetectorRef.detectChanges()
+    return this.changeDetectorRef.markForCheck()
   }
 
   private createMediaMatcher(): void {
@@ -232,6 +193,7 @@ export class GameComponent implements OnDestroy, OnInit {
         .pipe<number>(take<number>(1))
         .subscribe((): void => {
           this.game.playing.next(false)
+          this.changeDetectorRef.markForCheck()
         })
 
       let statistic: Statistic
@@ -396,6 +358,10 @@ export class GameComponent implements OnDestroy, OnInit {
     this.game.playing.next(false)
   }
   //#endregion reset
+
+  public trackBy(index: number, name: Card): string {
+    return name.name
+  }
 
   //#region ngOnDestroy
   public ngOnDestroy(): void {

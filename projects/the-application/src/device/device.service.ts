@@ -58,7 +58,7 @@ export class DeviceService {
   }
 
   /**
-   * Create listeners for if the window is focused or blurred
+   * Create listeners for if the window is focused or blurred.
    */
   private createActiveListener(): void {
     window.addEventListener('blur', (event: FocusEvent) => {
@@ -109,6 +109,7 @@ export class DeviceService {
    * Prompt to install the PWA
    *
    * @param snackBar `MatSnackBar` prompt
+   * @param checkForUpdate `CheckForUpdateService`
    */
   private install(
     snackBar: MatSnackBar,
@@ -140,6 +141,7 @@ export class DeviceService {
       }
 
       const standalone = 'standalone'
+
       if (
         !window.navigator[standalone] &&
         (/iPhone|iPad|iPod/.test(window.navigator.platform) ||

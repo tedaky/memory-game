@@ -1,7 +1,5 @@
 import { isPlatformBrowser } from '@angular/common'
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core'
-import { interval } from 'rxjs'
-import { take } from 'rxjs/operators'
 
 import { createTime } from '../create-time/create-time'
 import { DatabaseService } from '../database/database.service'
@@ -54,7 +52,7 @@ export abstract class Score {
     this.dataChange = new EventEmitter<string>()
 
     if (isPlatformBrowser(platformId)) {
-      this.getScores()
+      this.getScores(0)
     }
   }
 
@@ -63,7 +61,15 @@ export abstract class Score {
    *
    * Only On Construction.
    */
-  private getScores(): void {
+  private getScores(count: number): void {
+    if (isNullOrUndefined(count)) {
+      count = 0
+    }
+    if (count > 10) {
+      console.error('Database took too long to initialise')
+      return
+    }
+
     this.getAll()
       .then((val: Statistic[]): void => {
         val.forEach((item: Statistic): void => {
@@ -78,11 +84,9 @@ export abstract class Score {
       })
       .catch((error: DOMException): void => {
         if (error.message === 'Database not set') {
-          interval(100)
-            .pipe<number>(take<number>(1))
-            .subscribe((val: number): void => {
-              this.getScores()
-            })
+          window.requestAnimationFrame((): void => {
+            this.getScores(++count)
+          })
         } else {
           console.error(error.message)
         }

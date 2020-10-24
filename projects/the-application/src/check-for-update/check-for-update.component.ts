@@ -1,10 +1,11 @@
-import { Component, HostBinding } from '@angular/core'
+import { ChangeDetectionStrategy, Component, HostBinding } from '@angular/core'
 import { MatSnackBarRef } from '@angular/material/snack-bar'
 
 @Component({
   selector: 'app-check-for-update',
   templateUrl: './check-for-update.component.html',
-  styleUrls: ['./check-for-update.component.scss']
+  styleUrls: ['./check-for-update.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CheckForUpdateComponent {
   @HostBinding('class.mat-simple-snackbar') private get simple(): true {

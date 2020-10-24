@@ -1,4 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common'
+import { HttpClientModule } from '@angular/common/http'
 import { APP_ID, Inject, NgModule, PLATFORM_ID } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -12,7 +13,6 @@ import { InstallComponent } from '../install/install.component'
 import { MainMenuComponent } from '../main-menu/main-menu.component'
 import { MaterialModule } from '../material/material.module'
 import { RootRoutingModule } from '../root-routing/root-routing.module'
-import { HttpClientModule } from '@angular/common/http'
 
 /**
  * Entry Module

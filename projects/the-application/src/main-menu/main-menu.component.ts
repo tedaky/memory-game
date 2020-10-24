@@ -1,5 +1,12 @@
 import { isPlatformBrowser } from '@angular/common'
-import { Component, Inject, Input, OnInit, PLATFORM_ID } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Inject,
+  Input,
+  OnInit,
+  PLATFORM_ID
+} from '@angular/core'
 import { MatRipple } from '@angular/material/core'
 import { RouterLinkActive } from '@angular/router'
 
@@ -11,7 +18,8 @@ import { MakeArray } from '../utilities/make-array'
 @Component({
   selector: 'app-main-menu',
   templateUrl: './main-menu.component.html',
-  styleUrls: ['./main-menu.component.scss']
+  styleUrls: ['./main-menu.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainMenuComponent implements OnInit {
   @Input() public ripple: MatRipple
@@ -102,5 +110,9 @@ export class MainMenuComponent implements OnInit {
     }
 
     this.launchRipple(x, y, this.theme.colour)
+  }
+
+  public trackBy(index: number, name: MenuButton): string {
+    return name.route
   }
 }

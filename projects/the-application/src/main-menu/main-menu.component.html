@@ -1,4 +1,4 @@
-<ng-container *ngFor="let menu of menuButtons">
+<ng-container *ngFor="let menu of menuButtons; trackBy: trackBy">
   <a
     mat-button
     [attr.aria-label]="menu.label"

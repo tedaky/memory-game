@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit
+} from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
 import { Subscription } from 'rxjs'
 
@@ -14,7 +20,8 @@ import { Statistic } from '../statistic/statistic'
   selector: 'app-high-scores',
   templateUrl: '../score/score-template.component.html',
   styleUrls: ['../score/score-template.component.scss'],
-  animations: [fadeAnimation]
+  animations: [fadeAnimation],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 /**
  * Display the high scores
@@ -71,7 +78,7 @@ export class HighScoresComponent
       if (typeof val === 'string') {
         this.dataSource.data = this.scores
 
-        this.changeDetectionRef.detectChanges()
+        this.changeDetectionRef.markForCheck()
       }
     })
   }

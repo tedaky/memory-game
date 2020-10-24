@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common'
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Inject,
@@ -22,7 +23,8 @@ import { ThemeService } from '../theme/theme.service'
   selector: 'app-root',
   templateUrl: './root.component.html',
   styleUrls: ['./root.component.scss'],
-  animations: [fadeAnimation]
+  animations: [fadeAnimation],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 /**
  * Root that holds game and statistics.

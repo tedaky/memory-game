@@ -1,9 +1,14 @@
-import { Component, OnDestroy, OnInit } from '@angular/core'
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit
+} from '@angular/core'
 import { interval, Subscription } from 'rxjs'
 
 import { createTime } from '../create-time/create-time'
 import { DeviceService } from '../device/device.service'
-import { Statistic } from '../statistic/statistic'
 import { Time } from '../time/time'
 
 /**
@@ -13,7 +18,8 @@ import { Time } from '../time/time'
  */
 @Component({
   selector: 'app-stopwatch',
-  templateUrl: './stopwatch.component.html'
+  templateUrl: './stopwatch.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 /**
  * Display a simple stopwatch with
@@ -39,7 +45,7 @@ export class StopwatchComponent implements OnDestroy, OnInit {
   /**
    * The subscription to the window focus/blur events.
    */
-  private window: Subscription
+  private focusBlur: Subscription
 
   /**
    * Hours time. Displayed to 2+ integer places. Shouldn't occur.
@@ -66,7 +72,10 @@ export class StopwatchComponent implements OnDestroy, OnInit {
    */
   public milliseconds: number
 
-  constructor(private device: DeviceService) {}
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef,
+    private device: DeviceService
+  ) {}
 
   /**
    * Set stopwatch back to 0 time.
@@ -76,6 +85,7 @@ export class StopwatchComponent implements OnDestroy, OnInit {
     this.seconds = 0
     this.minutes = 0
     this.hours = 0
+    this.changeDetectorRef.markForCheck()
   }
 
   /**
@@ -107,6 +117,8 @@ export class StopwatchComponent implements OnDestroy, OnInit {
     ) {
       this.stop()
     }
+
+    this.changeDetectorRef.markForCheck()
   }
 
   /**
@@ -140,13 +152,13 @@ export class StopwatchComponent implements OnDestroy, OnInit {
   public ngOnDestroy(): void {
     this.unsubscribe()
 
-    if (this.window && this.window instanceof Subscription) {
-      this.window.unsubscribe()
+    if (this.focusBlur && this.focusBlur instanceof Subscription) {
+      this.focusBlur.unsubscribe()
     }
   }
 
   public ngOnInit(): void {
-    this.window = this.device.active.subscribe((val: boolean): void => {
+    this.focusBlur = this.device.active.subscribe((val: boolean): void => {
       if (!val) {
         this.stop()
         return
