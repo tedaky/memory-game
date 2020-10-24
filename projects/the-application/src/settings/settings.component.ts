@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit
@@ -45,7 +46,11 @@ export class SettingsComponent implements OnDestroy, OnInit {
   @MakeArray()
   public settingOptions: SettingOption[]
 
-  constructor(private game: GameService, private settings: SettingsService) {}
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef,
+    private game: GameService,
+    private settings: SettingsService
+  ) {}
 
   public ngOnInit(): void {
     let ambientVolume: SettingOption
@@ -91,6 +96,7 @@ export class SettingsComponent implements OnDestroy, OnInit {
 
       sub = this.game[label].subscribe((val: number): void => {
         this.settingOptions[index].value = val
+        this.changeDetectorRef.markForCheck()
       })
 
       this.subscriptions.push(sub)
