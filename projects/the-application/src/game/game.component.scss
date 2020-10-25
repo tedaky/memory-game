@@ -37,6 +37,7 @@ img {
   }
 
   &-holder {
+    will-change: transform;
     transform-style: preserve-3d;
     transition: transform 250ms;
   }

@@ -456,8 +456,8 @@ export class GameComponent implements OnDestroy, OnInit {
   }
   //#endregion reset
 
-  public trackBy(index: number, name: Card): string {
-    return name.name
+  public trackBy(index: number, name: Card): number {
+    return index
   }
 
   //#region ngOnDestroy
