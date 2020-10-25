@@ -9,6 +9,7 @@ import { interval, Subscription } from 'rxjs'
 
 import { createTime } from '../create-time/create-time'
 import { DeviceService } from '../device/device.service'
+import { GameService } from '../game/game.service'
 import { Time } from '../time/time'
 
 /**
@@ -74,7 +75,8 @@ export class StopwatchComponent implements OnDestroy, OnInit {
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
-    private device: DeviceService
+    private device: DeviceService,
+    private game: GameService
   ) {}
 
   /**
@@ -163,7 +165,7 @@ export class StopwatchComponent implements OnDestroy, OnInit {
         this.stop()
         return
       }
-      if (val && this.milliseconds + this.seconds) {
+      if (val && this.game.playing.value) {
         this.continue()
       }
     })

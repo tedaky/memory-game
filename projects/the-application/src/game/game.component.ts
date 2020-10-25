@@ -213,18 +213,22 @@ export class GameComponent implements OnDestroy, OnInit {
       interval(500)
         .pipe<number>(take<number>(1))
         .subscribe((): void => {
-          if (this.game.playing.value) {
+          if (this.game.playing.value || this.cardsWon.length) {
             cardChosen0.flipped = 4
             cardChosen1.flipped = 4
 
             interval(250)
               .pipe<number>(take<number>(1))
               .subscribe((): void => {
-                if (this.game.playing.value) {
+                if (this.game.playing.value || this.cardsWon.length) {
                   cardChosen0.flipped = 2
                   cardChosen1.flipped = 2
+
+                  this.changeDetectorRef.markForCheck()
                 }
               })
+
+            this.changeDetectorRef.markForCheck()
           }
         })
 
@@ -245,23 +249,21 @@ export class GameComponent implements OnDestroy, OnInit {
                   cardChosen1.flipped = 0
 
                   this.clickSound(0.25 * this.effectsVolume)
+
+                  this.changeDetectorRef.markForCheck()
                 }
               })
+
+            this.changeDetectorRef.markForCheck()
           }
         })
     }
 
     if (this.cardsWon.length === this.cards.matchCount) {
-      interval(768)
-        .pipe<number>(take<number>(1))
-        .subscribe((): void => {
-          this.game.playing.next(false)
-          this.changeDetectorRef.markForCheck()
-        })
-
       let statistic: Statistic
 
       this.stopwatch.stop()
+      this.game.playing.next(false)
 
       statistic = new Statistic(
         this.game.mode.value,
@@ -278,6 +280,10 @@ export class GameComponent implements OnDestroy, OnInit {
         null
       )
 
+      this.statistics.addStatistic(statistic)
+
+      this.changeDetectorRef.markForCheck()
+
       interval(500)
         .pipe<number>(take<number>(1))
         .subscribe((): void => {
@@ -292,9 +298,13 @@ export class GameComponent implements OnDestroy, OnInit {
                 this.reset(new Event('click') as MouseEvent)
               }
             })
-        })
 
-      this.statistics.addStatistic(statistic)
+          interval(250)
+            .pipe<number>(take<number>(1))
+            .subscribe((): void => {
+              this.winReveal()
+            })
+        })
     }
   }
 
@@ -368,6 +378,16 @@ export class GameComponent implements OnDestroy, OnInit {
     }
   }
 
+  private winReveal(): void {
+    if (!this.game.playing.value) {
+      this.cards.deck.forEach((card: Card): void => {
+        card.flipped = 1
+      })
+
+      this.changeDetectorRef.markForCheck()
+    }
+  }
+
   /**
    * Swap cards if cards match on the very first flip
    *
@@ -431,6 +451,8 @@ export class GameComponent implements OnDestroy, OnInit {
     this.stopwatch.stop()
     this.stopwatch.clear()
     this.game.playing.next(false)
+
+    this.changeDetectorRef.markForCheck()
   }
   //#endregion reset
 
