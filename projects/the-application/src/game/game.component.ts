@@ -210,14 +210,14 @@ export class GameComponent implements OnDestroy, OnInit {
     cardChosen1 = this.cards.deck[option1]
 
     if (cardChosen0.name === cardChosen1.name) {
-      interval(500)
+      interval(100)
         .pipe<number>(take<number>(1))
         .subscribe((): void => {
           if (this.game.playing.value || this.cardsWon.length) {
             cardChosen0.flipped = 4
             cardChosen1.flipped = 4
 
-            interval(250)
+            interval(600)
               .pipe<number>(take<number>(1))
               .subscribe((): void => {
                 if (this.game.playing.value || this.cardsWon.length) {
@@ -234,14 +234,14 @@ export class GameComponent implements OnDestroy, OnInit {
 
       this.cardsWon.push([cardChosen0.name, cardChosen1.name])
     } else {
-      interval(500)
+      interval(100)
         .pipe<number>(take<number>(1))
         .subscribe((): void => {
           if (this.game.playing.value) {
             cardChosen0.flipped = 3
             cardChosen1.flipped = 3
 
-            interval(250)
+            interval(600)
               .pipe<number>(take<number>(1))
               .subscribe((): void => {
                 if (this.game.playing.value) {
@@ -357,7 +357,7 @@ export class GameComponent implements OnDestroy, OnInit {
       if (this.cardsChosenId.length === this.game.match.value) {
         this.checking = true
 
-        interval(500)
+        interval(350)
           .pipe<number>(take<number>(1))
           .subscribe((): void => {
             if (this.game.playing.value) {
