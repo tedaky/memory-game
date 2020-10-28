@@ -3,6 +3,15 @@
     <mat-card-title>
       Matches: {{ cardsWon.length }} /
       {{ game.count.value }}
+      <button
+        mat-flat-button
+        color="warn"
+        type="button"
+        (click)="profiler.profile()"
+        *ngIf="!profiler.environment"
+      >
+        Profile
+      </button>
     </mat-card-title>
     <mat-card-title> Flips: {{ flips }} </mat-card-title>
     <mat-card-title>

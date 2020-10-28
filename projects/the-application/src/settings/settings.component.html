@@ -1,5 +1,16 @@
 <mat-card class="mat-elevation-z2">
-  <mat-card-title> Settings </mat-card-title>
+  <mat-card-title>
+    Settings
+    <button
+      mat-flat-button
+      color="warn"
+      type="button"
+      (click)="profiler.profile()"
+      *ngIf="!profiler.environment"
+    >
+      Profile
+    </button>
+  </mat-card-title>
 </mat-card>
 <mat-card class="mat-elevation-z2">
   <mat-card-title>Volume</mat-card-title>

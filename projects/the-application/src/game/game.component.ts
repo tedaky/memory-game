@@ -25,6 +25,7 @@ import { StatisticsService } from '../statistics/statistics.service'
 import { StopwatchComponent } from '../stopwatch/stopwatch.component'
 import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
 import { Setting } from '../setting/setting'
+import { ProfilerService } from '../profiler/profiler.service'
 
 @Component({
   selector: 'app-game',
@@ -137,6 +138,7 @@ export class GameComponent implements OnDestroy, OnInit {
     private statistics: StatisticsService,
     public cards: CardsService,
     public game: GameService,
+    public profiler: ProfilerService,
     public settings: SettingsService
   ) {}
 

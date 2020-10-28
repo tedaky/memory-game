@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs'
 import { HighScoresService } from './high-scores.service'
 import { fadeAnimation } from '../fade-animation/fade-animation'
 import { GameService } from '../game/game.service'
+import { ProfilerService } from '../profiler/profiler.service'
 import { ScoresTemplateComponent } from '../score/score-template'
 import { Statistic } from '../statistic/statistic'
 import { Match } from '../statistic/statistic.d'
@@ -75,7 +76,8 @@ export class HighScoresComponent
   constructor(
     private changeDetectionRef: ChangeDetectorRef,
     private highScores: HighScoresService,
-    private game: GameService
+    private game: GameService,
+    public profiler: ProfilerService
   ) {}
 
   public inputChange(event?: MatSelectChange): void {

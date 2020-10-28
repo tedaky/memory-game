@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs'
 
 import { SettingsService } from './settings.service'
 import { GameService } from '../game/game.service'
+import { ProfilerService } from '../profiler/profiler.service'
 import { MakeArray } from '../utilities/make-array'
 import { MakeProperty } from '../utilities/make-property'
 
@@ -50,7 +51,8 @@ export class SettingsComponent implements OnDestroy, OnInit {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private game: GameService,
-    private settings: SettingsService
+    private settings: SettingsService,
+    public profiler: ProfilerService
   ) {}
 
   public ngOnInit(): void {
