@@ -91,25 +91,27 @@ export class DatabaseService {
 
         self = this
 
-        request = window.indexedDB.open('MemoryGame', 6)
+        request = window.indexedDB.open('MemoryGame', 7)
 
-        request.onerror = function(event: Event): void {
+        request.onerror = function (event: Event): void {
           this.result.close()
           reject(this.error)
         }
 
-        request.onblocked = function(event: Event): void {
+        request.onblocked = function (event: Event): void {
           this.result.close()
           console.log('blocked')
           console.log(event)
           console.log(this)
         }
 
-        request.onsuccess = function(event: Event): void {
+        request.onsuccess = function (event: Event): void {
           resolve(this.result)
         }
 
-        request.onupgradeneeded = function(event: IDBVersionChangeEvent): void {
+        request.onupgradeneeded = function (
+          event: IDBVersionChangeEvent
+        ): void {
           let database: IDBDatabase
           let request1: IDBOpenDBRequest
           let promises: Promise<IDBValidKey[]>[]
@@ -140,11 +142,11 @@ export class DatabaseService {
 
                 request2 = objectStore.getAll()
 
-                request2.onerror = function(event1: Event): void {
+                request2.onerror = function (event1: Event): void {
                   reject1(this.error)
                 }
 
-                request2.onsuccess = function(event1: Event): void {
+                request2.onsuccess = function (event1: Event): void {
                   let promises1: Promise<IDBValidKey>[]
 
                   promises1 = []
@@ -177,11 +179,11 @@ export class DatabaseService {
 
                         update = objectStore.put(json)
 
-                        update.onsuccess = function(event2: Event): void {
+                        update.onsuccess = function (event2: Event): void {
                           resolve2(this.result)
                         }
 
-                        update.onerror = function(event2: Event): void {
+                        update.onerror = function (event2: Event): void {
                           reject2(this.error)
                         }
                       }
@@ -251,11 +253,11 @@ export class DatabaseService {
 
                 request2 = objectStore.getAll()
 
-                request2.onerror = function(event1: Event): void {
+                request2.onerror = function (event1: Event): void {
                   reject1(this.error)
                 }
 
-                request2.onsuccess = function(event1: Event): void {
+                request2.onsuccess = function (event1: Event): void {
                   let names: string[]
                   let promises1: Promise<IDBValidKey>[]
                   let result: ISetting[]
@@ -290,11 +292,11 @@ export class DatabaseService {
 
                             add = objectStore.add(json)
 
-                            add.onsuccess = function(event2: Event): void {
+                            add.onsuccess = function (event2: Event): void {
                               resolve2(this.result)
                             }
 
-                            add.onerror = function(event2: Event): void {
+                            add.onerror = function (event2: Event): void {
                               reject2(this.error)
                             }
                           }
@@ -347,7 +349,136 @@ export class DatabaseService {
             )
           }
 
-          database.onerror = function(event1: Event): void {
+          /**
+           * For Case 6.
+           *
+           * Update an object store.
+           *
+           * @param name `string` name of objectStore and storeName
+           */
+          function updateCase6(name: string): Promise<IDBValidKey[]> {
+            return new Promise(
+              (
+                resolve1: (value: IDBValidKey[]) => void,
+                reject1: (reason: DOMException) => void
+              ): void => {
+                let objectStore: IDBObjectStore
+                let request2: IDBRequest<ISetting[]>
+
+                objectStore = database
+                  .transaction(name, 'readwrite')
+                  .objectStore(name)
+
+                request2 = objectStore.getAll()
+
+                request2.onerror = function (event1: Event): void {
+                  reject1(this.error)
+                }
+
+                request2.onsuccess = function (event1: Event): void {
+                  let names: string[]
+                  let promises1: Promise<IDBValidKey>[]
+                  let result: ISetting[]
+
+                  result = this.result
+                  names = ['count', 'match', 'mode']
+                  promises1 = names.reduce<Promise<IDBValidKey>[]>(
+                    (
+                      pv: Promise<IDBValidKey>[],
+                      cv: string
+                    ): Promise<IDBValidKey>[] => {
+                      let found: number
+
+                      found = result.findIndex((index: ISetting): boolean => {
+                        return index.key === cv
+                      })
+
+                      if (found === -1) {
+                        let promise: Promise<IDBValidKey>
+
+                        promise = new Promise(
+                          (
+                            resolve2: (value: IDBValidKey) => void,
+                            reject2: (reason: DOMException) => void
+                          ): void => {
+                            let json: ISetting
+                            let setting: Setting
+                            let add: IDBRequest<IDBValidKey>
+
+                            switch (cv) {
+                              case 'count':
+                                setting = new Setting(cv, 6)
+                                break
+                              case 'match':
+                                setting = new Setting(cv, 2)
+                                break
+                              case 'mode':
+                                setting = new Setting(cv, 'regular')
+                                break
+                            }
+
+                            json = Setting.toJSON(setting)
+
+                            add = objectStore.add(json)
+
+                            add.onsuccess = function (event2: Event): void {
+                              resolve2(this.result)
+                            }
+
+                            add.onerror = function (event2: Event): void {
+                              reject2(this.error)
+                            }
+                          }
+                        )
+
+                        pv.push(promise.catch(error => error))
+                      }
+
+                      return pv
+                    },
+                    []
+                  )
+
+                  Promise.all(promises1).then((val: IDBValidKey[]): void => {
+                    resolve1(val)
+                  })
+                }
+              }
+            )
+          }
+
+          /**
+           * For Case 6.
+           *
+           * Reuse complete listener for each objectStore update.
+           *
+           * Calls `updateCase6` and resolves/rejects
+           *
+           * @param name `string` name of objectStore and storeName
+           */
+          function completeCase6(name: string): Promise<IDBValidKey[]> {
+            return new Promise(
+              (
+                resolve1: (value: IDBValidKey[]) => void,
+                reject1: (reason: DOMException) => void
+              ): void => {
+                request1.transaction.addEventListener(
+                  'complete',
+                  (event1: Event): void => {
+                    updateCase6(name)
+                      .then((val: IDBValidKey[]): void => {
+                        resolve1(val)
+                      })
+                      .catch((error: DOMException): void => {
+                        reject1(error)
+                      })
+                  }
+                )
+              }
+            )
+          }
+
+          database.onerror = function (event1: Event): void {
             self.ready = false
             console.log('error in upgrade')
             console.log(event1)
@@ -383,6 +514,10 @@ export class DatabaseService {
               console.log('database upgrading to version 6')
               self.createObjectStore('settings', database, true)
               promises.push(completeCase5('settings').catch(error => error))
+
+            case 6:
+              console.log('database upgrading to version 7')
+              promises.push(completeCase6('settings').catch(error => error))
           }
 
           Promise.all(promises).then((value: IDBValidKey[][]): void => {
@@ -392,7 +527,7 @@ export class DatabaseService {
                   console.error(`highScores error `, group)
                 } else if (index === 1) {
                   console.error(`recentScores error `, group)
-                } else if (index === 2) {
+                } else if (index === 2 || index === 3) {
                   console.error(`settings error `, group)
                 }
               } else {
@@ -402,7 +537,7 @@ export class DatabaseService {
                       console.error(`highScores error at ${index1} `, key)
                     } else if (index === 1) {
                       console.error(`recentScores error at ${index1} `, key)
-                    } else if (index === 2) {
+                    } else if (index === 2 || index === 3) {
                       console.error(`settings error at ${index1} `, key)
                     }
                   }

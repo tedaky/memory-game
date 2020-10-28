@@ -14,15 +14,15 @@
       <button
         mat-flat-button
         color="primary"
-        (click)="reset($event)"
         type="button"
+        (click)="reset($event)"
       >
         Reset
       </button>
     </mat-card-subtitle>
   </mat-card-title-group>
 </mat-card>
-<mat-card class="mat-elevation-z2">
+<mat-card class="mat-elevation-z2" *ngIf="settings.settings.length">
   <mat-card-content>
     <mat-grid-list [cols]="columns" rowHeight="1:1" gutterSize="10px">
       <mat-grid-tile

@@ -1,7 +1,5 @@
 import { isPlatformBrowser } from '@angular/common'
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core'
-import { interval } from 'rxjs'
-import { take } from 'rxjs/operators'
 
 import { DatabaseService } from '../database/database.service'
 import { GameService } from '../game/game.service'
@@ -42,7 +40,7 @@ export class SettingsService {
     private game: GameService
   ) {
     if (isPlatformBrowser(platformId)) {
-      this.getSettings()
+      this.getSettings(0)
     }
   }
 
@@ -51,7 +49,16 @@ export class SettingsService {
    *
    * Only On Construction.
    */
-  private getSettings(): void {
+  private getSettings(count: number): void {
+    if (isNullOrUndefined(count)) {
+      count = 0
+    }
+
+    if (count > 100) {
+      console.error('Database took too long to initialise')
+      return
+    }
+
     this.getAll()
       .then((val: Setting[]): void => {
         val.forEach((item: Setting): void => {
@@ -61,11 +68,9 @@ export class SettingsService {
       })
       .catch((error: DOMException): void => {
         if (error.message === 'Database not set') {
-          interval(100)
-            .pipe<number>(take<number>(1))
-            .subscribe((val: number): void => {
-              this.getSettings()
-            })
+          window.requestAnimationFrame((): void => {
+            this.getSettings(++count)
+          })
         } else {
           console.error(error.message)
         }
@@ -108,11 +113,11 @@ export class SettingsService {
 
           request = objectStore.put(add)
 
-          request.onsuccess = function(event: Event): void {
+          request.onsuccess = function (event: Event): void {
             resolve(this.result)
           }
 
-          request.onerror = function(event: Event): void {
+          request.onerror = function (event: Event): void {
             reject(this.error)
           }
         } else {
@@ -147,11 +152,11 @@ export class SettingsService {
 
           request = objectStore.getAll()
 
-          request.onerror = function(event: Event): void {
+          request.onerror = function (event: Event): void {
             reject(this.error)
           }
 
-          request.onsuccess = function(event: Event): void {
+          request.onsuccess = function (event: Event): void {
             let result: Setting[]
 
             result = this.result.map<Setting>(

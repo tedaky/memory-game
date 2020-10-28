@@ -5,25 +5,26 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core'
+import { MatSelectChange } from '@angular/material/select'
 import { MatSliderChange } from '@angular/material/slider'
 import { Subscription } from 'rxjs'
 
+import { SettingsService } from './settings.service'
 import { GameService } from '../game/game.service'
 import { MakeArray } from '../utilities/make-array'
 import { MakeProperty } from '../utilities/make-property'
-import { SettingsService } from './settings.service'
 
 class SettingOption {
   @MakeProperty()
   public title: string
 
   @MakeProperty()
-  public value: number
+  public value: number | string
 
   @MakeProperty()
   public key: string
 
-  constructor(title: string, value: number, key: string) {
+  constructor(title: string, value: number | string, key: string) {
     this.title = title
     this.value = value
     this.key = key
@@ -57,8 +58,20 @@ export class SettingsComponent implements OnDestroy, OnInit {
     let effectsVolume: SettingOption
     let masterVolume: SettingOption
 
-    this.settingLabels = ['masterVolume', 'effectsVolume', 'ambientVolume']
+    let count: SettingOption
+    let match: SettingOption
+    let mode: SettingOption
 
+    this.settingLabels = [
+      'masterVolume',
+      'effectsVolume',
+      'ambientVolume',
+      'count',
+      'match',
+      'mode'
+    ]
+
+    //#region Volume
     masterVolume = new SettingOption(
       'Master Volume',
       this.game.masterVolume.value,
@@ -76,8 +89,24 @@ export class SettingsComponent implements OnDestroy, OnInit {
       this.game.ambientVolume.value,
       'ambientVolume'
     )
+    //#endregion Volume
 
-    this.settingOptions.push(masterVolume, effectsVolume, ambientVolume)
+    //#region Game
+    count = new SettingOption('Match Count', this.game.count.value, 'count')
+
+    match = new SettingOption('Cards To Match', this.game.match.value, 'match')
+
+    mode = new SettingOption('Mode', this.game.mode.value, 'mode')
+    //#endregion Game
+
+    this.settingOptions.push(
+      masterVolume,
+      effectsVolume,
+      ambientVolume,
+      count,
+      match,
+      mode
+    )
 
     this.sub()
   }
@@ -98,7 +127,6 @@ export class SettingsComponent implements OnDestroy, OnInit {
         this.settingOptions[index].value = val
         this.changeDetectorRef.markForCheck()
       })
-
       this.subscriptions.push(sub)
     })
   }
@@ -107,7 +135,10 @@ export class SettingsComponent implements OnDestroy, OnInit {
     return parseInt(String(value * 100), 10)
   }
 
-  public inputChange(event: MatSliderChange, name: string): void {
+  public inputChange(
+    event: MatSliderChange | MatSelectChange,
+    name: string
+  ): void {
     this.settings
       .put(name, event.value)
       .then((val: IDBValidKey): void => {
@@ -118,7 +149,7 @@ export class SettingsComponent implements OnDestroy, OnInit {
       })
   }
 
-  public trackBy(index: number, name: SettingOption): string {
-    return name.key
+  public trackBy(index: number, name: SettingOption): number {
+    return index
   }
 }

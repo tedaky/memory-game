@@ -2,12 +2,11 @@
   <mat-card-title> Settings </mat-card-title>
 </mat-card>
 <mat-card class="mat-elevation-z2">
-  <mat-card-title> Volume </mat-card-title>
-  <mat-card-content>
-    <ng-container
-      *ngFor="let settingOption of settingOptions; trackBy: trackBy"
-    >
-      <h3>{{ settingOption.title }}</h3>
+  <mat-card-title>Volume</mat-card-title>
+  <!-- [0, 1, 2] -->
+  <ng-container *ngFor="let item of [0, 1]; trackBy: trackBy">
+    <mat-card-content>
+      <h3>{{ settingOptions[item].title }}</h3>
       <mat-slider
         [min]="0"
         [thumbLabel]="true"
@@ -15,9 +14,45 @@
         [max]="1"
         [displayWith]="formatLabel"
         [tickInterval]="0.02"
-        [(ngModel)]="settingOption.value"
-        (input)="inputChange($event, settingOption.key)"
+        [(ngModel)]="settingOptions[item].value"
+        (input)="inputChange($event, settingOptions[item].key)"
       ></mat-slider>
-    </ng-container>
-  </mat-card-content>
+    </mat-card-content>
+  </ng-container>
+</mat-card>
+
+<mat-card class="mat-elevation-z2">
+  <mat-card-title>Game</mat-card-title>
+  <!-- [3, 4, 5] -->
+  <ng-container *ngFor="let item of [4]; trackBy: trackBy">
+    <mat-card-content>
+      <h3>{{ settingOptions[item].title }}</h3>
+      <mat-form-field>
+        <mat-label>{{ settingOptions[item].title }}</mat-label>
+        <mat-select
+          [(ngModel)]="settingOptions[item].value"
+          (selectionChange)="inputChange($event, settingOptions[item].key)"
+        >
+          <ng-container *ngIf="item === 3">
+            <mat-option *ngFor="let val of [6, 9, 12]" [value]="val">
+              {{ val }}
+            </mat-option>
+          </ng-container>
+          <ng-container *ngIf="item === 4">
+            <mat-option *ngFor="let val of [2, 3, 4]" [value]="val">
+              {{ val }}
+            </mat-option>
+          </ng-container>
+          <ng-container *ngIf="item === 5">
+            <mat-option
+              *ngFor="let val of ['memorize', 'regular']"
+              [value]="val"
+            >
+              {{ val }}
+            </mat-option>
+          </ng-container>
+        </mat-select>
+      </mat-form-field>
+    </mat-card-content>
+  </ng-container>
 </mat-card>

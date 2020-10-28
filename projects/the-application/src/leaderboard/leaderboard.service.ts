@@ -1,6 +1,7 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core'
 
 import { DatabaseService } from '../database/database.service'
+import { GameService } from '../game/game.service'
 import { Score } from '../score/score'
 
 /**
@@ -22,17 +23,11 @@ export class LeaderboardService extends Score {
    */
   protected storeName: string = 'leaderboard'
 
-  /**
-   * Tell whether to sort the list on construction.
-   *
-   * Is = `true`
-   */
-  protected sortOnConstruction: boolean = true
-
   constructor(
     @Inject(PLATFORM_ID) readonly platformId: string,
-    database: DatabaseService
+    database: DatabaseService,
+    game: GameService
   ) {
-    super(platformId, database)
+    super(platformId, database, game)
   }
 }

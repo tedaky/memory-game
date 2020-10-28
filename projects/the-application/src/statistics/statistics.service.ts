@@ -7,6 +7,11 @@ import { Count, IStatistic, Match, Mode } from '../statistic/statistic.d'
 import { ITime } from '../time/time.d'
 import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
 
+interface ScoresFilter {
+  gameTypes: string[]
+  statistics: Statistic[][]
+}
+
 /**
  * Statistics Service that allows quick access to
  * `highScores` and `recentScores` and to quickly
@@ -51,8 +56,86 @@ export class StatisticsService {
     statistic = new Statistic(statistic)
 
     this.highScoresService.add(statistic).then((val: Statistic): void => {
-      this.ensureHighScoresLength()
+      this.ensureScoresLength('highScores')
     })
+  }
+
+  /**
+   * Make sure the length of high scores is never more than 10.
+   *
+   * @param `scoreName` 'highScores' | 'recentScores'
+   */
+  private ensureScoresLength(scoreName: 'highScores' | 'recentScores'): void {
+    let gameTypes: ScoresFilter
+
+    gameTypes = { gameTypes: [], statistics: [] }
+
+    gameTypes = this[scoreName].reduce<ScoresFilter>(
+      (pv: ScoresFilter, cv: Statistic): ScoresFilter => {
+        let types: string
+        types = `${cv.mode}_${cv.match}_${cv.count}`
+
+        if (!pv.gameTypes.includes(types)) {
+          let filter: Statistic[]
+
+          filter = this[`${scoreName}Service`].getScoresBy(
+            cv.count,
+            cv.match,
+            cv.mode
+          )
+
+          if (scoreName !== 'recentScores') {
+            filter = this[`${scoreName}Service`].sort(filter)
+          }
+
+          pv.gameTypes.push(types)
+          pv.statistics.push(filter)
+        }
+
+        return pv
+      },
+      gameTypes
+    )
+
+    gameTypes.statistics.forEach((statistics: Statistic[]): void => {
+      this.ensureGroupLength(statistics, scoreName)
+    })
+  }
+
+  /**
+   * ensureGroupLength recursive call
+   *
+   * @param statistics `Statistic[]`
+   */
+  private ensureGroupLength(
+    statistics: Statistic[],
+    scoreName: 'highScores' | 'recentScores'
+  ): void {
+    if (statistics.length > 10) {
+      let keyID: number
+      keyID = statistics.pop().keyID
+
+      this[`${scoreName}Service`]
+        .delete(keyID)
+        .then((val: undefined): void => {
+          let found: number
+
+          found = this[scoreName].findIndex((score): boolean => {
+            return score.keyID === keyID
+          })
+
+          if (found !== -1) {
+            this[scoreName].splice(found, 1)
+          }
+
+          if (statistics.length > 10) {
+            this.ensureGroupLength(statistics, scoreName)
+          }
+        })
+        .catch((error: DOMException): void => {
+          console.error(error.message)
+        })
+    }
   }
 
   /**
@@ -64,46 +147,8 @@ export class StatisticsService {
     statistic = new Statistic(statistic)
 
     this.recentScoresService.add(statistic).then((val: Statistic): void => {
-      this.ensureRecentScoresLength()
+      this.ensureScoresLength('recentScores')
     })
-  }
-
-  /**
-   * Make sure the length of high scores is never more than 10.
-   */
-  private ensureHighScoresLength(): void {
-    this.highScoresService.sort()
-
-    if (this.highScores.length > 10) {
-      this.highScoresService
-        .delete(this.highScores.pop().keyID)
-        .then((val: undefined): void => {
-          if (this.highScores.length > 10) {
-            this.ensureHighScoresLength()
-          }
-        })
-        .catch((error: DOMException): void => {
-          console.error(error.message)
-        })
-    }
-  }
-
-  /**
-   * Make sure the length of recent scores is never more than 10.
-   */
-  private ensureRecentScoresLength(): void {
-    if (this.recentScores.length > 10) {
-      this.recentScoresService
-        .delete(this.recentScores.pop().keyID)
-        .then((val: undefined): void => {
-          if (this.recentScores.length > 10) {
-            this.ensureRecentScoresLength()
-          }
-        })
-        .catch((error: DOMException): void => {
-          console.error(error.message)
-        })
-    }
   }
 
   /**
@@ -112,7 +157,6 @@ export class StatisticsService {
    * @param statistic `Statistic` to add.
    */
   public addStatistic(statistic: Statistic): void
-
   /**
    * Add statistic to high scores and recent scores.
    *

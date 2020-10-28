@@ -6,12 +6,15 @@ import {
   OnInit
 } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
+import { MatSelectChange } from '@angular/material/select'
 import { Subscription } from 'rxjs'
 
 import { HighScoresService } from './high-scores.service'
 import { fadeAnimation } from '../fade-animation/fade-animation'
+import { GameService } from '../game/game.service'
 import { ScoresTemplateComponent } from '../score/score-template'
 import { Statistic } from '../statistic/statistic'
+import { Match } from '../statistic/statistic.d'
 
 /**
  * Display the high scores
@@ -58,6 +61,10 @@ export class HighScoresComponent
   public showClear: boolean = true
   public comingSoon: boolean = false
 
+  public filter: Match = this.game.match.value
+
+  public newScores: Statistic[]
+
   /**
    * Receive the scores from `HighScoresService`
    */
@@ -67,8 +74,23 @@ export class HighScoresComponent
 
   constructor(
     private changeDetectionRef: ChangeDetectorRef,
-    private highScores: HighScoresService
+    private highScores: HighScoresService,
+    private game: GameService
   ) {}
+
+  public inputChange(event?: MatSelectChange): void {
+    this.highScores.dataChange.emit('filtered')
+  }
+
+  private makeNewScores(): void {
+    this.newScores = this.highScores.getScoresBy(
+      this.game.count.value,
+      this.filter,
+      this.game.mode.value
+    )
+
+    this.newScores = this.highScores.sort(this.newScores)
+  }
 
   /**
    * Set detection of score changes
@@ -76,7 +98,9 @@ export class HighScoresComponent
   private initialiseDataChange(): void {
     this.sub = this.highScores.dataChange.subscribe((val: string): void => {
       if (typeof val === 'string') {
-        this.dataSource.data = this.scores
+        this.makeNewScores()
+
+        this.dataSource.data = this.newScores || this.scores
 
         this.changeDetectionRef.markForCheck()
       }
@@ -88,6 +112,7 @@ export class HighScoresComponent
    */
   private initialiseDataSource(): void {
     this.dataSource = new MatTableDataSource<Statistic>(this.scores)
+    this.inputChange()
   }
 
   /**

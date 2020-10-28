@@ -20,8 +20,11 @@ import { CardsService } from '../cards/cards.service'
 import { flipAnimation } from '../flip-animation/flip-animation'
 import { GameEndComponent } from '../game-end/game-end.component'
 import { Statistic } from '../statistic/statistic'
+import { SettingsService } from '../settings/settings.service'
 import { StatisticsService } from '../statistics/statistics.service'
 import { StopwatchComponent } from '../stopwatch/stopwatch.component'
+import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
+import { Setting } from '../setting/setting'
 
 @Component({
   selector: 'app-game',
@@ -78,26 +81,26 @@ export class GameComponent implements OnDestroy, OnInit {
       //   }
       //   break
 
-      // case 24:
-      //   pair = {
-      //     is: 5,
-      //     not: 5
-      //   }
-      //   break
+      case 24:
+        pair = {
+          is: 6,
+          not: 4
+        }
+        break
 
-      // case 18:
-      //   pair = {
-      //     is: 5,
-      //     not: 4
-      //   }
-      //   break
+      case 18:
+        pair = {
+          is: 5,
+          not: 4
+        }
+        break
 
-      // case 12:
-      //   pair = {
-      //     is: 4,
-      //     not: 3
-      //   }
-      //   break
+      case 12:
+        pair = {
+          is: 4,
+          not: 3
+        }
+        break
 
       default:
         pair = {
@@ -133,7 +136,8 @@ export class GameComponent implements OnDestroy, OnInit {
     private mediaMatcher: MediaMatcher,
     private statistics: StatisticsService,
     public cards: CardsService,
-    public game: GameService
+    public game: GameService,
+    public settings: SettingsService
   ) {}
 
   private clickSound(volume: number): void {
@@ -202,51 +206,73 @@ export class GameComponent implements OnDestroy, OnInit {
   /**
    * Check for a match
    */
-  private checkForMatch(option0: number, option1: number): void {
-    let cardChosen0: Card
-    let cardChosen1: Card
+  private checkForMatch(id: number[]): void {
+    let cardChosen: Card[]
+    let namesMatch: boolean
 
-    cardChosen0 = this.cards.deck[option0]
-    cardChosen1 = this.cards.deck[option1]
+    cardChosen = id.reduce<Card[]>((pv: Card[], cv: number): Card[] => {
+      pv.push(this.cards.deck[cv])
+      return pv
+    }, [])
 
-    if (cardChosen0.name === cardChosen1.name) {
+    namesMatch = cardChosen.every(
+      (card: Card, index: number, array: Card[]): boolean => {
+        return card.name === array[0].name
+      }
+    )
+
+    if (namesMatch) {
       interval(100)
         .pipe<number>(take<number>(1))
         .subscribe((): void => {
           if (this.game.playing.value || this.cardsWon.length) {
-            cardChosen0.flipped = 4
-            cardChosen1.flipped = 4
-
-            interval(600)
-              .pipe<number>(take<number>(1))
-              .subscribe((): void => {
-                if (this.game.playing.value || this.cardsWon.length) {
-                  cardChosen0.flipped = 2
-                  cardChosen1.flipped = 2
-
-                  this.changeDetectorRef.markForCheck()
-                }
+            if (id.length === this.game.match.value) {
+              cardChosen.forEach((card: Card): void => {
+                card.flipped = 4
               })
+
+              interval(600)
+                .pipe<number>(take<number>(1))
+                .subscribe((): void => {
+                  if (this.game.playing.value || this.cardsWon.length) {
+                    cardChosen.forEach((card: Card): void => {
+                      card.flipped = 2
+                    })
+
+                    this.changeDetectorRef.markForCheck()
+                  }
+                })
+            }
 
             this.changeDetectorRef.markForCheck()
           }
         })
 
-      this.cardsWon.push([cardChosen0.name, cardChosen1.name])
+      if (id.length === this.game.match.value) {
+        this.cardsChosenId = []
+
+        this.cardsWon.push([
+          ...cardChosen.map<string>((card: Card): string => {
+            return card.name
+          })
+        ])
+      }
     } else {
       interval(100)
         .pipe<number>(take<number>(1))
         .subscribe((): void => {
           if (this.game.playing.value) {
-            cardChosen0.flipped = 3
-            cardChosen1.flipped = 3
+            cardChosen.forEach((card: Card): void => {
+              card.flipped = 3
+            })
 
             interval(600)
               .pipe<number>(take<number>(1))
               .subscribe((): void => {
                 if (this.game.playing.value) {
-                  cardChosen0.flipped = 0
-                  cardChosen1.flipped = 0
+                  cardChosen.forEach((card: Card): void => {
+                    card.flipped = 0
+                  })
 
                   this.clickSound(0.25 * this.effectsVolume)
 
@@ -257,6 +283,8 @@ export class GameComponent implements OnDestroy, OnInit {
             this.changeDetectorRef.markForCheck()
           }
         })
+
+      this.cardsChosenId = []
     }
 
     if (this.cardsWon.length === this.cards.matchCount) {
@@ -336,14 +364,8 @@ export class GameComponent implements OnDestroy, OnInit {
     }
 
     if (!this.cards.deck[index].flipped && !this.checking) {
-      let option0: number
-      let option1: number
-
       this.flips++
       this.cardsChosenId.push(index)
-
-      option0 = this.cardsChosenId[0]
-      option1 = this.cardsChosenId[1]
 
       // Swap cards if matched on first flip
       // if (this.game.mode.value === 'regular' && this.game.match.value === 2) {
@@ -354,14 +376,17 @@ export class GameComponent implements OnDestroy, OnInit {
 
       this.updateFlipped(index)
 
-      if (this.cardsChosenId.length === this.game.match.value) {
+      if (this.cardsChosenId.length > 1) {
+        let id: number[]
         this.checking = true
+
+        id = [...this.cardsChosenId]
 
         interval(350)
           .pipe<number>(take<number>(1))
           .subscribe((): void => {
             if (this.game.playing.value) {
-              this.checkForMatch(option0, option1)
+              this.checkForMatch(id)
             }
           })
 
@@ -370,8 +395,6 @@ export class GameComponent implements OnDestroy, OnInit {
           .subscribe((): void => {
             this.checking = false
           })
-
-        this.cardsChosenId = []
       }
 
       this.clickSound(this.effectsVolume)
@@ -421,10 +444,52 @@ export class GameComponent implements OnDestroy, OnInit {
   //#region ngOnInit
   public ngOnInit(): void {
     this.createMediaMatcher()
-
     this.reset(new Event('click') as MouseEvent)
+    if (isPlatformBrowser(this.platformId)) {
+      this.start(0)
+    } else {
+      if (!this.settings.settings) {
+        this.settings.settings.push(new Setting('match', 2))
+      }
+    }
   }
   //#endregion ngOnInit
+
+  private start(count: number): void {
+    if (isNullOrUndefined(count)) {
+      count = 0
+    }
+
+    if (count > 100) {
+      console.error('Database took too long to initialise')
+      return
+    }
+
+    this.init()
+      .then((): void => {
+        this.reset(new Event('click') as MouseEvent)
+      })
+      .catch((error: DOMException): void => {
+        window.requestAnimationFrame((): void => {
+          this.start(++count)
+        })
+      })
+  }
+
+  private init(): Promise<void> {
+    return new Promise(
+      (
+        resolve: (value: undefined) => void,
+        reject: (reason: undefined) => void
+      ): void => {
+        if (this.settings.settings.length) {
+          resolve(undefined)
+        } else {
+          reject(undefined)
+        }
+      }
+    )
+  }
 
   //#region reset
   /**

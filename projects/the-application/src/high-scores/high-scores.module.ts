@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 
 import { HighScoresComponent } from './high-scores.component'
@@ -13,6 +14,7 @@ import { MaterialModule } from '../material/material.module'
   declarations: [HighScoresComponent],
   imports: [
     CommonModule,
+    FormsModule,
     HighScoresRoutingModule,
     MaterialModule,
     RouterModule

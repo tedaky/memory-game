@@ -1,10 +1,13 @@
 import { isPlatformBrowser } from '@angular/common'
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core'
+import { interval } from 'rxjs'
+import { take } from 'rxjs/operators'
 
 import { createTime } from '../create-time/create-time'
 import { DatabaseService } from '../database/database.service'
+import { GameService } from '../game/game.service'
 import { Statistic } from '../statistic/statistic'
-import { IStatistic } from '../statistic/statistic.d'
+import { Count, IStatistic, Match, Mode } from '../statistic/statistic.d'
 import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
 
 /**
@@ -21,11 +24,6 @@ export abstract class Score {
    * Indexeddb Store Name
    */
   protected storeName: string = 'defaultStore'
-
-  /**
-   * Tell whether to sort the list on construction.
-   */
-  protected sortOnConstruction: boolean = false
 
   /**
    * Emit a data change for material table.
@@ -47,7 +45,8 @@ export abstract class Score {
 
   constructor(
     @Inject(PLATFORM_ID) readonly platformId: string,
-    protected database: DatabaseService
+    protected database: DatabaseService,
+    protected game: GameService
   ) {
     this.dataChange = new EventEmitter<string>()
 
@@ -57,15 +56,93 @@ export abstract class Score {
   }
 
   /**
+   * Get scores by game type
+   *
+   * @param count `Count` number of card matches
+   * @param match `Match` number of cards to match
+   * @param mode `Mode` mode of game
+   */
+  public getScoresBy(count: Count, match: Match, mode: Mode): Statistic[] {
+    return this.scores.filter((score: Statistic): boolean => {
+      return (
+        score.count === count && score.match === match && score.mode === mode
+      )
+    })
+  }
+
+  /**
+   * CompareFn for Statistic[] sort to order by "weight"
+   *
+   * @param a `Statistic` compare a
+   * @param b `Statistic` compare b
+   */
+  private compare(a: Statistic, b: Statistic): 1 | -1 | 0 {
+    let aTime: number
+    let bTime: number
+    let aWeight: number
+    let bWeight: number
+
+    aTime = createTime(a.complete)
+    bTime = createTime(b.complete)
+
+    aWeight = a.flips * aTime
+    bWeight = b.flips * bTime
+
+    if (aWeight > bWeight) {
+      return 1
+    }
+    if (aWeight < bWeight) {
+      return -1
+    }
+
+    if (a.flips > b.flips) {
+      return 1
+    }
+    if (a.flips < b.flips) {
+      return -1
+    }
+
+    if (aTime > bTime) {
+      return -1
+    }
+    if (aTime < bTime) {
+      return 1
+    }
+
+    return 0
+  }
+
+  /**
+   * Sort scores by best score.
+   */
+  public sort(): Statistic[]
+  /**
+   * Sort scores by best score.
+   *
+   * @param statistics `Statistic[]` sort the provided statistics array
+   */
+  public sort(statistics: Statistic[]): Statistic[]
+  public sort(arg1?: Statistic[]): Statistic[] {
+    if (isNullOrUndefined(arg1)) {
+      return this.scores.sort(this.compare)
+    } else {
+      return arg1.sort(this.compare)
+    }
+  }
+
+  /**
    * Get scores from indexeddb then push them to scores list.
    *
    * Only On Construction.
+   *
+   * @param count `number` indicator of self call position < 10 otherwise throw error
    */
   private getScores(count: number): void {
     if (isNullOrUndefined(count)) {
       count = 0
     }
-    if (count > 10) {
+
+    if (count > 100) {
       console.error('Database took too long to initialise')
       return
     }
@@ -75,10 +152,6 @@ export abstract class Score {
         val.forEach((item: Statistic): void => {
           this.addScoreStatistic(item)
         })
-
-        if (this.sortOnConstruction) {
-          this.sort()
-        }
 
         this.dataChange.emit('getAll')
       })
@@ -91,49 +164,6 @@ export abstract class Score {
           console.error(error.message)
         }
       })
-  }
-
-  /**
-   * Sort scores by best score.
-   */
-  public sort(): void {
-    this.scores.sort((a: Statistic, b: Statistic): 1 | -1 | 0 => {
-      let aTime: number
-      let bTime: number
-      let aWeight: number
-      let bWeight: number
-
-      aTime = createTime(a.complete)
-      bTime = createTime(b.complete)
-
-      aWeight = a.flips * aTime
-      bWeight = b.flips * bTime
-
-      if (aWeight > bWeight) {
-        return 1
-      }
-      if (aWeight < bWeight) {
-        return -1
-      }
-
-      if (a.flips > b.flips) {
-        return 1
-      }
-      if (a.flips < b.flips) {
-        return -1
-      }
-
-      if (aTime < bTime) {
-        return -1
-      }
-      if (aTime > bTime) {
-        return 1
-      }
-
-      return 0
-    })
-
-    this.dataChange.emit('sorted')
   }
 
   /**
@@ -173,11 +203,11 @@ export abstract class Score {
 
           request = objectStore.getAll()
 
-          request.onerror = function(event: Event): void {
+          request.onerror = function (event: Event): void {
             reject(this.error)
           }
 
-          request.onsuccess = function(event: Event): void {
+          request.onsuccess = function (event: Event): void {
             let result: Statistic[]
 
             result = this.result.map<Statistic>(
@@ -207,9 +237,40 @@ export abstract class Score {
    * @param statistic `Statistic` to add to indexeddb
    */
   public add(statistic: Statistic): Promise<Statistic> {
+    let gameState: Statistic[]
     let self: this
+    let shouldAdd: boolean
 
-    this.addScoreStatistic(statistic)
+    gameState = this.getScoresBy(
+      statistic.count,
+      statistic.match,
+      statistic.mode
+    )
+
+    if (gameState.length < 10) {
+      shouldAdd = true
+      this.addScoreStatistic(statistic)
+    } else {
+      if (this.storeName === 'recentScores') {
+        shouldAdd = true
+        this.addScoreStatistic(statistic)
+      } else {
+        gameState = this.sort(gameState)
+
+        let gameStateWeight: number
+        let statisticWeight: number
+
+        gameStateWeight = createTime(gameState[9].complete) * gameState[9].flips
+        statisticWeight = createTime(statistic.complete) * statistic.flips
+
+        if (gameStateWeight > statisticWeight) {
+          shouldAdd = true
+          this.addScoreStatistic(statistic)
+        } else {
+          shouldAdd = false
+        }
+      }
+    }
 
     self = this
 
@@ -218,6 +279,11 @@ export abstract class Score {
         resolve: (value: Statistic) => void,
         reject: (reason: DOMException) => void
       ): void => {
+        if (!shouldAdd) {
+          resolve(statistic)
+          return
+        }
+
         if (this.database.database && this.database.ready) {
           let add: IStatistic
           let objectStore: IDBObjectStore
@@ -231,7 +297,7 @@ export abstract class Score {
 
           request = objectStore.add(add)
 
-          request.onsuccess = function(event: Event): void {
+          request.onsuccess = function (event: Event): void {
             statistic.keyID = this.result as number
 
             self.dataChange.emit('add')
@@ -239,7 +305,7 @@ export abstract class Score {
             resolve(statistic)
           }
 
-          request.onerror = function(event: Event): void {
+          request.onerror = function (event: Event): void {
             reject(this.error)
           }
         } else {
@@ -280,13 +346,13 @@ export abstract class Score {
 
           request = objectStore.clear()
 
-          request.onsuccess = function(event: Event): void {
+          request.onsuccess = function (event: Event): void {
             self.dataChange.emit('clear')
 
             resolve(this.result)
           }
 
-          request.onerror = function(event: Event): void {
+          request.onerror = function (event: Event): void {
             reject(this.error)
           }
         } else {
@@ -327,13 +393,13 @@ export abstract class Score {
 
           request = objectStore.delete(key)
 
-          request.onsuccess = function(event: Event): void {
+          request.onsuccess = function (event: Event): void {
             self.dataChange.emit('delete')
 
             resolve(this.result)
           }
 
-          request.onerror = function(event: Event): void {
+          request.onerror = function (event: Event): void {
             reject(this.error)
           }
         } else {

@@ -1,6 +1,7 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
 import { APP_ID, Inject, NgModule, PLATFORM_ID } from '@angular/core'
+import { FormsModule } from '@angular/forms'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule } from '@angular/router'
@@ -28,6 +29,7 @@ import { RootRoutingModule } from '../root-routing/root-routing.module'
     BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'MemoryGameApp' }),
     CommonModule,
+    FormsModule,
     HttpClientModule,
     MaterialModule,
     RootRoutingModule,
