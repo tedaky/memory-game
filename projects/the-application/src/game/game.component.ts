@@ -382,17 +382,13 @@ export class GameComponent implements OnDestroy, OnInit {
 
         id = [...this.cardsChosenId]
 
-        interval(350)
+        interval(250)
           .pipe<number>(take<number>(1))
           .subscribe((): void => {
             if (this.game.playing.value) {
               this.checkForMatch(id)
             }
-          })
 
-        interval(250)
-          .pipe<number>(take<number>(1))
-          .subscribe((): void => {
             this.checking = false
           })
       }
