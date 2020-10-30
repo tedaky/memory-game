@@ -1,8 +1,10 @@
 import { isPlatformBrowser } from '@angular/common'
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core'
+import { MatSnackBar } from '@angular/material/snack-bar'
+
+import { CheckForUpdateComponent } from '../check-for-update/check-for-update.component'
 import { Setting } from '../setting/setting'
 import { ISetting } from '../setting/setting.d'
-
 import { Statistic } from '../statistic/statistic'
 import { IStatistic } from '../statistic/statistic.d'
 import { Time } from '../time/time'
@@ -28,17 +30,24 @@ export class DatabaseService {
    */
   public ready: boolean
 
-  constructor(@Inject(PLATFORM_ID) readonly platformId: string) {
+  constructor(
+    @Inject(PLATFORM_ID) readonly platformId: string,
+    private snackBar: MatSnackBar
+  ) {
     if (isPlatformBrowser(platformId)) {
-      this.open()
-        .then<void, never>((val: IDBDatabase): void => {
-          this.database = val
-          this.ready = true
-        })
-        .catch<void>((error: DOMException): void => {
-          console.error(error.message)
-        })
+      this.openDatabase(7)
     }
+  }
+
+  private openDatabase(version: number): void {
+    this.open(version)
+      .then<void, never>((val: IDBDatabase): void => {
+        this.database = val
+        this.ready = true
+      })
+      .catch<void>((error: DOMException): void => {
+        console.error(error.message)
+      })
   }
 
   /**
@@ -47,7 +56,7 @@ export class DatabaseService {
    * @param name `string` name of objectStore
    * @param database `IDBDatabase` database to create object store on
    */
-  public createObjectStore(name: string, database: IDBDatabase): void
+  private createObjectStore(name: string, database: IDBDatabase): void
   /**
    * Create an object store.
    *
@@ -55,12 +64,12 @@ export class DatabaseService {
    * @param database `IDBDatabase` database to create object store on
    * @param warn `boolean` warn if the object store already exists
    */
-  public createObjectStore(
+  private createObjectStore(
     name: string,
     database: IDBDatabase,
     warn: boolean
   ): void
-  public createObjectStore(
+  private createObjectStore(
     arg1: string,
     arg2: IDBDatabase,
     arg3?: boolean
@@ -80,7 +89,7 @@ export class DatabaseService {
   /**
    * Open a connection, create a database and upgrade if needed
    */
-  private open(): Promise<IDBDatabase> {
+  private open(version: number): Promise<IDBDatabase> {
     return new Promise(
       (
         resolve: (value: IDBDatabase) => void,
@@ -91,7 +100,7 @@ export class DatabaseService {
 
         self = this
 
-        request = window.indexedDB.open('MemoryGame', 7)
+        request = window.indexedDB.open('MemoryGame', version)
 
         request.onerror = function (event: Event): void {
           this.result.close()
@@ -106,6 +115,38 @@ export class DatabaseService {
         }
 
         request.onsuccess = function (event: Event): void {
+          this.result.onversionchange = function (
+            event1: IDBVersionChangeEvent
+          ) {
+            self.ready = false
+
+            console.log('versionchange')
+            console.log(event1)
+
+            self.snackBar
+              .openFromComponent(CheckForUpdateComponent, {
+                panelClass: 'snack-bar-reposition'
+              })
+              .onAction()
+              .subscribe((): void => {
+                window.document.location.reload()
+              })
+
+            this.close()
+          }
+
+          this.result.onerror = function (event1: Event) {
+            console.log('onerror')
+            console.log(event1)
+          }
+
+          // Doesn't appear to be called when closed
+          this.result.onclose = function (event1: Event): void {
+            console.log('close')
+            console.log(event1)
+            self.ready = false
+          }
+
           resolve(this.result)
         }
 
@@ -113,10 +154,12 @@ export class DatabaseService {
           event: IDBVersionChangeEvent
         ): void {
           let database: IDBDatabase
+          let newVersion: number
           let request1: IDBOpenDBRequest
           let promises: Promise<IDBValidKey[]>[]
 
           database = this.result
+          newVersion = event.newVersion
           request1 = event.target as IDBOpenDBRequest
           promises = []
 
@@ -490,13 +533,25 @@ export class DatabaseService {
               console.log('database upgrading to version 1')
               self.createObjectStore('highScores', database, true)
 
+              if (newVersion === 1) {
+                break
+              }
+
             case 1:
               console.log('database upgrading to version 2')
               self.createObjectStore('recentScores', database, true)
 
+              if (newVersion === 2) {
+                break
+              }
+
             case 2:
               console.log('database upgrading to version 3')
               self.createObjectStore('leaderboard', database, true)
+
+              if (newVersion === 3) {
+                break
+              }
 
             case 3:
               console.log('database upgrading to version 4')
@@ -504,20 +559,36 @@ export class DatabaseService {
                 completeCase3vCase4('highScores').catch(error => error)
               )
 
+              if (newVersion === 4) {
+                break
+              }
+
             case 4:
               console.log('database upgrading to version 5')
               promises.push(
                 completeCase3vCase4('recentScores').catch(error => error)
               )
 
+              if (newVersion === 5) {
+                break
+              }
+
             case 5:
               console.log('database upgrading to version 6')
               self.createObjectStore('settings', database, true)
               promises.push(completeCase5('settings').catch(error => error))
 
+              if (newVersion === 6) {
+                break
+              }
+
             case 6:
               console.log('database upgrading to version 7')
               promises.push(completeCase6('settings').catch(error => error))
+
+              if (newVersion === 7) {
+                break
+              }
           }
 
           Promise.all(promises).then((value: IDBValidKey[][]): void => {
