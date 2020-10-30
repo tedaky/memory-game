@@ -12,7 +12,8 @@
     "run:server": "http-server -p 8080 -c-1 docs/",
     "build:shell": "ng run the-application:app-shell:production",
     "build:shell:github": "ng run the-application:app-shell:github",
-    "bundle:source-map:report": "source-map-explorer docs/**/*.js --html docs/source-map.html"
+    "build:test": "ng test --no-watch --codeCoverage",
+    "build:source-map:report": "source-map-explorer docs/**/*.js --html docs/source-map.html"
   },
   "private": true,
   "dependencies": {
