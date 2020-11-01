@@ -1,8 +1,7 @@
 import { isPlatformBrowser } from '@angular/common'
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core'
-import { interval } from 'rxjs'
-import { take } from 'rxjs/operators'
 
+import { AnalyticsService } from '../analytics/analytics.service'
 import { createTime } from '../create-time/create-time'
 import { DatabaseService } from '../database/database.service'
 import { GameService } from '../game/game.service'
@@ -45,6 +44,7 @@ export abstract class Score {
 
   constructor(
     @Inject(PLATFORM_ID) readonly platformId: string,
+    protected analytics: AnalyticsService,
     protected database: DatabaseService,
     protected game: GameService
   ) {
@@ -280,7 +280,15 @@ export abstract class Score {
         reject: (reason: DOMException) => void
       ): void => {
         if (!shouldAdd) {
+          if (this.storeName === 'highScores') {
+            self.analytics.gtag('event', 'send_score', {
+              ...Statistic.toJSON(statistic),
+              isHighScore: false
+            })
+          }
+
           resolve(statistic)
+
           return
         }
 
@@ -298,6 +306,13 @@ export abstract class Score {
           request = objectStore.add(add)
 
           request.onsuccess = function (event: Event): void {
+            if (self.storeName === 'highScores') {
+              self.analytics.gtag('event', 'send_score', {
+                ...add,
+                isHighScore: false
+              })
+            }
+
             statistic.keyID = this.result as number
 
             self.dataChange.emit('add')
