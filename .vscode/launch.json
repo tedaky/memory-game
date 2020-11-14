@@ -1,0 +1,27 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Angular",
+      "request": "launch",
+      "type": "pwa-chrome",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}",
+      "runtimeArgs": ["--remote-debugging-port=9222"],
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        // https://github.com/microsoft/vscode-recipes/tree/master/Angular-CLI
+        //  \/ Changed to resemble this project
+        "webpack:/*": "${webRoot}/projects/the-application/*",
+        "/./*": "${webRoot}/*",
+        // \/ Changed to resemble this project
+        "/src/*": "${webRoot}/projects/the-application/src/*",
+        "/*": "*",
+        "/./~/*": "${webRoot}/node_modules/*",
+      }
+    }
+  ]
+}

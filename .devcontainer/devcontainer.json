@@ -1,0 +1,44 @@
+{
+  "name": "Memory Game",
+  "build": {
+    "dockerfile": "Dockerfile",
+    // Update 'VARIANT' to pick a Node version: 10, 12, 14
+    "args": {
+      "VARIANT": "12"
+    }
+  },
+  // Set *default* container specific settings.json values on container create.
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [
+    "angular.ng-template",
+    "editorconfig.editorconfig",
+    "eamodio.gitlens",
+    "oderwat.indent-rainbow",
+    "ritwickdey.liveserver",
+    "ms-vsliveshare.vsliveshare",
+    "yzhang.markdown-all-in-one",
+    "esbenp.prettier-vscode",
+    "mechatroner.rainbow-csv",
+    "humao.rest-client",
+    "msjsdiag.debugger-for-chrome",
+    "firefox-devtools.vscode-firefox-debug",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "visualstudioexptteam.vscodeintellicode",
+    "redhat.vscode-yaml",
+    "vscode-icons-team.vscode-icons",
+    "johnpapa.angular2",
+    "formulahendry.auto-rename-tag"
+  ],
+  // "appPort": 4200,
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  // "forwardPorts": [],
+  "forwardPorts": [4200, 8080],
+  // Use 'postCreateCommand' to run commands after the container is created.
+  // "postCreateCommand": "yarn install",
+  "postCreateCommand": "npm install",
+  // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "node"
+}
