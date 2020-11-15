@@ -68,8 +68,8 @@ export class SettingsComponent implements OnDestroy, OnInit {
       'masterVolume',
       'effectsVolume',
       'ambientVolume',
-      'count',
       'match',
+      'count',
       'mode'
     ]
 
