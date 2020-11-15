@@ -5,7 +5,7 @@ describe('Statistic', () => {
       mode: 'regular',
       match: 2,
       flips: 12,
-      count: 9,
+      count: 6,
       complete: {
         milliseconds: 0,
         seconds: 0,
@@ -31,7 +31,7 @@ describe('Statistic', () => {
       mode: 'regular',
       match: 2,
       flips: 14,
-      count: 9,
+      count: 6,
       complete: {
         milliseconds: 2,
         seconds: 2,
