@@ -117,7 +117,7 @@ export class DatabaseService {
         request.onsuccess = function (event: Event): void {
           this.result.onversionchange = function (
             event1: IDBVersionChangeEvent
-          ) {
+          ): void {
             self.ready = false
 
             console.log('versionchange')
@@ -135,12 +135,14 @@ export class DatabaseService {
             this.close()
           }
 
-          this.result.onerror = function (event1: Event) {
+          // tslint:disable-next-line: only-arrow-functions
+          this.result.onerror = function (event1: Event): void {
             console.log('onerror')
             console.log(event1)
           }
 
           // Doesn't appear to be called when closed
+          // tslint:disable-next-line: only-arrow-functions
           this.result.onclose = function (event1: Event): void {
             console.log('close')
             console.log(event1)
@@ -449,10 +451,7 @@ export class DatabaseService {
                             let add: IDBRequest<IDBValidKey>
 
                             switch (cv) {
-                              case 'count':
-                                setting = new Setting(cv, 6)
-                                break
-                              case 'match':
+                              case 'count' || 'match':
                                 setting = new Setting(cv, 2)
                                 break
                               case 'mode':

@@ -12,9 +12,9 @@ export class GameService {
   /**
    * Unique cards of the game
    *
+   * * 2
+   * * 4
    * * 6
-   * * 9
-   * * 12
    */
   public count: BehaviorSubject<Count>
 
@@ -59,7 +59,7 @@ export class GameService {
   public ambientVolume: BehaviorSubject<number>
 
   constructor(private httpClient: HttpClient) {
-    this.count = new BehaviorSubject<Count>(6)
+    this.count = new BehaviorSubject<Count>(2)
     this.match = new BehaviorSubject<Match>(2)
     this.mode = new BehaviorSubject<Mode>('regular')
     this.playing = new BehaviorSubject<boolean>(false)

@@ -15,6 +15,9 @@
 <mat-card class="mat-elevation-z2">
   <mat-card-title>Volume</mat-card-title>
   <!-- [0, 1, 2] -->
+  <!-- 0 = masterVolume -->
+  <!-- 1 = effectsVolume -->
+  <!-- 2 = ambientVolume -->
   <ng-container *ngFor="let item of [0, 1]; trackBy: trackBy">
     <mat-card-content>
       <h3>{{ settingOptions[item].title }}</h3>
@@ -35,7 +38,10 @@
 <mat-card class="mat-elevation-z2">
   <mat-card-title>Game</mat-card-title>
   <!-- [3, 4, 5] -->
-  <ng-container *ngFor="let item of [4]; trackBy: trackBy">
+  <!-- 3 = match -->
+  <!-- 4 = count -->
+  <!-- 5 = mode -->
+  <ng-container *ngFor="let item of [3, 4]; trackBy: trackBy">
     <mat-card-content>
       <h3>{{ settingOptions[item].title }}</h3>
       <mat-form-field>
@@ -45,12 +51,12 @@
           (selectionChange)="inputChange($event, settingOptions[item].key)"
         >
           <ng-container *ngIf="item === 3">
-            <mat-option *ngFor="let val of [6, 9, 12]" [value]="val">
+            <mat-option *ngFor="let val of [2, 3, 4]" [value]="val">
               {{ val }}
             </mat-option>
           </ng-container>
           <ng-container *ngIf="item === 4">
-            <mat-option *ngFor="let val of [2, 3, 4]" [value]="val">
+            <mat-option *ngFor="let val of [2, 4, 6]" [value]="val">
               {{ val }}
             </mat-option>
           </ng-container>

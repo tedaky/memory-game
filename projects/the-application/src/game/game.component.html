@@ -43,7 +43,11 @@
             ((i === 15 && columns === 5) || (i === 16 && columns === 4))
           "
         ></mat-grid-tile>
-        <mat-grid-tile>
+        <mat-grid-tile
+          [style.margin-left]="
+            cards.deck.length === 8 && (i === 6 || i === 7) ? '16.6666%' : null
+          "
+        >
           <div class="card-wrapper" (click)="flipCard($event, i)">
             <div
               class="card-holder mat-elevation-z4"

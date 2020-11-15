@@ -96,6 +96,13 @@ export class GameComponent implements OnDestroy, OnInit {
         }
         break
 
+      case 16:
+        pair = {
+          is: 4,
+          not: 4
+        }
+        break
+
       case 12:
         pair = {
           is: 4,
@@ -103,10 +110,31 @@ export class GameComponent implements OnDestroy, OnInit {
         }
         break
 
+      case 8:
+        pair = {
+          is: 3,
+          not: 3
+        }
+        break
+
+      case 6:
+        pair = {
+          is: 3,
+          not: 2
+        }
+        break
+
+      case 4:
+        pair = {
+          is: 2,
+          not: 2
+        }
+        break
+
       default:
         pair = {
-          is: 4,
-          not: 3
+          is: 2,
+          not: 2
         }
         break
     }
@@ -196,6 +224,7 @@ export class GameComponent implements OnDestroy, OnInit {
       this.mediaMatcherQuery = this.mediaMatcher.matchMedia(
         '(min-aspect-ratio: 7/10)'
       )
+      // tslint:disable-next-line: deprecation
       this.mediaMatcherQuery.addListener(this.mediaQueryListener.bind(this))
       // `addListener` is deprecated but Safari doesn't support `addEventListener`
       // this.mediaMatcherQuery.addEventListener(
@@ -289,7 +318,7 @@ export class GameComponent implements OnDestroy, OnInit {
       this.cardsChosenId = []
     }
 
-    if (this.cardsWon.length === this.cards.matchCount) {
+    if (this.cardsWon.length === this.game.count.value) {
       let statistic: Statistic
 
       this.stopwatch.stop()
@@ -526,6 +555,7 @@ export class GameComponent implements OnDestroy, OnInit {
   //#region ngOnDestroy
   public ngOnDestroy(): void {
     if (isPlatformBrowser(this.platformId)) {
+      // tslint:disable-next-line: deprecation
       this.mediaMatcherQuery.removeListener(this.mediaQueryListener)
       // `removeListener` is deprecated but Safari doesn't support `removeEventListener`
       // this.mediaMatcherQuery.removeEventListener(

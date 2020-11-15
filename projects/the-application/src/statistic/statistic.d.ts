@@ -35,11 +35,11 @@ export interface IStatistic {
 }
 
 /**
+ * * 2 = 2 unique cards
+ * * 4 = 4 unique cards
  * * 6 = 6 unique cards
- * * 9 = 9 unique cards
- * * 12 = 12 unique cards
  */
-export type Count = 6 | 9 | 12
+export type Count = 2 | 4 | 6
 /**
  * * 2 = match 2 game
  * * 3 = match 3 game

@@ -94,7 +94,7 @@ export class SettingsComponent implements OnDestroy, OnInit {
     //#endregion Volume
 
     //#region Game
-    count = new SettingOption('Match Count', this.game.count.value, 'count')
+    count = new SettingOption('Unique Cards Count', this.game.count.value, 'count')
 
     match = new SettingOption('Cards To Match', this.game.match.value, 'match')
 
@@ -105,8 +105,8 @@ export class SettingsComponent implements OnDestroy, OnInit {
       masterVolume,
       effectsVolume,
       ambientVolume,
-      count,
       match,
+      count,
       mode
     )
 

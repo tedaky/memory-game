@@ -27,8 +27,17 @@
   <mat-card-content>
     <mat-form-field>
       <mat-label>Cards To Match</mat-label>
-      <mat-select [(ngModel)]="filter" (selectionChange)="inputChange($event)">
+      <mat-select [(ngModel)]="match" (selectionChange)="inputChange($event)">
         <mat-option *ngFor="let val of [2, 3, 4]" [value]="val">
+          {{ val }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Unique Cards Count</mat-label>
+      <mat-select [(ngModel)]="count" (selectionChange)="inputChange($event)">
+        <mat-option *ngFor="let val of [2, 4, 6]" [value]="val">
           {{ val }}
         </mat-option>
       </mat-select>

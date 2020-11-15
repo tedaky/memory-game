@@ -41,15 +41,6 @@ export class CardsService {
   @MakeArray<CardsService, Card>()
   public deck: Card[]
   //#endregion deck
-
-  //#region matchCount
-  /**
-   * Total number of matches.
-   */
-  public get matchCount(): number {
-    return this.cards.length
-  }
-  //#endregion matchCount
   //#endregion get
 
   //#region blank, white images

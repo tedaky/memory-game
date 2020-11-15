@@ -15,7 +15,7 @@ import { GameService } from '../game/game.service'
 import { ProfilerService } from '../profiler/profiler.service'
 import { ScoresTemplateComponent } from '../score/score-template'
 import { Statistic } from '../statistic/statistic'
-import { Match } from '../statistic/statistic.d'
+import { Count, Match, Mode } from '../statistic/statistic.d'
 
 /**
  * Display the leaderboard
@@ -62,7 +62,9 @@ export class LeaderboardComponent
   public showClear: boolean = false
   public comingSoon: boolean = true
 
-  public filter: Match = this.game.match.value
+  public count: Count = this.game.count.value
+  public match: Match = this.game.match.value
+  public mode: Mode = this.game.mode.value
 
   public newScores: Statistic[]
 
@@ -86,9 +88,9 @@ export class LeaderboardComponent
 
   private makeNewScores(): void {
     this.newScores = this.leaderboard.getScoresBy(
-      this.game.count.value,
-      this.filter,
-      this.game.mode.value
+      this.count,
+      this.match,
+      this.mode
     )
 
     this.newScores = this.leaderboard.sort(this.newScores)
