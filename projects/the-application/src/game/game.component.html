@@ -45,7 +45,7 @@
         ></mat-grid-tile>
         <mat-grid-tile
           [style.margin-left]="
-            cards.deck.length === 8 && (i === 6 || i === 7) ? '16.6666%' : null
+            cards.deck.length === 8 && (i === 6 || i === 7) ? 'calc(16.6666% + 2.5px)' : null
           "
         >
           <div class="card-wrapper" (click)="flipCard($event, i)">
