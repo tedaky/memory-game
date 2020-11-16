@@ -6,5 +6,6 @@
     "enable": true,
     "baseUri": "/memory-game/",
     "proxyUri": "http://localhost:8080"
-  }
+  },
+  "vsicons.presets.angular": true
 }
