@@ -23,4 +23,4 @@ RUN sudo -u node npm install -g @angular/cli
 
 COPY . .
 
-EXPOSE 4200 5500 9222
+EXPOSE 4200 5500 8080
