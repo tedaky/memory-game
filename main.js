@@ -10,6 +10,9 @@ function createWindow() {
     width: 600,
     height: 400,
     backgroundColor: '#ffffff',
+    webPreferences: {
+      nodeIntegration: true
+    },
     icon: format({
       pathname: join(__dirname, '/docs/assets/icons/icon-192x192.png'),
       protocol: 'file:',
@@ -49,5 +52,11 @@ app.on('activate', function () {
   // macOS specific close process
   if (win === null) {
     createWindow()
+    return
+  }
+
+  if (BrowserWindow.getAllWindows().length === 0) {
+    createWindow()
+    return
   }
 })
