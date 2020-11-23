@@ -122,6 +122,8 @@ If built for GitHub Pages use the Live Server **Go Live** button after the comma
 1. Run `npm i` from the Terminal window to install Node Modules.
    1. Should be run for you at container creation.
 
+If you'd like Angular VSIcons and they are not appearing you can toggle them with the VS Code Command Palette `>Icons: Toggle Angular Preset (Workspace Level)`
+
 ### Serving
 
 Using a Terminal window.
