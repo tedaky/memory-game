@@ -67,6 +67,38 @@
               "serviceWorker": true,
               "ngswConfigPath": "projects/the-application/ngsw-config.json"
             },
+            "electron": {
+              "fileReplacements": [
+                {
+                  "replace": "projects/the-application/src/environments/environment.ts",
+                  "with": "projects/the-application/src/environments/environment.prod.ts"
+                }
+              ],
+              "baseHref": "./",
+              "deleteOutputPath": false,
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "extractCss": true,
+              "namedChunks": true,
+              "extractLicenses": true,
+              "vendorChunk": true,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb",
+                  "maximumError": "10kb"
+                }
+              ],
+              "serviceWorker": true,
+              "ngswConfigPath": "projects/the-application/ngsw-config.json"
+            },
             "github": {
               "fileReplacements": [
                 {
@@ -204,6 +236,10 @@
           "configurations": {
             "production": {
               "browserTarget": "the-application:build:production",
+              "serverTarget": "the-application:server:production"
+            },
+            "electron": {
+              "browserTarget": "the-application:build:electron",
               "serverTarget": "the-application:server:production"
             },
             "github": {

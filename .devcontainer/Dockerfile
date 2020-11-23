@@ -19,7 +19,7 @@ RUN apt-get update && apt-get install -y google-chrome-stable
 
 # [Optional] Uncomment if you want to install more global node packages
 # RUN sudo -u node npm install -g <your-package-list -here>
-RUN sudo -u node npm install -g @angular/cli
+RUN sudo -u node npm install -g @angular/cli electron electron-packager
 
 COPY . .
 
