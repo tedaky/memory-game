@@ -10,9 +10,6 @@ function createWindow() {
     width: 600,
     height: 400,
     backgroundColor: '#ffffff',
-    webPreferences: {
-      nodeIntegration: true
-    },
     icon: format({
       pathname: join(__dirname, '/docs/assets/icons/icon-192x192.png'),
       protocol: 'file:',
@@ -22,7 +19,7 @@ function createWindow() {
 
   win.loadURL(
     format({
-      pathname: join(__dirname, '/docs/dist.html'),
+      pathname: join(__dirname, '/docs/index.html'),
       protocol: 'file:',
       slashes: true
     })
