@@ -7,14 +7,14 @@ let win
 function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
-    width: 600,
-    height: 400,
-    backgroundColor: '#ffffff',
     icon: format({
       pathname: join(__dirname, '/docs/assets/icons/icon-192x192.png'),
       protocol: 'file:',
       slashes: true
-    })
+    }),
+    webPreferences: {
+      nodeIntegration: true
+    }
   })
 
   win.loadURL(
@@ -25,8 +25,8 @@ function createWindow() {
     })
   )
 
-  //// uncomment below to open the DevTools.
-  // win.webContents.openDevTools()
+  // uncomment below to open the DevTools.
+  win.webContents.openDevTools()
 
   // Event when the window is closed.
   win.on('closed', function () {

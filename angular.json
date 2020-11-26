@@ -72,6 +72,10 @@
                 {
                   "replace": "projects/the-application/src/environments/environment.ts",
                   "with": "projects/the-application/src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "projects/the-application/src/route-location/route-location.ts",
+                  "with": "projects/the-application/src/route-location/route-location.electron.ts"
                 }
               ],
               "baseHref": "./",

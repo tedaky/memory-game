@@ -451,7 +451,8 @@ export class DatabaseService {
                             let add: IDBRequest<IDBValidKey>
 
                             switch (cv) {
-                              case 'count' || 'match':
+                              case 'count':
+                              case 'match':
                                 setting = new Setting(cv, 2)
                                 break
                               case 'mode':

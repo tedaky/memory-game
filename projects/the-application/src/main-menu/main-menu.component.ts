@@ -12,6 +12,7 @@ import { RouterLinkActive } from '@angular/router'
 
 import { GameService } from '../game/game.service'
 import { MenuButton } from '../menu-button/menu-button'
+import { RouteLoction } from '../route-location/route-location'
 import { ThemeService } from '../theme/theme.service'
 import { MakeArray } from '../utilities/make-array'
 
@@ -40,25 +41,25 @@ export class MainMenuComponent implements OnInit {
     const highScores = new MenuButton(
       'view_headline',
       'High Scores',
-      'high-scores',
+      RouteLoction.HighScores,
       'theme-blue'
     )
     const recentScores = new MenuButton(
       'timelapse',
       'Recent Scores',
-      'recent-scores',
+      RouteLoction.RecentScores,
       'theme-red'
     )
     const leaderboard = new MenuButton(
       'leaderboard',
       'Leaderboard',
-      'leaderboard',
+      RouteLoction.Leaderboard,
       'theme-pink'
     )
     const settings = new MenuButton(
       'settings',
       'Settings',
-      'settings',
+      RouteLoction.Settings,
       'theme-purple'
     )
 
