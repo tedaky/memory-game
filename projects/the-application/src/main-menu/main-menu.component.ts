@@ -4,17 +4,21 @@ import {
   Component,
   Inject,
   Input,
+  OnDestroy,
   OnInit,
   PLATFORM_ID
 } from '@angular/core'
 import { MatRipple } from '@angular/material/core'
 import { RouterLinkActive } from '@angular/router'
+import { Subscription } from 'rxjs'
 
 import { GameService } from '../game/game.service'
+import { LanguageService } from '../language/language.service'
 import { MenuButton } from '../menu-button/menu-button'
 import { RouteLoction } from '../route-location/route-location'
 import { ThemeService } from '../theme/theme.service'
 import { MakeArray } from '../utilities/make-array'
+import { MakeProperty } from '../utilities/make-property'
 
 @Component({
   selector: 'app-main-menu',
@@ -22,44 +26,61 @@ import { MakeArray } from '../utilities/make-array'
   styleUrls: ['./main-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class MainMenuComponent implements OnInit {
-  @Input() public ripple: MatRipple
+export class MainMenuComponent implements OnInit, OnDestroy {
+  private sub: Subscription
 
-  @MakeArray<MainMenuComponent, MenuButton>()
-  public menuButtons: MenuButton[]
+  @MakeProperty<MainMenuComponent, string>() public lan: string
+
+  @MakeArray<MainMenuComponent, MenuButton>() public menuButtons: MenuButton[]
+
+  @Input() public ripple: MatRipple
 
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: string,
     private game: GameService,
+    private language: LanguageService,
     public theme: ThemeService
   ) {}
 
+  private lang(): void {
+    this.sub = this.language.lang.subscribe((val: string): void => {
+      this.lan = val
+    })
+  }
+
   public ngOnInit(): void {
+    this.lang()
+
     this.menuButtons = []
 
-    const game = new MenuButton('view_module', 'Game', 'game', 'theme-yellow')
+    const game = new MenuButton(
+      'view_module',
+      'Game',
+      `${RouteLoction.Game}`,
+      'theme-yellow'
+    )
     const highScores = new MenuButton(
       'view_headline',
       'High Scores',
-      RouteLoction.HighScores,
+      `${RouteLoction.HighScores}`,
       'theme-blue'
     )
     const recentScores = new MenuButton(
       'timelapse',
       'Recent Scores',
-      RouteLoction.RecentScores,
+      `${RouteLoction.RecentScores}`,
       'theme-red'
     )
     // const leaderboard = new MenuButton(
     //   'leaderboard',
     //   'Leaderboard',
-    //   RouteLoction.Leaderboard,
+    //   `${RouteLoction.Leaderboard}`,
     //   'theme-pink'
     // )
     const settings = new MenuButton(
       'settings',
       'Settings',
-      RouteLoction.Settings,
+      `${RouteLoction.Settings}`,
       'theme-purple'
     )
 
@@ -116,5 +137,11 @@ export class MainMenuComponent implements OnInit {
 
   public trackBy(index: number, name: MenuButton): string {
     return name.route
+  }
+
+  public ngOnDestroy(): void {
+    if (this.sub && this.sub instanceof Subscription) {
+      this.sub.unsubscribe()
+    }
   }
 }

@@ -1,6 +1,6 @@
 <mat-card class="mat-elevation-z2">
   <mat-card-title>
-    Settings
+    {{ 'Settings' | translate }}
     <button
       mat-flat-button
       color="warn"
@@ -12,6 +12,28 @@
     </button>
   </mat-card-title>
 </mat-card>
+
+<mat-card class="mat-elevation-z2">
+  <mat-card-title>Language</mat-card-title>
+  <mat-card-content>
+    <a [routerLink]="['/', 'en', tempRoute]" (click)="changeLanguage('en')">
+      EN
+    </a>
+    <br />
+    <a [routerLink]="['/', 'de', tempRoute]" (click)="changeLanguage('de')">
+      DE
+    </a>
+    <br />
+    <a [routerLink]="['/', 'hi', tempRoute]" (click)="changeLanguage('hi')">
+      HI
+    </a>
+    <br />
+    <a [routerLink]="['/', 'bn', tempRoute]" (click)="changeLanguage('bn')">
+      BN
+    </a>
+  </mat-card-content>
+</mat-card>
+
 <mat-card class="mat-elevation-z2">
   <mat-card-title>Volume</mat-card-title>
   <!-- [0, 1, 2] -->

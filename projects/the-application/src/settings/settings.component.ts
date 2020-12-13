@@ -11,7 +11,9 @@ import { Subscription } from 'rxjs'
 
 import { SettingsService } from './settings.service'
 import { GameService } from '../game/game.service'
+import { LanguageService } from '../language/language.service'
 import { ProfilerService } from '../profiler/profiler.service'
+import { RouteLoction } from '../route-location/route-location'
 import { MakeArray } from '../utilities/make-array'
 import { MakeProperty } from '../utilities/make-property'
 
@@ -20,10 +22,10 @@ class SettingOption {
   public title: string
 
   @MakeProperty()
-  public value: number | string
+  public key: string
 
   @MakeProperty()
-  public key: string
+  public value: number | string
 
   constructor(title: string, value: number | string, key: string) {
     this.title = title
@@ -48,12 +50,20 @@ export class SettingsComponent implements OnDestroy, OnInit {
   @MakeArray()
   public settingOptions: SettingOption[]
 
+  @MakeProperty()
+  public tempRoute: string
+
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private game: GameService,
+    private language: LanguageService,
     private settings: SettingsService,
     public profiler: ProfilerService
   ) {}
+
+  public changeLanguage(lang: string): void {
+    this.language.setLang(lang)
+  }
 
   public ngOnInit(): void {
     let ambientVolume: SettingOption
@@ -63,6 +73,8 @@ export class SettingsComponent implements OnDestroy, OnInit {
     let count: SettingOption
     let match: SettingOption
     let mode: SettingOption
+
+    this.tempRoute = RouteLoction.Settings
 
     this.settingLabels = [
       'masterVolume',
@@ -94,7 +106,11 @@ export class SettingsComponent implements OnDestroy, OnInit {
     //#endregion Volume
 
     //#region Game
-    count = new SettingOption('Unique Cards Count', this.game.count.value, 'count')
+    count = new SettingOption(
+      'Unique Cards Count',
+      this.game.count.value,
+      'count'
+    )
 
     match = new SettingOption('Cards To Match', this.game.match.value, 'match')
 
