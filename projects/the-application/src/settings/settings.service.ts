@@ -94,7 +94,7 @@ export class SettingsService {
         })
 
         if (found === -1) {
-          reject(new DOMException('Setting not found'))
+          reject(new DOMException(`Setting "${name}" not found`))
           return
         }
 

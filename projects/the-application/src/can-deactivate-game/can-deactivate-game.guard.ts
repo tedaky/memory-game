@@ -8,7 +8,7 @@ import { GameService } from '../game/game.service'
 @Injectable({
   providedIn: 'root'
 })
-export class CanDeactivateGame implements CanDeactivate<GameComponent> {
+export class CanDeactivateGameGuard implements CanDeactivate<GameComponent> {
   constructor(private game: GameService, private snackBar: MatSnackBar) {}
 
   public canDeactivate(): boolean {

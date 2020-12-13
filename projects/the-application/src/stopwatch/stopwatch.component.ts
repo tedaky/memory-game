@@ -20,6 +20,7 @@ import { Time } from '../time/time'
 @Component({
   selector: 'app-stopwatch',
   templateUrl: './stopwatch.component.html',
+  styleUrls: ['./stopwatch.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 /**

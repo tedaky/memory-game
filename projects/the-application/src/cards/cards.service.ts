@@ -73,7 +73,7 @@ export class CardsService {
 
   //#region constructor
   constructor(private game: GameService) {
-    this.createGame()
+    this.createDeck()
   }
   //#endregion constructor
 
@@ -360,8 +360,10 @@ export class CardsService {
     // Allows for holiday cards without closing and reopening.
     this.createCards()
 
+    // Randomise the cards.
     this.shuffleCards()
 
+    // Take the number of cards based on the game count setting.
     temp = this.cards.slice(0, this.game.count.value)
 
     // Loop each individual card.
@@ -378,15 +380,6 @@ export class CardsService {
     })
   }
   //#endregion createDeck
-
-  //#region createGame
-  /**
-   * Create the game by initialising cards and deck.
-   */
-  private createGame(): void {
-    this.createDeck()
-  }
-  //#endregion createGame
 
   //#region shuffleCards
   /**

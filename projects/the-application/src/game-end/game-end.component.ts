@@ -6,6 +6,7 @@ import { Statistic } from '../statistic/statistic'
 @Component({
   selector: 'app-game-end',
   templateUrl: './game-end.component.html',
+  styleUrls: ['./game-end.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameEndComponent {

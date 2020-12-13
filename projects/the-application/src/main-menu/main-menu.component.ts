@@ -50,12 +50,12 @@ export class MainMenuComponent implements OnInit {
       RouteLoction.RecentScores,
       'theme-red'
     )
-    const leaderboard = new MenuButton(
-      'leaderboard',
-      'Leaderboard',
-      RouteLoction.Leaderboard,
-      'theme-pink'
-    )
+    // const leaderboard = new MenuButton(
+    //   'leaderboard',
+    //   'Leaderboard',
+    //   RouteLoction.Leaderboard,
+    //   'theme-pink'
+    // )
     const settings = new MenuButton(
       'settings',
       'Settings',
@@ -63,7 +63,8 @@ export class MainMenuComponent implements OnInit {
       'theme-purple'
     )
 
-    this.menuButtons = [game, highScores, recentScores, leaderboard, settings]
+    // this.menuButtons = [game, highScores, recentScores, leaderboard, settings]
+    this.menuButtons = [game, highScores, recentScores, settings]
   }
 
   private launchRipple(x: number, y: number, colour: string): void {

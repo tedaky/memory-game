@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common'
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core'
+
 import { IStatistic } from '../statistic/statistic.d'
 
 @Injectable({
@@ -20,7 +21,9 @@ export class AnalyticsService {
   ): void
   public gtag(): void {
     if (isPlatformBrowser(this.platformId)) {
+      // tslint:disable-next-line: whitespace semicolon
       ;(window as any).dataLayer = (window as any).dataLayer || []
+      // tslint:disable-next-line: whitespace semicolon
       ;(window as any).dataLayer.push(arguments)
     }
   }
