@@ -6,6 +6,7 @@
   ::ng-deep {
     router-outlet ~ .ng-animating {
       top: 0;
+      z-index: 2;
       left: 0;
       position: absolute;
       width: 100%;
@@ -47,6 +48,7 @@
 
   mat-card-content {
     position: relative;
+    margin: -8px;
   }
 }
 

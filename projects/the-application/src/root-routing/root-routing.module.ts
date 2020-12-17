@@ -2,9 +2,14 @@ import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
 
 import { CanDeactivateGameGuard } from '../can-deactivate-game/can-deactivate-game.guard'
+import { GameModule } from '../game/game.module'
+import { HighScoresModule } from '../high-scores/high-scores.module'
+import { LeaderboardModule } from '../leaderboard/leaderboard.module'
+import { RecentScoresModule } from '../recent-scores/recent-scores.module'
 import { redirect } from '../redirect/redirect'
 import { RouteLoction } from '../route-location/route-location'
 import { RouteGuard } from '../route/route.guard'
+import { SettingsModule } from '../settings/settings.module'
 
 const routes: Routes = [
   {
@@ -23,34 +28,38 @@ const routes: Routes = [
       },
       {
         canDeactivate: [CanDeactivateGameGuard],
-        loadChildren: () =>
-          import('../game/game.module').then(m => m.GameModule),
+        loadChildren: async (): Promise<typeof GameModule> => {
+          const m = await import('../game/game.module')
+          return m.GameModule
+        },
         path: RouteLoction.Game
       },
       {
-        loadChildren: () =>
-          import('../high-scores/high-scores.module').then(
-            m => m.HighScoresModule
-          ),
+        loadChildren: async (): Promise<typeof HighScoresModule> => {
+          const m = await import('../high-scores/high-scores.module')
+          return m.HighScoresModule
+        },
         path: RouteLoction.HighScores
       },
+      // {
+      //   loadChildren: async (): Promise<typeof LeaderboardModule> => {
+      //     const m = await import('../leaderboard/leaderboard.module')
+      //     return m.LeaderboardModule
+      //   },
+      //   path: RouteLoction.Leaderboard
+      // },
       {
-        loadChildren: () =>
-          import('../leaderboard/leaderboard.module').then(
-            m => m.LeaderboardModule
-          ),
-        path: RouteLoction.Leaderboard
-      },
-      {
-        loadChildren: () =>
-          import('../recent-scores/recent-scores.module').then(
-            m => m.RecentScoresModule
-          ),
+        loadChildren: async (): Promise<typeof RecentScoresModule> => {
+          const m = await import('../recent-scores/recent-scores.module')
+          return m.RecentScoresModule
+        },
         path: RouteLoction.RecentScores
       },
       {
-        loadChildren: () =>
-          import('../settings/settings.module').then(m => m.SettingsModule),
+        loadChildren: async (): Promise<typeof SettingsModule> => {
+          const m = await import('../settings/settings.module')
+          return m.SettingsModule
+        },
         path: RouteLoction.Settings
       },
       {
