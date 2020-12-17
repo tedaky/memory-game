@@ -2,6 +2,6 @@
  * Environment properties.
  */
 export const environment = {
-  production: true,
-  location: '/memory-game/'
+  location: '/memory-game/',
+  production: true
 }
