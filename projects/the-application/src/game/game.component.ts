@@ -11,6 +11,7 @@ import {
   ViewChild
 } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
+import { TranslateService } from '@ngx-translate/core'
 import { interval } from 'rxjs'
 import { take } from 'rxjs/operators'
 
@@ -167,7 +168,8 @@ export class GameComponent implements OnDestroy, OnInit {
     public cards: CardsService,
     public game: GameService,
     public profiler: ProfilerService,
-    public settings: SettingsService
+    public settings: SettingsService,
+    public translate: TranslateService
   ) {}
 
   private clickSound(volume: number): void {

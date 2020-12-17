@@ -1,8 +1,9 @@
 <mat-card class="mat-elevation-z2">
   <mat-card-title-group>
     <mat-card-title>
-      Matches: {{ cardsWon.length }} /
-      {{ game.count.value }}
+      {{ 'MATCHES' | translate }}:
+      {{ cardsWon.length | number: '1.0':translate.currentLang }} /
+      {{ game.count.value | number: '1.0':translate.currentLang }}
       <button
         mat-flat-button
         color="warn"
@@ -10,10 +11,13 @@
         (click)="profiler.profile()"
         *ngIf="!profiler.environment"
       >
-        Profile
+        {{ 'PROFILE' | translate }}
       </button>
     </mat-card-title>
-    <mat-card-title> Flips: {{ flips }} </mat-card-title>
+    <mat-card-title>
+      {{ 'FLIPS' | translate }}:
+      {{ flips | number: '1.0':translate.currentLang }}
+    </mat-card-title>
     <mat-card-title>
       <app-stopwatch></app-stopwatch>
     </mat-card-title>
@@ -26,7 +30,7 @@
         type="button"
         (click)="reset($event)"
       >
-        Reset
+        {{ 'RESET' | translate }}
       </button>
     </mat-card-subtitle>
   </mat-card-title-group>

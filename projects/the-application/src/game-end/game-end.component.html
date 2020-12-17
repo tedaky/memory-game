@@ -1,24 +1,28 @@
-<h1 mat-dialog-title>🎉 You Won 🎉</h1>
+<h1 mat-dialog-title>🎉 {{ 'YOU_WON' | translate }} 🎉</h1>
 <div mat-dialog-content>
-  <p>Your results for this game.</p>
   <p>
-    <b>Flips</b>:
-    <span>{{ data.flips }}</span>
+    {{ 'YOUR_RESULTS_FOR_THIS_GAME' | translate }}{{ 'FULL_STOP' | translate }}
   </p>
   <p>
-    <b>Time</b>:
+    <b>{{ 'FLIPS' | translate }}</b
+    >:
+    <span>{{ data.flips | number: '1.0':translate.currentLang }}</span>
+  </p>
+  <p>
+    <b>{{ 'TIME' | translate }}</b
+    >:
     <span *ngIf="data.complete.hours">
-      {{ data.complete.hours | number: '2.0' }} hr
+      {{ data.complete.hours | number: '2.0':translate.currentLang }} hr
     </span>
     <span *ngIf="data.complete.minutes || data.complete.hours">
-      {{ data.complete.minutes | number: '2.0' }} min
+      {{ data.complete.minutes | number: '2.0':translate.currentLang }} min
     </span>
     <span
       *ngIf="
         data.complete.seconds || data.complete.minutes || data.complete.hours
       "
     >
-      {{ data.complete.seconds | number: '2.0' }} sec
+      {{ data.complete.seconds | number: '2.0':translate.currentLang }} sec
     </span>
     <span
       *ngIf="
@@ -28,7 +32,7 @@
         data.complete.hours
       "
     >
-      {{ data.complete.milliseconds | number: '3.0' }} mil
+      {{ data.complete.milliseconds | number: '3.0':translate.currentLang }} ms
     </span>
   </p>
 </div>
@@ -39,6 +43,6 @@
     type="button"
     [mat-dialog-close]="'reset'"
   >
-    Reset
+    {{ 'RESET' | translate }}
   </button>
 </div>

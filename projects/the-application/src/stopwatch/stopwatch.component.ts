@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core'
+import { TranslateService } from '@ngx-translate/core'
 import { interval, Subscription } from 'rxjs'
 
 import { createTime } from '../create-time/create-time'
@@ -77,7 +78,8 @@ export class StopwatchComponent implements OnDestroy, OnInit {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private device: DeviceService,
-    private game: GameService
+    private game: GameService,
+    public translate: TranslateService
   ) {}
 
   /**
