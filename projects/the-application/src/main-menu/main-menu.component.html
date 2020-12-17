@@ -4,7 +4,7 @@
     [attr.aria-label]="menu.label"
     disableRipple="true"
     (click)="setTheme($event, menu.theme, rla)"
-    [routerLink]="['/', lan, menu.route]"
+    [routerLink]="['/', language.lang | async, menu.route]"
     routerLinkActive="router-link-active"
     #rla="routerLinkActive"
   >

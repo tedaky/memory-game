@@ -38,7 +38,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: string,
     private game: GameService,
-    private language: LanguageService,
+    public language: LanguageService,
     public theme: ThemeService
   ) {}
 
@@ -55,19 +55,19 @@ export class MainMenuComponent implements OnInit, OnDestroy {
 
     const game = new MenuButton(
       'view_module',
-      'Game',
+      'GAME',
       `${RouteLoction.Game}`,
       'theme-yellow'
     )
     const highScores = new MenuButton(
       'view_headline',
-      'High Scores',
+      'HIGH_SCORES',
       `${RouteLoction.HighScores}`,
       'theme-blue'
     )
     const recentScores = new MenuButton(
       'timelapse',
-      'Recent Scores',
+      'RECENT_SCORES',
       `${RouteLoction.RecentScores}`,
       'theme-red'
     )
@@ -79,7 +79,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
     // )
     const settings = new MenuButton(
       'settings',
-      'Settings',
+      'SETTINGS',
       `${RouteLoction.Settings}`,
       'theme-purple'
     )

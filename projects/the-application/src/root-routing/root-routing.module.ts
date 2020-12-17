@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
 
 import { CanDeactivateGameGuard } from '../can-deactivate-game/can-deactivate-game.guard'
+import { redirect } from '../redirect/redirect'
 import { RouteLoction } from '../route-location/route-location'
 import { RouteGuard } from '../route/route.guard'
 
@@ -9,7 +10,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: `en/${RouteLoction.Game}`
+    redirectTo: `${redirect() || 'en'}/${RouteLoction.Game}`
   },
   {
     path: ':lang',
@@ -18,7 +19,7 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        redirectTo: `en/${RouteLoction.Game}`
+        redirectTo: `${redirect() || 'en'}/${RouteLoction.Game}`
       },
       {
         canDeactivate: [CanDeactivateGameGuard],
@@ -51,12 +52,16 @@ const routes: Routes = [
         loadChildren: () =>
           import('../settings/settings.module').then(m => m.SettingsModule),
         path: RouteLoction.Settings
+      },
+      {
+        path: '**',
+        redirectTo: RouteLoction.Game
       }
     ]
   },
   {
     path: '**',
-    redirectTo: `en/${RouteLoction.Game}`
+    redirectTo: `${redirect() || 'en'}/${RouteLoction.Game}`
   }
 ]
 
