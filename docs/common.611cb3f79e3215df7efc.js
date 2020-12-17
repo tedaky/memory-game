@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[0],{bX2N:function(n,o,t){"use strict";t.d(o,"a",(function(){return c}));var r=t("AytR"),e=t("kZht");let c=(()=>{class n{constructor(){this.environment=r.a.production}profile(){console.log(window.ng.profiler.timeChangeDetection({record:!0}))}}return n.\u0275fac=function(o){return new(o||n)},n.\u0275prov=e.Hb({token:n,factory:n.\u0275fac,providedIn:"root"}),n})()}}]);
+//# sourceMappingURL=common.611cb3f79e3215df7efc.js.map
