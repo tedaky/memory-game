@@ -1,10 +1,10 @@
 <span>
-  Time:
-  {{ hours | number: '2.0' }}
+  {{ 'TIME' | translate }}:
+  {{ hours | number: '2.0':translate.currentLang }}
   :
-  {{ minutes | number: '2.0' }}
+  {{ minutes | number: '2.0':translate.currentLang }}
   :
-  {{ seconds | number: '2.0' }}
+  {{ seconds | number: '2.0':translate.currentLang }}
   :
-  {{ milliseconds | number: '3.0' }}
+  {{ milliseconds | number: '3.0':translate.currentLang }}
 </span>

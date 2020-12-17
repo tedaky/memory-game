@@ -1,6 +1,6 @@
 <mat-card class="mat-elevation-z2">
   <mat-card-title>
-    {{ title }}
+    {{ title | translate }}
     <button
       mat-flat-button
       color="warn"
@@ -8,7 +8,7 @@
       (click)="profiler.profile()"
       *ngIf="!profiler.environment"
     >
-      Profile
+      {{ 'PROFILE' | translate }}
     </button>
     <button
       *ngIf="showClear"
@@ -17,28 +17,28 @@
       type="button"
       (click)="clear($event)"
     >
-      Clear
+      {{ 'CLEAR' | translate }}
     </button>
   </mat-card-title>
 </mat-card>
 
 <mat-card class="mat-elevation-z2">
-  <mat-card-title>Filter Scores</mat-card-title>
+  <mat-card-title>{{ 'FILTER_SCORES' | translate }}</mat-card-title>
   <mat-card-content>
     <mat-form-field>
-      <mat-label>Cards To Match</mat-label>
+      <mat-label>{{ 'CARDS_TO_MATCH' | translate }}</mat-label>
       <mat-select [(ngModel)]="match" (selectionChange)="inputChange($event)">
         <mat-option *ngFor="let val of [2, 3, 4]" [value]="val">
-          {{ val }}
+          {{ val | number: '1.0':translate.currentLang }}
         </mat-option>
       </mat-select>
     </mat-form-field>
 
     <mat-form-field>
-      <mat-label>Unique Cards Count</mat-label>
+      <mat-label>{{ 'UNIQUE_CARDS_COUNT' | translate }}</mat-label>
       <mat-select [(ngModel)]="count" (selectionChange)="inputChange($event)">
         <mat-option *ngFor="let val of [2, 4, 6]" [value]="val">
-          {{ val }}
+          {{ val | number: '1.0':translate.currentLang }}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -49,42 +49,44 @@
   <mat-card-content>
     <table mat-table [dataSource]="dataSource">
       <ng-container matColumnDef="column1">
-        <th mat-header-cell *matHeaderCellDef>{{ column }}:</th>
+        <th mat-header-cell *matHeaderCellDef>{{ column | translate }}:</th>
         <td mat-cell *matCellDef="let element; let i = index">
-          {{ i + 1 | number }}
+          {{ i + 1 | number: '1.0':translate.currentLang }}
         </td>
         <td mat-footer-cell *matFooterCellDef>
-          {{ 1 | number }}
+          {{ 1 | number: '1.0':translate.currentLang }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="column2">
-        <th mat-header-cell *matHeaderCellDef>Time:</th>
+        <th mat-header-cell *matHeaderCellDef>{{ 'TIME' | translate }}:</th>
         <td mat-cell *matCellDef="let element">
-          {{ element.complete.hours | number: '2.0' }}
+          {{ element.complete.hours | number: '2.0':translate.currentLang }}
           :
-          {{ element.complete.minutes | number: '2.0' }}
+          {{ element.complete.minutes | number: '2.0':translate.currentLang }}
           :
-          {{ element.complete.seconds | number: '2.0' }}
+          {{ element.complete.seconds | number: '2.0':translate.currentLang }}
           :
-          {{ element.complete.milliseconds | number: '3.0' }}
+          {{
+            element.complete.milliseconds | number: '3.0':translate.currentLang
+          }}
         </td>
         <td mat-footer-cell *matFooterCellDef>
-          {{ 0 | number: '2.0' }}
+          {{ 0 | number: '2.0':translate.currentLang }}
           :
-          {{ 0 | number: '2.0' }}
+          {{ 0 | number: '2.0':translate.currentLang }}
           :
-          {{ 3 | number: '2.0' }}
+          {{ 3 | number: '2.0':translate.currentLang }}
           :
-          {{ 0 | number: '3.0' }}
+          {{ 0 | number: '3.0':translate.currentLang }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="column3">
-        <th mat-header-cell *matHeaderCellDef>Flips:</th>
+        <th mat-header-cell *matHeaderCellDef>{{ 'FLIPS' | translate }}:</th>
         <td mat-cell *matCellDef="let element">{{ element.flips }}</td>
         <td mat-footer-cell *matFooterCellDef>
-          {{ 12 | number }}
+          {{ 12 | number: '1.0':translate.currentLang }}
         </td>
       </ng-container>
 
@@ -108,5 +110,5 @@
   </mat-card-content>
 </mat-card>
 <mat-card class="mat-elevation-z2" *ngIf="comingSoon">
-  <mat-card-title>Coming Soon!</mat-card-title>
+  <mat-card-title>{{ 'COMING_SOON' | translate }}</mat-card-title>
 </mat-card>

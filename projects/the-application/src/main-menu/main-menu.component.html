@@ -4,7 +4,7 @@
     [attr.aria-label]="menu.label"
     disableRipple="true"
     (click)="setTheme($event, menu.theme, rla)"
-    [routerLink]="[menu.route]"
+    [routerLink]="['/', language.lang | async, menu.route]"
     routerLinkActive="router-link-active"
     #rla="routerLinkActive"
   >
@@ -12,11 +12,12 @@
       aria-hidden="false"
       [fontSet]="rla.isActive ? 'material-icons-outlined' : 'material-icons'"
       [color]="rla.isActive ? 'primary' : ''"
+      [attr.aria-label]="menu.label | translate"
     >
       {{ menu.icon }}
     </mat-icon>
     <span>
-      {{ menu.label }}
+      {{ menu.label | translate }}
     </span>
   </a>
 </ng-container>

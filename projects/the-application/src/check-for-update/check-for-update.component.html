@@ -1,6 +1,11 @@
-<span>Update available. Please reload.</span>
+<span>
+  {{ 'UPDATE_AVAILABLE' | translate }}{{ 'FULL_STOP' | translate }}
+  {{ 'PLEASE_RELOAD' | translate }}{{ 'FULL_STOP' | translate }}
+</span>
 <div class="mat-simple-snackbar-action">
   <button mat-button (click)="dismiss()">
-    <mat-icon aria-hidden="false">refresh</mat-icon>
+    <mat-icon aria-hidden="false" [attr.aria-label]="'REFRESH' | translate">
+      refresh
+    </mat-icon>
   </button>
 </div>

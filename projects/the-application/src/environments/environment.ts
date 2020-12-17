@@ -6,8 +6,8 @@
  * Environment properties.
  */
 export const environment = {
-  production: false,
-  location: '/'
+  location: '/',
+  production: false
 }
 
 /*

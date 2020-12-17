@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core'
 import { MAT_DIALOG_DATA } from '@angular/material/dialog'
+import { TranslateService } from '@ngx-translate/core'
 
 import { Statistic } from '../statistic/statistic'
 
@@ -10,5 +11,8 @@ import { Statistic } from '../statistic/statistic'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GameEndComponent {
-  constructor(@Inject(MAT_DIALOG_DATA) public data: Statistic) {}
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: Statistic,
+    public translate: TranslateService
+  ) {}
 }

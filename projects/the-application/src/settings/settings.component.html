@@ -1,6 +1,6 @@
 <mat-card class="mat-elevation-z2">
   <mat-card-title>
-    Settings
+    {{ 'SETTINGS' | translate }}
     <button
       mat-flat-button
       color="warn"
@@ -8,19 +8,37 @@
       (click)="profiler.profile()"
       *ngIf="!profiler.environment"
     >
-      Profile
+      {{ 'PROFILE' | translate }}
     </button>
   </mat-card-title>
 </mat-card>
+
 <mat-card class="mat-elevation-z2">
-  <mat-card-title>Volume</mat-card-title>
+  <mat-card-title>{{ 'LANGUAGE' | translate }}</mat-card-title>
+  <mat-card-content>
+    <a [routerLink]="['/', 'en', tempRoute]">EN</a>
+    <br />
+    <a [routerLink]="['/', 'es', tempRoute]">ES</a>
+    <br />
+    <a [routerLink]="['/', 'de', tempRoute]">DE</a>
+    <br />
+    <a [routerLink]="['/', 'hi', tempRoute]">HI</a>
+    <br />
+    <a [routerLink]="['/', 'bn', tempRoute]">BN</a>
+    <br />
+    <a [routerLink]="['/', 'bg', tempRoute]">BG</a>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="mat-elevation-z2">
+  <mat-card-title>{{ 'VOLUME' | translate }}</mat-card-title>
   <!-- [0, 1, 2] -->
   <!-- 0 = masterVolume -->
   <!-- 1 = effectsVolume -->
   <!-- 2 = ambientVolume -->
   <ng-container *ngFor="let item of [0, 1]; trackBy: trackBy">
     <mat-card-content>
-      <h3>{{ settingOptions[item].title }}</h3>
+      <h3>{{ settingOptions[item].title | translate }}</h3>
       <mat-slider
         [min]="0"
         [thumbLabel]="true"
@@ -36,28 +54,28 @@
 </mat-card>
 
 <mat-card class="mat-elevation-z2">
-  <mat-card-title>Game</mat-card-title>
+  <mat-card-title>{{ 'GAME' | translate }}</mat-card-title>
   <!-- [3, 4, 5] -->
   <!-- 3 = match -->
   <!-- 4 = count -->
   <!-- 5 = mode -->
   <ng-container *ngFor="let item of [3, 4]; trackBy: trackBy">
     <mat-card-content>
-      <h3>{{ settingOptions[item].title }}</h3>
+      <h3>{{ settingOptions[item].title | translate }}</h3>
       <mat-form-field>
-        <mat-label>{{ settingOptions[item].title }}</mat-label>
+        <mat-label>{{ settingOptions[item].title | translate }}</mat-label>
         <mat-select
           [(ngModel)]="settingOptions[item].value"
           (selectionChange)="inputChange($event, settingOptions[item].key)"
         >
           <ng-container *ngIf="item === 3">
             <mat-option *ngFor="let val of [2, 3, 4]" [value]="val">
-              {{ val }}
+              {{ val | number: '1.0':translate.currentLang }}
             </mat-option>
           </ng-container>
           <ng-container *ngIf="item === 4">
             <mat-option *ngFor="let val of [2, 4, 6]" [value]="val">
-              {{ val }}
+              {{ val | number: '1.0':translate.currentLang }}
             </mat-option>
           </ng-container>
           <ng-container *ngIf="item === 5">
@@ -65,7 +83,7 @@
               *ngFor="let val of ['memorize', 'regular']"
               [value]="val"
             >
-              {{ val }}
+              {{ val.toUpperCase() | translate }}
             </mat-option>
           </ng-container>
         </mat-select>

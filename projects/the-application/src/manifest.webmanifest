@@ -1,6 +1,6 @@
 {
   "background_color": "#fafafa",
-  "description": "Memory Game.",
+  "description": "Sample Memory Game.",
   "display": "standalone",
   "icons": [
     {

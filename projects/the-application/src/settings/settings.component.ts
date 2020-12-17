@@ -1,3 +1,4 @@
+import { formatNumber } from '@angular/common'
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -7,11 +8,14 @@ import {
 } from '@angular/core'
 import { MatSelectChange } from '@angular/material/select'
 import { MatSliderChange } from '@angular/material/slider'
+import { TranslateService } from '@ngx-translate/core'
 import { Subscription } from 'rxjs'
 
 import { SettingsService } from './settings.service'
 import { GameService } from '../game/game.service'
+import { LanguageService } from '../language/language.service'
 import { ProfilerService } from '../profiler/profiler.service'
+import { RouteLoction } from '../route-location/route-location'
 import { MakeArray } from '../utilities/make-array'
 import { MakeProperty } from '../utilities/make-property'
 
@@ -20,10 +24,10 @@ class SettingOption {
   public title: string
 
   @MakeProperty()
-  public value: number | string
+  public key: string
 
   @MakeProperty()
-  public key: string
+  public value: number | string
 
   constructor(title: string, value: number | string, key: string) {
     this.title = title
@@ -48,11 +52,16 @@ export class SettingsComponent implements OnDestroy, OnInit {
   @MakeArray()
   public settingOptions: SettingOption[]
 
+  @MakeProperty()
+  public tempRoute: string
+
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private game: GameService,
     private settings: SettingsService,
-    public profiler: ProfilerService
+    public language: LanguageService,
+    public profiler: ProfilerService,
+    public translate: TranslateService
   ) {}
 
   public ngOnInit(): void {
@@ -63,6 +72,8 @@ export class SettingsComponent implements OnDestroy, OnInit {
     let count: SettingOption
     let match: SettingOption
     let mode: SettingOption
+
+    this.tempRoute = RouteLoction.Settings
 
     this.settingLabels = [
       'masterVolume',
@@ -75,30 +86,34 @@ export class SettingsComponent implements OnDestroy, OnInit {
 
     //#region Volume
     masterVolume = new SettingOption(
-      'Master Volume',
+      'MASTER_VOLUME',
       this.game.masterVolume.value,
       'masterVolume'
     )
 
     effectsVolume = new SettingOption(
-      'Effects Volume',
+      'EFFECTS_VOLUME',
       this.game.effectsVolume.value,
       'effectsVolume'
     )
 
     ambientVolume = new SettingOption(
-      'Ambient Volume',
+      'AMBIENT_VOLUME',
       this.game.ambientVolume.value,
       'ambientVolume'
     )
     //#endregion Volume
 
     //#region Game
-    count = new SettingOption('Unique Cards Count', this.game.count.value, 'count')
+    count = new SettingOption(
+      'UNIQUE_CARDS_COUNT',
+      this.game.count.value,
+      'count'
+    )
 
-    match = new SettingOption('Cards To Match', this.game.match.value, 'match')
+    match = new SettingOption('CARDS_TO_MATCH', this.game.match.value, 'match')
 
-    mode = new SettingOption('Mode', this.game.mode.value, 'mode')
+    mode = new SettingOption('MODE', this.game.mode.value, 'mode')
     //#endregion Game
 
     this.settingOptions.push(
@@ -129,6 +144,7 @@ export class SettingsComponent implements OnDestroy, OnInit {
         this.settingOptions[index].value = val
         this.changeDetectorRef.markForCheck()
       })
+
       this.subscriptions.push(sub)
     })
   }
