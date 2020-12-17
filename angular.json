@@ -152,6 +152,9 @@
           "configurations": {
             "production": {
               "browserTarget": "the-application:build:production"
+            },
+            "github": {
+              "browserTarget": "the-application:build:github"
             }
           }
         },
