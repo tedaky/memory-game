@@ -1,6 +1,6 @@
 {
   "background_color": "#fafafa",
-  "description": "Sample Memory Game.",
+  "description": "Memory Game.",
   "display": "standalone",
   "icons": [
     {
@@ -52,7 +52,7 @@
       "type": "image/png"
     }
   ],
-  "lang": "en",
+  "lang": "de",
   "name": "Memory Game",
   "scope": "./",
   "short_name": "Memory Game",
@@ -123,6 +123,6 @@
       "url": "./settings"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": "./de/index.html",
   "theme_color": "#1976d2"
 }
