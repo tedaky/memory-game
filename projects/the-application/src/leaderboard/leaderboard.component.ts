@@ -7,6 +7,7 @@ import {
 } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
 import { MatSelectChange } from '@angular/material/select'
+import { TranslateService } from '@ngx-translate/core'
 import { Subscription } from 'rxjs'
 
 import { LeaderboardService } from './leaderboard.service'
@@ -40,7 +41,7 @@ export class LeaderboardComponent
   /**
    * First Column name.
    */
-  public column: string = 'Rank'
+  public column: string = 'RANK'
 
   /**
    * Data source
@@ -57,7 +58,7 @@ export class LeaderboardComponent
   /**
    * Title to show.
    */
-  public title: string = 'Leaderboard'
+  public title: string = 'LEADERBOARD'
 
   public showClear: boolean = false
   public comingSoon: boolean = true
@@ -79,7 +80,8 @@ export class LeaderboardComponent
     private changeDetectionRef: ChangeDetectorRef,
     private leaderboard: LeaderboardService,
     private game: GameService,
-    public profiler: ProfilerService
+    public profiler: ProfilerService,
+    public translate: TranslateService
   ) {}
 
   public inputChange(event?: MatSelectChange): void {

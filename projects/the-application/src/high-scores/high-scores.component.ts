@@ -7,6 +7,7 @@ import {
 } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
 import { MatSelectChange } from '@angular/material/select'
+import { TranslateService } from '@ngx-translate/core'
 import { Subscription } from 'rxjs'
 
 import { HighScoresService } from './high-scores.service'
@@ -40,7 +41,7 @@ export class HighScoresComponent
   /**
    * First Column name.
    */
-  public column: string = 'Rank'
+  public column: string = 'RANK'
 
   /**
    * Data source
@@ -57,7 +58,7 @@ export class HighScoresComponent
   /**
    * Title to show.
    */
-  public title: string = 'High Scores'
+  public title: string = 'HIGH_SCORES'
 
   public showClear: boolean = true
   public comingSoon: boolean = false
@@ -79,7 +80,8 @@ export class HighScoresComponent
     private changeDetectionRef: ChangeDetectorRef,
     private highScores: HighScoresService,
     private game: GameService,
-    public profiler: ProfilerService
+    public profiler: ProfilerService,
+    public translate: TranslateService
   ) {}
 
   public inputChange(event?: MatSelectChange): void {

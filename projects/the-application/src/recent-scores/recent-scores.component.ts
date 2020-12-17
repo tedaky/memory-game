@@ -7,6 +7,7 @@ import {
 } from '@angular/core'
 import { MatTableDataSource } from '@angular/material/table'
 import { MatSelectChange } from '@angular/material/select'
+import { TranslateService } from '@ngx-translate/core'
 import { Subscription } from 'rxjs'
 
 import { RecentScoresService } from './recent-scores.service'
@@ -40,7 +41,7 @@ export class RecentScoresComponent
   /**
    * First Column name.
    */
-  public column: string = 'Recent'
+  public column: string = 'RECENT'
 
   /**
    * Data source
@@ -57,7 +58,7 @@ export class RecentScoresComponent
   /**
    * Title to show.
    */
-  public title: string = 'Recent Scores'
+  public title: string = 'RECENT_SCORES'
 
   public showClear: boolean = true
   public comingSoon: boolean = false
@@ -79,7 +80,8 @@ export class RecentScoresComponent
     private changeDetectionRef: ChangeDetectorRef,
     private recentScores: RecentScoresService,
     private game: GameService,
-    public profiler: ProfilerService
+    public profiler: ProfilerService,
+    public translate: TranslateService
   ) {}
 
   public inputChange(event?: MatSelectChange): void {
