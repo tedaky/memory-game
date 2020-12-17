@@ -3,10 +3,10 @@ import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { Subscription } from 'rxjs'
 
 import { HighScoresComponent } from './high-scores.component'
 import { HighScoresRoutingModule } from '../high-scores-routing/high-scores-routing.module'
+import { LanguageModule } from '../language/language.module'
 import { LanguageService } from '../language/language.service'
 import { MaterialModule } from '../material/material.module'
 import {
@@ -34,24 +34,10 @@ import {
 /**
  * Entry Module
  */
-export class HighScoresModule {
+export class HighScoresModule extends LanguageModule {
   constructor(language: LanguageService, translate: TranslateService) {
-    language.lang.subscribe((lang: string): void => {
-      let sub: Subscription
+    super()
 
-      sub = translate.use(lang).subscribe(
-        (): void => {},
-        (): void => {
-          console.error(`Language "${lang}": at "HighScoresModule" not found.`)
-
-          translate.setTranslation(lang, {}, true)
-        },
-        (): void => {
-          if (sub && sub instanceof Subscription) {
-            sub.unsubscribe()
-          }
-        }
-      )
-    })
+    this.langChange(language, translate, 'HighScoresModule')
   }
 }

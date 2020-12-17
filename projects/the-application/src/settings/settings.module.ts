@@ -3,10 +3,10 @@ import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterModule } from '@angular/router'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { Subscription } from 'rxjs'
 
 import { SettingsComponent } from './settings.component'
 import { LanguageComponent } from '../language/language.component'
+import { LanguageModule } from '../language/language.module'
 import { LanguageService } from '../language/language.service'
 import { MaterialModule } from '../material/material.module'
 import { SettingsRoutingModule } from '../settings-routing/settings-routing.module'
@@ -35,24 +35,10 @@ import {
 /**
  * Settings Module
  */
-export class SettingsModule {
+export class SettingsModule extends LanguageModule {
   constructor(language: LanguageService, translate: TranslateService) {
-    language.lang.subscribe((lang: string): void => {
-      let sub: Subscription
+    super()
 
-      sub = translate.use(lang).subscribe(
-        (): void => {},
-        (): void => {
-          console.error(`Language "${lang}": at "SettingsModule" not found.`)
-
-          translate.setTranslation(lang, {}, true)
-        },
-        (): void => {
-          if (sub && sub instanceof Subscription) {
-            sub.unsubscribe()
-          }
-        }
-      )
-    })
+    this.langChange(language, translate, 'SettingsModule')
   }
 }

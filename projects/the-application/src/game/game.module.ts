@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { Subscription } from 'rxjs'
 
 import { GameComponent } from '../game/game.component'
 import { GameEndComponent } from '../game-end/game-end.component'
 import { GameRoutingModule } from '../game-routing/game-routing.module'
+import { LanguageModule } from '../language/language.module'
 import { LanguageService } from '../language/language.service'
 import { MaterialModule } from '../material/material.module'
 import { StopwatchComponent } from '../stopwatch/stopwatch.component'
@@ -34,24 +34,11 @@ import {
 /**
  * Entry Module
  */
-export class GameModule {
+export class GameModule extends LanguageModule {
   constructor(language: LanguageService, translate: TranslateService) {
-    language.lang.subscribe((lang: string): void => {
-      let sub: Subscription
+    super()
 
-      sub = translate.use(lang).subscribe(
-        (): void => {},
-        (): void => {
-          console.error(`Language "${lang}": at "GameModule" not found.`)
-
-          translate.setTranslation(lang, {}, true)
-        },
-        (): void => {
-          if (sub && sub instanceof Subscription) {
-            sub.unsubscribe()
-          }
-        }
-      )
-    })
+    this.langChange(language, translate, 'GameModule')
   }
+
 }
