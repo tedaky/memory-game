@@ -1,3 +1,4 @@
+import { formatNumber } from '@angular/common'
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -7,6 +8,7 @@ import {
 } from '@angular/core'
 import { MatSelectChange } from '@angular/material/select'
 import { MatSliderChange } from '@angular/material/slider'
+import { TranslateService } from '@ngx-translate/core'
 import { Subscription } from 'rxjs'
 
 import { SettingsService } from './settings.service'
@@ -56,14 +58,11 @@ export class SettingsComponent implements OnDestroy, OnInit {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private game: GameService,
-    private language: LanguageService,
     private settings: SettingsService,
-    public profiler: ProfilerService
+    public language: LanguageService,
+    public profiler: ProfilerService,
+    public translate: TranslateService
   ) {}
-
-  public changeLanguage(lang: string): void {
-    this.language.setLang(lang)
-  }
 
   public ngOnInit(): void {
     let ambientVolume: SettingOption
@@ -87,19 +86,19 @@ export class SettingsComponent implements OnDestroy, OnInit {
 
     //#region Volume
     masterVolume = new SettingOption(
-      'Master Volume',
+      'MASTER_VOLUME',
       this.game.masterVolume.value,
       'masterVolume'
     )
 
     effectsVolume = new SettingOption(
-      'Effects Volume',
+      'EFFECTS_VOLUME',
       this.game.effectsVolume.value,
       'effectsVolume'
     )
 
     ambientVolume = new SettingOption(
-      'Ambient Volume',
+      'AMBIENT_VOLUME',
       this.game.ambientVolume.value,
       'ambientVolume'
     )
@@ -107,14 +106,14 @@ export class SettingsComponent implements OnDestroy, OnInit {
 
     //#region Game
     count = new SettingOption(
-      'Unique Cards Count',
+      'UNIQUE_CARDS_COUNT',
       this.game.count.value,
       'count'
     )
 
-    match = new SettingOption('Cards To Match', this.game.match.value, 'match')
+    match = new SettingOption('CARDS_TO_MATCH', this.game.match.value, 'match')
 
-    mode = new SettingOption('Mode', this.game.mode.value, 'mode')
+    mode = new SettingOption('MODE', this.game.mode.value, 'mode')
     //#endregion Game
 
     this.settingOptions.push(
@@ -145,6 +144,7 @@ export class SettingsComponent implements OnDestroy, OnInit {
         this.settingOptions[index].value = val
         this.changeDetectorRef.markForCheck()
       })
+
       this.subscriptions.push(sub)
     })
   }
