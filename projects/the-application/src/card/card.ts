@@ -10,7 +10,7 @@ export class Card implements ICard {
    * Flipped
    */
   @MakeProperty<Card, Flipped>(null, 0)
-  public flipped: Flipped
+  public flipped?: Flipped
 
   /**
    * image

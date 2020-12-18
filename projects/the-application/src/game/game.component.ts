@@ -12,11 +12,11 @@ import {
 } from '@angular/core'
 import { MatDialog } from '@angular/material/dialog'
 import { TranslateService } from '@ngx-translate/core'
-import { interval } from 'rxjs'
+import { interval, Subscription } from 'rxjs'
 import { take } from 'rxjs/operators'
 
 import { GameService } from './game.service'
-import { Card } from '../card/card'
+import { ICard } from '../card/card.d'
 import { CardsService } from '../cards/cards.service'
 import { flipAnimation } from '../flip-animation/flip-animation'
 import { GameEndComponent } from '../game-end/game-end.component'
@@ -48,6 +48,10 @@ export class GameComponent implements OnDestroy, OnInit {
    * Keep track of cards that haven't been flipped.
    */
   private unFlipped: number[]
+  /**
+   * Subscribe to cards update.
+   */
+  private sub: Subscription
   /**
    * Chosen card matches.
    */
@@ -240,16 +244,16 @@ export class GameComponent implements OnDestroy, OnInit {
    * Check for a match
    */
   private checkForMatch(id: number[]): void {
-    let cardChosen: Card[]
+    let cardChosen: ICard[]
     let namesMatch: boolean
 
-    cardChosen = id.reduce<Card[]>((pv: Card[], cv: number): Card[] => {
+    cardChosen = id.reduce<ICard[]>((pv: ICard[], cv: number): ICard[] => {
       pv.push(this.cards.deck[cv])
       return pv
     }, [])
 
     namesMatch = cardChosen.every(
-      (card: Card, index: number, array: Card[]): boolean => {
+      (card: ICard, index: number, array: ICard[]): boolean => {
         return card.name === array[0].name
       }
     )
@@ -260,7 +264,7 @@ export class GameComponent implements OnDestroy, OnInit {
         .subscribe((): void => {
           if (this.game.playing.value || this.cardsWon.length) {
             if (id.length === this.game.match.value) {
-              cardChosen.forEach((card: Card): void => {
+              cardChosen.forEach((card: ICard): void => {
                 card.flipped = 4
               })
 
@@ -268,7 +272,7 @@ export class GameComponent implements OnDestroy, OnInit {
                 .pipe<number>(take<number>(1))
                 .subscribe((): void => {
                   if (this.game.playing.value || this.cardsWon.length) {
-                    cardChosen.forEach((card: Card): void => {
+                    cardChosen.forEach((card: ICard): void => {
                       card.flipped = 2
                     })
 
@@ -285,7 +289,7 @@ export class GameComponent implements OnDestroy, OnInit {
         this.cardsChosenId = []
 
         this.cardsWon.push([
-          ...cardChosen.map<string>((card: Card): string => {
+          ...cardChosen.map<string>((card: ICard): string => {
             return card.name
           })
         ])
@@ -295,7 +299,7 @@ export class GameComponent implements OnDestroy, OnInit {
         .pipe<number>(take<number>(1))
         .subscribe((): void => {
           if (this.game.playing.value) {
-            cardChosen.forEach((card: Card): void => {
+            cardChosen.forEach((card: ICard): void => {
               card.flipped = 3
             })
 
@@ -303,7 +307,7 @@ export class GameComponent implements OnDestroy, OnInit {
               .pipe<number>(take<number>(1))
               .subscribe((): void => {
                 if (this.game.playing.value) {
-                  cardChosen.forEach((card: Card): void => {
+                  cardChosen.forEach((card: ICard): void => {
                     card.flipped = 0
                   })
 
@@ -432,7 +436,7 @@ export class GameComponent implements OnDestroy, OnInit {
 
   private winReveal(): void {
     if (!this.game.playing.value) {
-      this.cards.deck.forEach((card: Card): void => {
+      this.cards.deck.forEach((card: ICard): void => {
         card.flipped = 1
       })
 
@@ -452,8 +456,8 @@ export class GameComponent implements OnDestroy, OnInit {
       this.cards.deck[option0].name === this.cards.deck[option1].name &&
       this.unFlipped.includes(option1)
     ) {
-      let swap0: Card
-      let swap1: Card
+      let swap0: ICard
+      let swap1: ICard
       let found: number
 
       swap0 = this.cards.deck[option1]
@@ -474,6 +478,7 @@ export class GameComponent implements OnDestroy, OnInit {
   public ngOnInit(): void {
     this.createMediaMatcher()
     this.reset(new Event('click') as MouseEvent)
+    this.refreshOnNewCards()
     if (isPlatformBrowser(this.platformId)) {
       this.start(0)
     } else {
@@ -483,6 +488,12 @@ export class GameComponent implements OnDestroy, OnInit {
     }
   }
   //#endregion ngOnInit
+
+  private refreshOnNewCards(): void {
+    this.sub = this.cards.refresh.subscribe((): void => {
+      this.changeDetectorRef.markForCheck()
+    })
+  }
 
   private start(count: number): void {
     if (isNullOrUndefined(count)) {
@@ -529,7 +540,7 @@ export class GameComponent implements OnDestroy, OnInit {
   public reset(event: MouseEvent): void {
     event.preventDefault()
 
-    this.cards.deck.forEach((card: Card): void => {
+    this.cards.deck.forEach((card: ICard): void => {
       card.flipped = 0
     })
 
@@ -550,7 +561,7 @@ export class GameComponent implements OnDestroy, OnInit {
   }
   //#endregion reset
 
-  public trackBy(index: number, name: Card): number {
+  public trackBy(index: number, name: ICard): number {
     return index
   }
 
@@ -564,6 +575,9 @@ export class GameComponent implements OnDestroy, OnInit {
       //   'change',
       //   this.mediaQueryListener
       // )
+    }
+    if (this.sub && this.sub instanceof Subscription) {
+      this.sub.unsubscribe()
     }
   }
   //#endregion ngOnDestroy
