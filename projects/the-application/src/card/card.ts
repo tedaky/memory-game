@@ -1,4 +1,5 @@
 import { Flipped, ICard } from './card.d'
+import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
 import { MakeProperty } from '../utilities/make-property'
 
 /**
@@ -44,5 +45,30 @@ export class Card implements ICard {
       this.name = arg1.name
       this.image = arg1.image
     }
+  }
+
+  static toJSON(card: Card): ICard
+  static toJSON(cards: Card[]): ICard[]
+  static toJSON(arg: Card | Card[]): ICard | ICard[] {
+    if (isNullOrUndefined(arg)) {
+      return
+    }
+
+    function result(card: Card): ICard {
+      return {
+        image: card.image,
+        name: card.name
+      }
+    }
+
+    if (Array.isArray(arg)) {
+      return arg.map<ICard>(
+        (card: Card): ICard => {
+          return result(card)
+        }
+      )
+    }
+
+    return result(arg)
   }
 }

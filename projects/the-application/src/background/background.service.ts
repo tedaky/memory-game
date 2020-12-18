@@ -40,7 +40,10 @@ export class BackgroundService {
       if (!isNullOrUndefined(Worker)) {
         let worker: Worker
 
-        worker = new Worker('../root/root.worker', { type: 'module' })
+        worker = new Worker('../root/root.worker', {
+          type: 'module',
+          name: 'root'
+        })
 
         worker.onmessage = (event: MessageEvent): void => {
           console.log(`page got message: "${event.data}"`)

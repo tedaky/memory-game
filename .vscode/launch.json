@@ -10,7 +10,9 @@
       "type": "pwa-chrome",
       "url": "http://localhost:4200",
       "webRoot": "${workspaceFolder}",
-      "runtimeArgs": ["--remote-debugging-port=9222"],
+      "runtimeArgs": [
+        "--remote-debugging-port=9222"
+      ],
       "sourceMaps": true,
       "sourceMapPathOverrides": {
         // https://github.com/microsoft/vscode-recipes/tree/master/Angular-CLI

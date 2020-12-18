@@ -1,9 +1,5 @@
-import { isPlatformBrowser } from '@angular/common'
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core'
-
 import { Card } from '../card/card'
 import { ICard } from '../card/card.d'
-import { GameService } from '../game/game.service'
 import {
   useValentinesDay,
   useStPatricksDay,
@@ -13,26 +9,17 @@ import {
   useThanksgiving,
   useChristmas
 } from '../holiday/holiday'
-import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
+import { Count, Match } from '../statistic/statistic.d'
 import { MakeArray } from '../utilities/make-array'
 import { MakeProperty } from '../utilities/make-property'
 
-/**
- * Create and make cards available.
- */
-@Injectable({
-  providedIn: 'root'
-})
-/**
- * Create and make cards available.
- */
-export class CardsService {
+export class Cards {
   //#region get
   //#region cards
   /**
    * List of unique cards.
    */
-  @MakeArray<CardsService, Card>()
+  @MakeArray<Cards, Card>()
   private cards: Card[]
   //#endregion cards
 
@@ -40,12 +27,21 @@ export class CardsService {
   /**
    * Deck of cards.
    */
-  @MakeArray<CardsService, Card>()
+  @MakeArray<Cards, Card>()
   public deck: Card[]
   //#endregion deck
   //#endregion get
 
   //#region blank, white images
+
+  //#region blankSource
+  /**
+   * BlankSource image folder.
+   */
+  @MakeProperty<Cards, string>(null, 'regular')
+  private blankSource: string
+  //#endregion blankSource
+
   //#region blank
   /**
    * Blank image card.
@@ -54,81 +50,13 @@ export class CardsService {
     return `assets/${this.blankSource}/blank.png`
   }
   //#endregion blank
-
-  //#region blankSource
-  /**
-   * BlankSource image folder.
-   */
-  @MakeProperty<CardsService, string>(null, 'regular')
-  public blankSource: string
-  //#endregion blankSource
-
-  //#region white
-  /**
-   * White image card.
-   */
-  public get white(): string {
-    return 'assets/white.png'
-  }
-  //#endregion white
   //#endregion blank, white images
 
-  private worker: Worker
-
   //#region constructor
-  constructor(
-    @Inject(PLATFORM_ID) readonly platformId: string,
-    private game: GameService
-  ) {
-    this.createDeck()
-    this.registerWorker()
+  constructor(count: Count = 2, match: Match = 2) {
+    this.createDeck(count, match)
   }
   //#endregion constructor
-
-  private registerWorker(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      if (!isNullOrUndefined(Worker)) {
-        this.worker = new Worker('./worker/cards.worker', {
-          type: 'module',
-          name: 'cards'
-        })
-
-        this.worker.addEventListener(
-          'message',
-          (
-            event: MessageEvent<{
-              blank: string
-              deck: ICard[]
-            }>
-          ): void => {
-            let blank: string
-            let deck: Card[]
-
-            blank = event.data.blank
-            deck = event.data.deck.map<Card>(
-              (card: ICard): Card => {
-                return new Card(card)
-              }
-            )
-
-            console.log(blank)
-            console.log(deck)
-          }
-        )
-      }
-    }
-  }
-
-  public testShuffle(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      if (!isNullOrUndefined(Worker) && !isNullOrUndefined(this.worker)) {
-        this.worker.postMessage({
-          count: this.game.count.value,
-          match: this.game.match.value
-        })
-      }
-    }
-  }
 
   //#region createCard
   //#region overload
@@ -182,7 +110,7 @@ export class CardsService {
    */
   private createCards(): void {
     // Clear unique cards.
-    this.cards.splice(0, this.cards.length)
+    this.cards = []
 
     let holidayCards: boolean
     holidayCards = false
@@ -402,12 +330,9 @@ export class CardsService {
   /**
    * Create a deck pairing each card.
    */
-  private createDeck(): void {
-    let temp: Card[]
-    temp = []
-
+  private createDeck(count: Count, match: Match): void {
     // Clear the current deck of any cards.
-    this.deck.splice(0, this.deck.length)
+    this.deck = []
 
     // Replenish unique cards.
     // Allows for holiday cards without closing and reopening.
@@ -417,16 +342,16 @@ export class CardsService {
     this.shuffleCards()
 
     // Take the number of cards based on the game count setting.
-    temp = this.cards.slice(0, this.game.count.value)
+    this.cards = this.cards.slice(0, count)
 
     // Loop each individual card.
-    temp.forEach((card: Card): void => {
+    this.cards.forEach((card: Card): void => {
       let i: number
 
       i = 0
 
       // Create new card(s) based on the setCount.
-      for (; i < this.game.match.value; i++) {
+      for (; i < match; i++) {
         // Push each new card to the deck.
         this.deck.push(new Card(card))
       }
@@ -444,54 +369,4 @@ export class CardsService {
     })
   }
   //#endregion shuffleCards
-
-  //#region getCardBack
-  /**
-   * The back of the card to use based on the flip state.
-   *
-   * @param card `Card` given card
-   */
-  public getCardBack(card: Card): string {
-    if (card.flipped === 3 || card.flipped === 1 || card.flipped === 0) {
-      return this.blank
-    } else if (card.flipped === 4) {
-      return card.image
-    } else if (card.flipped === 2) {
-      return this.white
-    }
-  }
-  //#endregion getCardBack
-
-  //#region getCardImage
-  /**
-   * Return what image to use based on card flip state.
-   *
-   * @param card `Card` given card
-   */
-  public getCardImage(card: Card): string {
-    if (card.flipped === 4 || card.flipped === 3 || card.flipped === 1) {
-      return card.image
-    } else if (card.flipped === 2) {
-      return this.white
-    } else if (card.flipped === 0) {
-      return this.blank
-    }
-  }
-  //#endregion getCardImage
-
-  //#region shuffle
-  /**
-   * Shuffle the deck randomly,
-   */
-  public shuffle(): void {
-    // Reset the deck.
-    this.createDeck()
-
-    this.deck.sort((): number => {
-      return 0.5 - Math.random()
-    })
-
-    this.testShuffle()
-  }
-  //#endregion shuffle
 }
