@@ -1,3 +1,4 @@
+/// For cards.worker.ts
 import { Card } from '../card/card'
 import { ICard } from '../card/card.d'
 import {
@@ -10,6 +11,7 @@ import {
   useChristmas
 } from '../holiday/holiday'
 import { Count, Match } from '../statistic/statistic.d'
+import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
 import { MakeArray } from '../utilities/make-array'
 import { MakeProperty } from '../utilities/make-property'
 
@@ -50,10 +52,29 @@ export class Cards {
     return `assets/${this.blankSource}/blank.png`
   }
   //#endregion blank
+
+  //#region white
+  /**
+   * White image card.
+   */
+  public get white(): string {
+    return 'assets/white.png'
+  }
+  //#endregion white
   //#endregion blank, white images
 
   //#region constructor
-  constructor(count: Count = 2, match: Match = 2) {
+  constructor()
+  constructor(count: Count, match: Match)
+  constructor(count?: Count, match?: Match) {
+    if (isNullOrUndefined(count)) {
+      count = 2
+    }
+
+    if (isNullOrUndefined(match)) {
+      match = 2
+    }
+
     this.createDeck(count, match)
   }
   //#endregion constructor
@@ -104,6 +125,7 @@ export class Cards {
   }
   //#endregion createCard
 
+  //#region createCardsMethods
   //#region createCards
   /**
    * Create a unique set of cards.
@@ -325,6 +347,7 @@ export class Cards {
     this.createCard('wreath', `${assets}wreath.png`)
   }
   //#endregion createChristmasCards
+  //#endregion createCardsMethods
 
   //#region createDeck
   /**
@@ -339,7 +362,7 @@ export class Cards {
     this.createCards()
 
     // Randomise the cards.
-    this.shuffleCards()
+    this.shuffleCards(this.cards)
 
     // Take the number of cards based on the game count setting.
     this.cards = this.cards.slice(0, count)
@@ -356,6 +379,9 @@ export class Cards {
         this.deck.push(new Card(card))
       }
     })
+
+    // Randomise the deck.
+    this.shuffleCards(this.deck)
   }
   //#endregion createDeck
 
@@ -363,8 +389,8 @@ export class Cards {
   /**
    * Shuffle the list of unique cards
    */
-  private shuffleCards(): void {
-    this.cards.sort((): number => {
+  private shuffleCards(array: Card[]): void {
+    array.sort((): number => {
       return 0.5 - Math.random()
     })
   }
