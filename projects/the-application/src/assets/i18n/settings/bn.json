@@ -1,15 +1,15 @@
 {
-  "AMBIENT_VOLUME": "AMBIENT_VOLUME",
-  "CARDS_TO_MATCH": "CARDS_TO_MATCH",
-  "EFFECTS_VOLUME": "EFFECTS_VOLUME",
-  "GAME": "GAME",
-  "LANGUAGE": "LANGUAGE",
-  "MASTER_VOLUME": "MASTER_VOLUME",
-  "MEMORIZE": "MEMORIZE",
-  "MODE": "MODE",
-  "PROFILE": "PROFILE",
-  "REGULAR": "REGULAR",
-  "SETTINGS": "SETTINGS",
-  "UNIQUE_CARDS_COUNT": "UNIQUE_CARDS_COUNT",
-  "VOLUME": "VOLUME"
+  "AMBIENT_VOLUME": "চারিপার্শ্বিক ভলিউম",
+  "CARDS_TO_MATCH": "টাইলস ম্যাচ করতে হবে",
+  "EFFECTS_VOLUME": "ভলিউম প্রভাব",
+  "GAME": "খেলা",
+  "LANGUAGE": "ভাষা",
+  "MASTER_VOLUME": "প্রধান ভলিউম",
+  "MEMORIZE": "স্মরণ করুন",
+  "MODE": "ধরন",
+  "PROFILE": "প্রোফাইল",
+  "REGULAR": "স্বাভাবিক",
+  "SETTINGS": "সেটিংস",
+  "UNIQUE_CARDS_COUNT": "আলাদা রকমের টাইলস সংখ্যা",
+  "VOLUME": "ভলিউম"
 }
