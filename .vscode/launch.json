@@ -5,6 +5,22 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Attach Angular",
+      "port": 9222,
+      "request": "attach",
+      "type": "pwa-chrome",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        // https://github.com/microsoft/vscode-recipes/tree/master/Angular-CLI
+        "webpack:/*": "${webRoot}/*",
+        "/./*": "${webRoot}/*",
+        "/src/*": "${webRoot}/*",
+        "/*": "*",
+        "/./~/*": "${webRoot}/node_modules/*"
+      }
+    },
+    {
       "name": "Launch Angular",
       "request": "launch",
       "type": "pwa-chrome",
@@ -16,13 +32,11 @@
       "sourceMaps": true,
       "sourceMapPathOverrides": {
         // https://github.com/microsoft/vscode-recipes/tree/master/Angular-CLI
-        //  \/ Changed to resemble this project
-        "webpack:/*": "${webRoot}/projects/the-application/*",
+        "webpack:/*": "${webRoot}/*",
         "/./*": "${webRoot}/*",
-        // \/ Changed to resemble this project
-        "/src/*": "${webRoot}/projects/the-application/src/*",
+        "/src/*": "${webRoot}/*",
         "/*": "*",
-        "/./~/*": "${webRoot}/node_modules/*",
+        "/./~/*": "${webRoot}/node_modules/*"
       }
     }
   ]
