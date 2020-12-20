@@ -93,11 +93,11 @@ export class Stopwatch {
     post(time)
 
     if (this.active) {
-      requestAnimationFrame((): void => {
+      setTimeout((): void => {
         if (this.active) {
           this.clockRunning()
         }
-      })
+      }, 1)
     }
   }
 
