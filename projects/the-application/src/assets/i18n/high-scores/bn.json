@@ -1,11 +1,11 @@
 {
-  "CARDS_TO_MATCH": "CARDS_TO_MATCH",
-  "CLEAR": "CLEAR",
-  "COMING_SOON": "COMING_SOON",
-  "FILTER_SCORES": "FILTER_SCORES",
-  "FLIPS": "FLIPS",
-  "PROFILE": "PROFILE",
-  "RANK": "RANK",
-  "TIME": "TIME",
-  "UNIQUE_CARDS_COUNT": "UNIQUE_CARDS_COUNT"
+  "CARDS_TO_MATCH": "টাইলস ম্যাচ করতে হবে",
+  "CLEAR": "মুছে ফেলা",
+  "COMING_SOON": "শীঘ্রই আসছে",
+  "FILTER_SCORES": "ফলাফল বাছাই",
+  "FLIPS": "উল্টানো টাইলস",
+  "PROFILE": "প্রোফাইল",
+  "RANK": "র‌্যাঙ্ক",
+  "TIME": "সময়",
+  "UNIQUE_CARDS_COUNT": "আলাদা রকমের টাইলস সংখ্যা"
 }
