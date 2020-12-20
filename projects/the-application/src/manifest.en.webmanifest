@@ -1,6 +1,6 @@
 {
   "background_color": "#fafafa",
-  "description": "Memory Game.",
+  "description": "Memory Game",
   "display": "standalone",
   "icons": [
     {
@@ -68,7 +68,7 @@
           "type": "image/png"
         }
       ],
-      "url": "./game"
+      "url": "./en/game"
     },
     {
       "description": "Memory Game High Scores.",
@@ -81,7 +81,7 @@
           "type": "image/png"
         }
       ],
-      "url": "./high-scores"
+      "url": "./en/high-scores"
     },
     {
       "description": "Memory Game Leaderboard.",
@@ -94,7 +94,7 @@
           "type": "image/png"
         }
       ],
-      "url": "./leaderboard"
+      "url": "./en/leaderboard"
     },
     {
       "description": "Memory Game Recent Scores.",
@@ -107,7 +107,7 @@
           "type": "image/png"
         }
       ],
-      "url": "./recent-scores"
+      "url": "./en/recent-scores"
     },
     {
       "description": "Memory Game Settings.",
@@ -120,7 +120,7 @@
           "type": "image/png"
         }
       ],
-      "url": "./settings"
+      "url": "./en/settings"
     }
   ],
   "start_url": "./en/index.html",
