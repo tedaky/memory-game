@@ -13,24 +13,28 @@
   </mat-card-title>
 </mat-card>
 
-<!--
-<mat-card class="mat-elevation-z2">
-  <mat-card-title>{{ 'LANGUAGE' | translate }}</mat-card-title>
-  <mat-card-content>
-    <a [routerLink]="['/', 'en', tempRoute]">EN</a>
-    <br />
-    <a [routerLink]="['/', 'es', tempRoute]">ES</a>
-    <br />
-    <a [routerLink]="['/', 'de', tempRoute]">DE</a>
-    <br />
-    <a [routerLink]="['/', 'hi', tempRoute]">HI</a>
-    <br />
-    <a [routerLink]="['/', 'bn', tempRoute]">BN</a>
-    <br />
-    <a [routerLink]="['/', 'bg', tempRoute]">BG</a>
-  </mat-card-content>
-</mat-card>
--->
+<ng-container *ngIf="language.supported.length > 1">
+  <mat-card class="mat-elevation-z2">
+    <mat-card-title>{{ 'LANGUAGE' | translate }}</mat-card-title>
+    <mat-card-content>
+      <h3>{{ 'LANGUAGE' | translate }}</h3>
+      <mat-form-field>
+        <mat-label>{{ 'LANGUAGE' | translate }}</mat-label>
+        <mat-select
+          [(ngModel)]="currentLang"
+          (selectionChange)="languageChange($event)"
+        >
+          <mat-option
+            *ngFor="let val of language.supported; let i = index"
+            [value]="val"
+          >
+            {{ language.description[i] }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-card-content>
+  </mat-card>
+</ng-container>
 
 <mat-card class="mat-elevation-z2">
   <mat-card-title>{{ 'VOLUME' | translate }}</mat-card-title>
