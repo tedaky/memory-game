@@ -1,8 +1,10 @@
 <span *ngIf="!forIOS">{{ 'INSTALL_MEMORY_GAME' | translate }}</span>
 <span *ngIf="forIOS">
-  {{ 'INSTALL_MEMORY_GAME' | translate }}{{ 'FULL_STOP' | translate }} Tap
+  {{ 'INSTALL_MEMORY_GAME' | translate }}{{ 'FULL_STOP' | translate }}
+  {{ 'TAP' | translate }}
   <img src="assets/icons/Navigation_Action_2x.png" />
-  then <b>"{{ 'ADD_TO_HOME_SCREEN' | translate }}"</b>
+  {{ 'THEN' | translate }}
+  <b>"{{ 'ADD_TO_HOME_SCREEN' | translate }}"</b>
 </span>
 <div class="mat-simple-snackbar-action">
   <button
