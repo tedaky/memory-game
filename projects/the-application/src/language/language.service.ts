@@ -25,8 +25,8 @@ export class LanguageService {
     translate: TranslateService
   ) {
     this.lang = new BehaviorSubject<string>(translate.getDefaultLang())
-    this.supported = ['en']
-    this.description = ['English']
+    this.supported = ['bn', 'en']
+    this.description = ['বাংলা', 'English']
   }
 
   /**
