@@ -14,6 +14,7 @@ import {
   ROUTE_TOKEN,
   translateModuleOptions
 } from '../translate-loader/translate-browser.loader'
+import { StopwatchService } from '../stopwatch/stopwatch.service'
 
 /**
  * Entry Module
@@ -27,7 +28,7 @@ import {
     RouterModule,
     TranslateModule.forChild(translateModuleOptions)
   ],
-  providers: [{ provide: ROUTE_TOKEN, useValue: 'game' }],
+  providers: [{ provide: ROUTE_TOKEN, useValue: 'game' }, StopwatchService],
   entryComponents: [GameEndComponent],
   bootstrap: [GameComponent]
 })
@@ -40,5 +41,4 @@ export class GameModule extends LanguageModule {
 
     this.langChange(language, translate, 'GameModule')
   }
-
 }
