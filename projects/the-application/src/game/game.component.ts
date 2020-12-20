@@ -335,10 +335,10 @@ export class GameComponent implements OnDestroy, OnInit {
         this.game.match.value,
         this.flips,
         this.game.count.value,
-        this.stopwatch.milliseconds,
-        this.stopwatch.seconds,
-        this.stopwatch.minutes,
-        this.stopwatch.hours,
+        this.stopwatch.stopwatch.milliseconds,
+        this.stopwatch.stopwatch.seconds,
+        this.stopwatch.stopwatch.minutes,
+        this.stopwatch.stopwatch.hours,
         null,
         null,
         null,
@@ -553,8 +553,7 @@ export class GameComponent implements OnDestroy, OnInit {
     this.flips = 0
 
     this.cards.shuffle()
-    this.stopwatch.stop()
-    this.stopwatch.clear()
+    this.stopwatch.reset()
     this.game.playing.next(false)
 
     this.changeDetectorRef.markForCheck()

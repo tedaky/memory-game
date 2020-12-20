@@ -16,3 +16,5 @@ export interface ITime {
    */
   hours: number
 }
+
+export type StopwatchState = 'pause' | 'reset' | 'restart' | 'start'
