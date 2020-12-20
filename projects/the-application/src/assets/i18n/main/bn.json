@@ -1,8 +1,8 @@
 {
   "ADD_TO_HOME_SCREEN": "হোম পর্দায় যোগ করুন",
   "CLOSE": "বন্ধ",
-  "DESCRIPTION": "বর্ণনা",
-  "FULL_STOP": "ফুলস্টপ্",
+  "DESCRIPTION": "মানুষ, কুকুর এবং বিড়ালদের জন্য মেমরি কার্ড গেম",
+  "FULL_STOP": "।",
   "GAME": "খেলা",
   "HIGH_SCORES": "সেরা স্কোর",
   "INSTALL": "ইনস্টল",
@@ -12,6 +12,8 @@
   "RECENT_SCORES": "সাম্প্রতিক স্কোর",
   "REFRESH": "রিফ্রেশ",
   "SETTINGS": "সেটিংস",
-  "TITLE": "শিরোনাম",
+  "TAP": "ট্যাপ করুন",
+  "THEN": "তারপর",
+  "TITLE": "মেমরি খেলা",
   "UPDATE_AVAILABLE": "আপডেট উপলব্ধ"
 }
