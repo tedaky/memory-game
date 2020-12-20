@@ -1,6 +1,7 @@
-/// For cards.worker.ts
-import { Card } from '../card/card'
-import { ICard } from '../card/card.d'
+/// <reference lib="webworker" />
+
+import { Card } from '../../card/card'
+import { ICard } from '../../card/card.d'
 import {
   useValentinesDay,
   useStPatricksDay,
@@ -9,11 +10,11 @@ import {
   useHalloween,
   useThanksgiving,
   useChristmas
-} from '../holiday/holiday'
-import { Count, Match } from '../statistic/statistic.d'
-import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
-import { MakeArray } from '../utilities/make-array'
-import { MakeProperty } from '../utilities/make-property'
+} from '../../holiday/holiday'
+import { Count, Match } from '../../statistic/statistic.d'
+import { isNullOrUndefined } from '../../utilities/is-null-or-undefined'
+import { MakeArray } from '../../utilities/make-array'
+import { MakeProperty } from '../../utilities/make-property'
 
 export class Cards {
   //#region get

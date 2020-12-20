@@ -1,4 +1,6 @@
-import { Cards } from '../cards'
+/// <reference lib="webworker" />
+
+import { Cards } from './cards'
 import { Card } from '../../card/card'
 import { ICard } from '../../card/card.d'
 import { Count, Match } from '../../statistic/statistic.d'

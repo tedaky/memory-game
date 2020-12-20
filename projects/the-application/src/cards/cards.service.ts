@@ -50,14 +50,14 @@ export class CardsService {
   /**
    * Refresh the cards.
    */
-  public refresh: BehaviorSubject<any>
+  public refresh: BehaviorSubject<'refresh'>
 
   //#region constructor
   constructor(
-    @Inject(PLATFORM_ID) readonly platformId: string,
+    @Inject(PLATFORM_ID) private readonly platformId: string,
     private game: GameService
   ) {
-    this.refresh = new BehaviorSubject<any>('refresh')
+    this.refresh = new BehaviorSubject<'refresh'>('refresh')
     this.registerWorker()
   }
   //#endregion constructor
