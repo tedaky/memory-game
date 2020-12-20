@@ -16,7 +16,8 @@ export class LanguageService {
    */
   public lang: BehaviorSubject<string>
 
-  @MakeArray() public supported: string[]
+  @MakeArray<LanguageService, string>() public supported: string[]
+  @MakeArray<LanguageService, string>() public description: string[]
 
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: string,
@@ -24,9 +25,17 @@ export class LanguageService {
     translate: TranslateService
   ) {
     this.lang = new BehaviorSubject<string>(translate.getDefaultLang())
-    this.supported = ['bn', 'de', 'en', 'es', 'hi']
+    this.supported = ['en']
+    this.description = ['English']
   }
 
+  /**
+   * If the application is "browser" based set the language, title and description.
+   *
+   * @param lang `string` the language to set
+   * @param title `string` the title of the application to set
+   * @param description `string` the description of the application to set
+   */
   public setBrowser(lang: string, title: string, description: string): void {
     if (isPlatformBrowser(this.platformId)) {
       let html: HTMLElement
@@ -44,6 +53,11 @@ export class LanguageService {
     }
   }
 
+  /**
+   * Update the emitter with the new language.
+   *
+   * @param lang `string` the new language
+   */
   public setLang(lang: string): void {
     this.lang.next(lang)
   }

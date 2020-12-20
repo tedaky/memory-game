@@ -18,6 +18,7 @@ import { ProfilerService } from '../profiler/profiler.service'
 import { RouteLoction } from '../route-location/route-location'
 import { MakeArray } from '../utilities/make-array'
 import { MakeProperty } from '../utilities/make-property'
+import { Router } from '@angular/router'
 
 class SettingOption {
   @MakeProperty()
@@ -43,21 +44,25 @@ class SettingOption {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SettingsComponent implements OnDestroy, OnInit {
-  @MakeArray()
+  @MakeArray<SettingsComponent, string>()
   private settingLabels: string[]
 
-  @MakeArray()
+  @MakeArray<SettingsComponent, Subscription>()
   private subscriptions: Subscription[]
 
-  @MakeArray()
+  @MakeArray<SettingsComponent, SettingOption>()
   public settingOptions: SettingOption[]
 
-  @MakeProperty()
+  @MakeProperty<SettingsComponent, string>()
   public tempRoute: string
+
+  @MakeProperty<SettingsComponent, string>()
+  public currentLang: string
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private game: GameService,
+    private router: Router,
     private settings: SettingsService,
     public language: LanguageService,
     public profiler: ProfilerService,
@@ -73,6 +78,7 @@ export class SettingsComponent implements OnDestroy, OnInit {
     let match: SettingOption
     let mode: SettingOption
 
+    this.currentLang = this.language.lang.getValue()
     this.tempRoute = RouteLoction.Settings
 
     this.settingLabels = [
@@ -151,6 +157,10 @@ export class SettingsComponent implements OnDestroy, OnInit {
 
   public formatLabel(value: number): number {
     return parseInt(String(value * 100), 10)
+  }
+
+  public languageChange(event: MatSelectChange): void {
+    this.router.navigate(['/', event.value, this.tempRoute])
   }
 
   public inputChange(
