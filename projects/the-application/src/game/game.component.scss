@@ -5,14 +5,17 @@
 
 mat {
   &-card {
+    background-color: rgba(255, 255, 255, 0.5);
+
     &:first-of-type {
       margin-bottom: 16px;
     }
+
     &-content {
+      margin: auto;
       max-width: calc(
         100vh - 40px - env(safe-area-inset-bottom) - env(safe-area-inset-top)
       );
-      margin: auto;
     }
   }
 
@@ -23,29 +26,30 @@ mat {
 
 .card-holder,
 img {
-  position: absolute;
-  top: 0;
-  right: 0;
   bottom: 0;
   left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
 }
 
 .card {
   &-wrapper {
-    position: absolute;
-    top: 4%;
-    right: 4%;
     bottom: 4%;
     left: 4%;
-    perspective-origin: center;
-    perspective: 800px;
+    position: absolute;
+    perspective: 800px {
+      origin: center;
+    }
+    right: 4%;
+    top: 4%;
   }
 
   &-holder {
-    will-change: transform;
-    transform-style: preserve-3d;
     border-radius: 12px;
+    transform-style: preserve-3d;
     transition: transform 250ms;
+    will-change: transform;
 
     &::before {
       content: '';

@@ -1,19 +1,22 @@
 :host {
-  width: calc(100% - env(safe-area-inset-left) - env(safe-area-inset-right));
-  height: 40px;
-  display: flex;
-  justify-content: space-around;
+  padding: {
+    bottom: env(safe-area-inset-bottom);
+    left: env(safe-area-inset-left);
+    right: env(safe-area-inset-right);
+  }
   align-items: center;
+  background-color: rgba(255, 255, 255, 0.5);
+  display: flex;
+  height: 40px;
+  justify-content: space-around;
   position: relative;
+  width: calc(100% - env(safe-area-inset-left) - env(safe-area-inset-right));
   z-index: 2;
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-left: env(safe-area-inset-left);
-  padding-right: env(safe-area-inset-right);
 }
 
 span {
-  margin-left: 8px;
   display: none;
+  margin-left: 8px;
 
   @media screen and (min-width: 600px) {
     display: inline;

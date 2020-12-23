@@ -1,10 +1,10 @@
 <span>
   {{ 'TIME' | translate }}:
-  {{ stopwatch.hours | number: '2.0':translate.currentLang }}
+  {{ stopwatch.hours || 0 | number: '2.0':translate.currentLang }}
   :
-  {{ stopwatch.minutes | number: '2.0':translate.currentLang }}
+  {{ stopwatch.minutes || 0 | number: '2.0':translate.currentLang }}
   :
-  {{ stopwatch.seconds | number: '2.0':translate.currentLang }}
+  {{ stopwatch.seconds || 0 | number: '2.0':translate.currentLang }}
   :
-  {{ stopwatch.milliseconds | number: '3.0':translate.currentLang }}
+  {{ stopwatch.milliseconds || 0 | number: '3.0':translate.currentLang }}
 </span>
