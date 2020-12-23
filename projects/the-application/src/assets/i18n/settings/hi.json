@@ -1,15 +1,15 @@
 {
-  "AMBIENT_VOLUME": "AMBIENT_VOLUME",
-  "CARDS_TO_MATCH": "CARDS_TO_MATCH",
-  "EFFECTS_VOLUME": "EFFECTS_VOLUME",
-  "GAME": "GAME",
-  "LANGUAGE": "LANGUAGE",
-  "MASTER_VOLUME": "MASTER_VOLUME",
-  "MEMORIZE": "MEMORIZE",
-  "MODE": "MODE",
-  "PROFILE": "PROFILE",
-  "REGULAR": "REGULAR",
-  "SETTINGS": "SETTINGS",
-  "UNIQUE_CARDS_COUNT": "UNIQUE_CARDS_COUNT",
-  "VOLUME": "VOLUME"
+  "AMBIENT_VOLUME": "परिप्रेक्ष्य शब्दों",
+  "CARDS_TO_MATCH": "मैच के लिए टाइल्स",
+  "EFFECTS_VOLUME": "शब्दों ध्प्रभाव",
+  "GAME": "खेल",
+  "LANGUAGE": "भाषा",
+  "MASTER_VOLUME": "मूल शब्दों",
+  "MEMORIZE": "याद करना",
+  "MODE": "मोड",
+  "PROFILE": "प्रोफ़ाइल",
+  "REGULAR": "नियमित",
+  "SETTINGS": "सेटिङ्",
+  "UNIQUE_CARDS_COUNT": "अद्वितीय टाइल्स गिनती",
+  "VOLUME": "शब्दों"
 }
