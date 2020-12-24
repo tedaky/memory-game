@@ -2,14 +2,14 @@ import { CommonModule, registerLocaleData } from '@angular/common'
 import { HttpClientModule } from '@angular/common/http'
 import localeBn from '@angular/common/locales/bn'
 import localeBnExtra from '@angular/common/locales/extra/bn'
-import localeDe from '@angular/common/locales/de'
-import localeDeExtra from '@angular/common/locales/extra/de'
 import localeEn from '@angular/common/locales/en'
 import localeEnExtra from '@angular/common/locales/extra/en'
-import localeEs from '@angular/common/locales/es'
-import localeEsExtra from '@angular/common/locales/extra/es'
 import localeHi from '@angular/common/locales/hi'
 import localeHiExtra from '@angular/common/locales/extra/hi'
+import localeKn from '@angular/common/locales/kn'
+import localeKnExtra from '@angular/common/locales/extra/kn'
+import localeTe from '@angular/common/locales/te'
+import localeTeExtra from '@angular/common/locales/extra/te'
 import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import {
@@ -92,10 +92,10 @@ export class RootModule extends LanguageModule {
 
   private registerLocaleData(): void {
     registerLocaleData(localeBn, 'bn', localeBnExtra)
-    registerLocaleData(localeDe, 'de', localeDeExtra)
     registerLocaleData(localeEn, 'en', localeEnExtra)
-    registerLocaleData(localeEs, 'es', localeEsExtra)
     registerLocaleData(localeHi, 'hi', localeHiExtra)
+    registerLocaleData(localeKn, 'kn', localeKnExtra)
+    registerLocaleData(localeTe, 'te', localeTeExtra)
   }
 
   private translateChange(
