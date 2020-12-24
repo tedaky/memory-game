@@ -29,7 +29,9 @@
               "projects/the-application/src/manifest.webmanifest",
               "projects/the-application/src/manifest.bn.webmanifest",
               "projects/the-application/src/manifest.en.webmanifest",
-              "projects/the-application/src/manifest.hi.webmanifest"
+              "projects/the-application/src/manifest.hi.webmanifest",
+              "projects/the-application/src/manifest.kn.webmanifest",
+              "projects/the-application/src/manifest.te.webmanifest"
             ],
             "styles": [
               "node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
@@ -172,7 +174,9 @@
               "projects/the-application/src/manifest.webmanifest",
               "projects/the-application/src/manifest.bn.webmanifest",
               "projects/the-application/src/manifest.en.webmanifest",
-              "projects/the-application/src/manifest.hi.webmanifest"
+              "projects/the-application/src/manifest.hi.webmanifest",
+              "projects/the-application/src/manifest.kn.webmanifest",
+              "projects/the-application/src/manifest.te.webmanifest"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
