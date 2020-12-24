@@ -1,0 +1,2 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[0],{TLEJ:function(n,o,r){"use strict";r.d(o,"a",function(){return c});var e=r("HlOB"),t=r("8Y7J");let c=(()=>{class n{constructor(){this.environment=e.a.production}profile(){console.log(window.ng.profiler.timeChangeDetection({record:!0}))}}return n.\u0275fac=function(o){return new(o||n)},n.\u0275prov=t.Hb({token:n,factory:n.\u0275fac,providedIn:"root"}),n})()}}]);
+//# sourceMappingURL=common.085b77e25f16aec109e3.js.map
