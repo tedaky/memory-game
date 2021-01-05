@@ -54,6 +54,7 @@
               "sourceMap": true,
               "namedChunks": true,
               "extractLicenses": true,
+              "statsJson": true,
               "vendorChunk": true,
               "buildOptimizer": true,
               "budgets": [
@@ -61,6 +62,12 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "bundle",
+                  "name": "vendor",
+                  "maximumWarning": "100kb",
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -90,6 +97,7 @@
               "sourceMap": true,
               "namedChunks": true,
               "extractLicenses": true,
+              "statsJson": true,
               "vendorChunk": true,
               "buildOptimizer": true,
               "budgets": [
@@ -97,6 +105,12 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "bundle",
+                  "name": "vendor",
+                  "maximumWarning": "100kb",
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -122,6 +136,7 @@
               "sourceMap": true,
               "namedChunks": true,
               "extractLicenses": true,
+              "statsJson": true,
               "vendorChunk": true,
               "buildOptimizer": true,
               "budgets": [
@@ -129,6 +144,12 @@
                   "type": "initial",
                   "maximumWarning": "2mb",
                   "maximumError": "5mb"
+                },
+                {
+                  "type": "bundle",
+                  "name": "vendor",
+                  "maximumWarning": "100kb",
+                  "maximumError": "2mb"
                 },
                 {
                   "type": "anyComponentStyle",
