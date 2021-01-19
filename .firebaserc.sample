@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "<firebase-project-name>": {
+      "hosting": {
+        "the-application": [
+          "<firebase-project-name>"
+        ]
+      }
+    }
+  }
+}

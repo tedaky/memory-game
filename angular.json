@@ -284,6 +284,10 @@
               "serverTarget": "the-application:server:github"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
     }

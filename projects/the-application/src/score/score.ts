@@ -1,7 +1,6 @@
 import { isPlatformBrowser } from '@angular/common'
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core'
 
-import { AnalyticsService } from '../analytics/analytics.service'
 import { createTime } from '../create-time/create-time'
 import { DatabaseService } from '../database/database.service'
 import { GameService } from '../game/game.service'
@@ -44,7 +43,6 @@ export abstract class Score {
 
   constructor(
     @Inject(PLATFORM_ID) readonly platformId: string,
-    protected analytics: AnalyticsService,
     protected database: DatabaseService,
     protected game: GameService
   ) {

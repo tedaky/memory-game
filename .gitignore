@@ -41,6 +41,14 @@ yarn-error.log
 testem.log
 /typings
 
+# Firebase
+.firebaserc
+
+# Angular environment
+/**/environments/environment.ts
+/**/environments/environment.*.ts
+!/**/environments/environment.sample.ts
+
 # System Files
 .DS_Store
 Thumbs.db
