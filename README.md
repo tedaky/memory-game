@@ -28,6 +28,26 @@ This project is inspired by [Kubowania Memory Game](https://github.com/kubowania
 1. Open a Terminal window to the repository root.
 1. Run `npm i` from the Terminal window to install Node Modules.
 
+### Settings and Variables
+
+Setup environment variables.
+
+Copy from `projects/the-application/src/environments/` the file `environment.sample.ts` to:
+
+* For serving `environment.ts`
+* Optional
+  * For production `environment.prod.ts`
+  * For GitHub `environment.github.ts`
+
+Configure Firebase settings.
+See the steps here at [8](https://developers.google.com/codelabs/building-a-web-app-with-angular-and-firebase#8) and [9](https://developers.google.com/codelabs/building-a-web-app-with-angular-and-firebase#9)
+
+Copy from `.firebaserc.sample` to `.firebaserc`
+
+* Set up the `<firebase-project-id>` as the project id
+
+See the Firebase -> Project Settings -> General - tab.
+
 ### Serving
 
 Using a Terminal window.

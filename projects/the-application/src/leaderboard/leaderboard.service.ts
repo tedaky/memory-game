@@ -28,6 +28,6 @@ export class LeaderboardService extends Score {
     database: DatabaseService,
     game: GameService
   ) {
-    super(platformId, analytics, database, game)
+    super(platformId, database, game)
   }
 }

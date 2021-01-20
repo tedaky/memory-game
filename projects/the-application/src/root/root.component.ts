@@ -11,6 +11,7 @@ import {
 import { MatRipple } from '@angular/material/core'
 import { ActivatedRoute, RouterOutlet } from '@angular/router'
 
+import { AuthService } from '../auth/auth.service'
 import { BackgroundService } from '../background/background.service'
 import { CardsService } from '../cards/cards.service'
 import { fadeAnimation } from '../fade-animation/fade-animation'
@@ -38,6 +39,7 @@ export class RootComponent implements AfterViewInit {
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: string,
     public theme: ThemeService,
+    public authService: AuthService,
     background: BackgroundService,
     cards: CardsService
   ) {}

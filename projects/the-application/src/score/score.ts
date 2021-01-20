@@ -278,13 +278,6 @@ export abstract class Score {
         reject: (reason: DOMException) => void
       ): void => {
         if (!shouldAdd) {
-          if (this.storeName === 'highScores') {
-            self.analytics.gtag('event', 'send_score', {
-              ...Statistic.toJSON(statistic),
-              isHighScore: false
-            })
-          }
-
           resolve(statistic)
 
           return
@@ -304,13 +297,6 @@ export abstract class Score {
           request = objectStore.add(add)
 
           request.onsuccess = function (event: Event): void {
-            if (self.storeName === 'highScores') {
-              self.analytics.gtag('event', 'send_score', {
-                ...add,
-                isHighScore: false
-              })
-            }
-
             statistic.keyID = this.result as number
 
             self.dataChange.emit('add')

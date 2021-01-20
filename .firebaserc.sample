@@ -1,9 +1,9 @@
 {
   "targets": {
-    "<firebase-project-name>": {
+    "<firebase-project-id>": {
       "hosting": {
         "the-application": [
-          "<firebase-project-name>"
+          "<firebase-project-id>"
         ]
       }
     }

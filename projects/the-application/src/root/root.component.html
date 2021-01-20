@@ -3,6 +3,21 @@
   <div #contentWrapper class="content-wrapper" (scroll)="scroll($event)">
     <div class="wrapper">
       <mat-card class="mat-elevation-z0">
+        <ng-container *ngIf="false">
+          <div *ngIf="authService.user$ | async as user; else login">
+            <img [src]="user.photoURL">
+            <pre>{{ user | json}}</pre>
+            <button type="button" (click)="authService.signout()">Logout</button>
+          </div>
+          <ng-template #login>
+            <button type="button" (click)="authService.providerSignin('Facebook')">Login with Facebook</button>
+            <button type="button" (click)="authService.providerSignin('Github')">Login with GitHub</button>
+            <button type="button" (click)="authService.providerSignin('Google')">Login with Google</button>
+            <button type="button" (click)="authService.providerSignin('Microsoft')">Login with Microsoft</button>
+            <button type="button" (click)="authService.providerSignin('Twitter')">Login with Twitter</button>
+            <button type="button" (click)="authService.providerSignin()">Continue as a Guest</button>
+          </ng-template>
+        </ng-container>
         <mat-card-content [@fadeAnimation]="getRouterOutletState(o)">
           <router-outlet #o="outlet"></router-outlet>
         </mat-card-content>

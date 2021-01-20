@@ -11,6 +11,9 @@ import localeKnExtra from '@angular/common/locales/extra/kn'
 import localeTe from '@angular/common/locales/te'
 import localeTeExtra from '@angular/common/locales/extra/te'
 import { NgModule } from '@angular/core'
+import { AngularFireAuthModule } from '@angular/fire/auth'
+import { AngularFireModule } from '@angular/fire'
+import { AngularFirestoreModule } from '@angular/fire/firestore'
 import { FormsModule } from '@angular/forms'
 import {
   BrowserModule,
@@ -47,6 +50,9 @@ import {
     RootComponent
   ],
   imports: [
+    AngularFireAuthModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
     BrowserAnimationsModule,
     BrowserModule.withServerTransition({ appId: 'MemoryGameApp' }),
     BrowserTransferStateModule,
