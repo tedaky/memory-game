@@ -6,9 +6,6 @@
  * Environment properties.
  */
 export const environment = {
-  analytics: false,
-  location: '/',
-  production: false,
   firebase: {
     apiKey: '<your-key>',
     authDomain: '<your-project-authdomain>',
@@ -16,7 +13,14 @@ export const environment = {
     projectId: '<your-project-id>',
     storageBucket: '<your-storage-bucket>',
     messagingSenderId: '<your-messaging-sender-id>'
-  }
+  },
+  location: '/',
+  policy: {
+    email: '<your@email.com>',
+    location: '<your-host.com>',
+    name: '<Your Name>'
+  },
+  production: false
 }
 
 /*

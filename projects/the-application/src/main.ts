@@ -29,40 +29,6 @@ window.document.addEventListener('DOMContentLoaded', (): void => {
 
           enableDebugTools(comRef)
         }
-
-        if (environment.analytics) {
-          function createGoogleTag(
-            w: Window & typeof globalThis,
-            d: Document,
-            s: 'script',
-            l: 'dataLayer',
-            i: 'GTM-KWJDQHW'
-          ): void {
-            w[l] = w[l] || []
-            w[l].push({
-              'gtm.start': new Date().getTime(),
-              event: 'gtm.js'
-            })
-            let dl: string
-            let f: HTMLScriptElement
-            let j: HTMLScriptElement
-
-            f = d.getElementsByTagName<'script'>(s)[0]
-            j = d.createElement<'script'>(s)
-            dl = l !== 'dataLayer' ? '&l=' + l : ''
-            j.async = true
-            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
-            f.parentNode.insertBefore<HTMLScriptElement>(j, f)
-          }
-
-          createGoogleTag(
-            window,
-            document,
-            'script',
-            'dataLayer',
-            'GTM-KWJDQHW'
-          )
-        }
       })
       .catch<void>((error): void => {
         console.error(error)
