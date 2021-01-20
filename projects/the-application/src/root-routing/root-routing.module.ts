@@ -5,6 +5,7 @@ import { CanDeactivateGameGuard } from '../can-deactivate-game/can-deactivate-ga
 import { GameModule } from '../game/game.module'
 import { HighScoresModule } from '../high-scores/high-scores.module'
 import { LeaderboardModule } from '../leaderboard/leaderboard.module'
+import { LegalModule } from '../legal/legal.module'
 import { RecentScoresModule } from '../recent-scores/recent-scores.module'
 import { redirect } from '../redirect/redirect'
 import { RouteLoction } from '../route-location/route-location'
@@ -16,6 +17,13 @@ const routes: Routes = [
     path: '',
     pathMatch: 'full',
     redirectTo: `${redirect() || 'en'}/${RouteLoction.Game}`
+  },
+  {
+    path: 'legal',
+    loadChildren: async (): Promise<typeof LegalModule> => {
+      const m = await import('../legal/legal.module')
+      return m.LegalModule
+    }
   },
   {
     path: ':lang',
