@@ -1,16 +1,67 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/theming';
+// Plus imports for other components in your app.
 
-html,
-body {
+// Define a custom typography config that overrides the font-family as well as the
+// `headlines` and `body-1` levels.
+$memory-game-typography: mat-typography-config(
+  $font-family: "Rubik, 'Helvetica Neue', Arial, sans-serif"
+);
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core($memory-game-typography);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$memory-game-app-primary: mat-palette($mat-indigo);
+$memory-game-app-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$memory-game-app-warn: mat-palette($mat-red);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as `color` or `typography`.
+$memory-game-app-theme: mat-light-theme(
+  (
+    color: (
+      primary: $memory-game-app-primary,
+      accent: $memory-game-app-accent,
+      warn: $memory-game-app-warn
+    )
+  )
+);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($memory-game-app-theme);
+
+html {
   height: 100%;
 }
 
 body {
+  @extend html;
   margin: 0;
-  font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-.mat-snack-bar-handset .mat-snack-bar-container.snack-bar-reposition,
-.mat-snack-bar-container.snack-bar-reposition {
-  margin-bottom: calc(48px + env(safe-area-inset-bottom));
+.mat-snack-bar-handset {
+  .mat-snack-bar-container {
+    margin-bottom: calc(48px + env(safe-area-inset-bottom));
+
+    &.snack-bar-reposition {
+      @extend .mat-snack-bar-container;
+    }
+  }
+}
+
+.mat-typography {
+  .mat-button,
+  .mat-stroked-button,
+  .mat-flat-button {
+    border-radius: 7.5px;
+  }
 }

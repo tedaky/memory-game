@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
 
-import { CookiePolicyComponent } from '../cookie-policy/cookie-policy.component'
-import { DisclaimerComponent } from '../disclaimer/disclaimer.component'
+import { CookiePolicyComponent } from '../legal/cookie-policy/cookie-policy.component'
+import { DisclaimerComponent } from '../legal/disclaimer/disclaimer.component'
 import { LegalComponent } from '../legal/legal.component'
-import { PrivacyPolicyComponent } from '../privacy-policy/privacy-policy.component'
-import { TermsOfServiceComponent } from '../terms-of-service/terms-of-service.component'
+import { PrivacyPolicyComponent } from '../legal/privacy-policy/privacy-policy.component'
+import { TermsOfServiceComponent } from '../legal/terms-of-service/terms-of-service.component'
 
 const routes: Routes = [
   {

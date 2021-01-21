@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core'
+
 import { LegalBase } from './legal-base.component'
 
 @Component({
