@@ -5,40 +5,83 @@ import {
   AngularFirestore,
   AngularFirestoreDocument
 } from '@angular/fire/firestore'
+import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import firebase from 'firebase/app'
 import { Observable, of } from 'rxjs'
-import { switchMap } from 'rxjs/operators'
+import { map, shareReplay, switchMap } from 'rxjs/operators'
 
-interface User {
-  uid: string
-  email: string
-  photoURL?: string
-  displayName?: string
-}
+import { User } from '../user/user'
+import { ErrorNoticeComponent } from '../error-notice/error-notice.component'
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private credential: firebase.auth.UserCredential
+  public credential: firebase.auth.UserCredential
+  public user$: Observable<User>
 
-  public user$: Observable<User> = this.angularFireAuth.authState.pipe<User>(
-    switchMap<firebase.User, Observable<User>>(
-      (user: firebase.User): Observable<User> => {
-        if (user) {
-          return this.angularFirestore
-            .doc<User>(`users/${user.uid}`)
-            .valueChanges()
-        }
-        return of(null)
-      }
-    )
-  )
+  private get findErrorDialog(): MatDialogRef<ErrorNoticeComponent> {
+    return this.dialog.openDialogs.find((log: MatDialogRef<any>): boolean => {
+      return log.componentInstance instanceof ErrorNoticeComponent
+    })
+  }
 
   constructor(
     private angularFireAuth: AngularFireAuth,
-    private angularFirestore: AngularFirestore
-  ) {}
+    private angularFirestore: AngularFirestore,
+    private dialog: MatDialog,
+    private router: Router
+  ) {
+    this.createUser()
+  }
+
+  private createUser(): void {
+    this.user$ = this.angularFireAuth.authState.pipe<User, User>(
+      switchMap<firebase.User, Observable<User>>(
+        (user: firebase.User): Observable<User> => {
+          if (user) {
+            return this.angularFirestore
+              .doc<User>(`users/${user.uid}`)
+              .valueChanges()
+              .pipe<User, User>(
+                map<User, User>(
+                  (u: User): User => {
+                    u.providerData = user.providerData
+                    return u
+                  }
+                ),
+                shareReplay<User>(1)
+              )
+          }
+          return of<User>(null)
+        }
+      ),
+      shareReplay<User>(1)
+    )
+  }
+
+  private async getCredential(
+    provider: firebase.auth.AuthProvider
+  ): Promise<firebase.auth.UserCredential> {
+    let currentUser: firebase.User
+    currentUser = await this.angularFireAuth.currentUser
+
+    if (currentUser) {
+      return await currentUser.linkWithPopup(provider)
+    }
+
+    return await this.angularFireAuth.signInWithPopup(provider)
+  }
+
+  private getProvider(whichProvider: string): firebase.auth.OAuthProvider {
+    if (whichProvider === 'Microsoft' || whichProvider === 'Yahoo') {
+      return new firebase.auth.OAuthProvider(
+        `${whichProvider.toLowerCase()}.com`
+      )
+    }
+
+    return new firebase.auth[`${whichProvider}AuthProvider`]()
+  }
 
   private updateUserData(user: firebase.User): Promise<void> {
     let userRef: AngularFirestoreDocument<User>
@@ -57,22 +100,41 @@ export class AuthService {
   }
 
   public async providerSignin(whichProvider: string): Promise<void> {
-    let provider: firebase.auth.AuthProvider
-    if (whichProvider) {
-      if (whichProvider === 'Microsoft') {
-        provider = new firebase.auth.OAuthProvider('microsoft.com')
-      } else {
-        provider = new firebase.auth[`${whichProvider}AuthProvider`]()
-      }
-      this.credential = await this.angularFireAuth.signInWithPopup(provider)
-    } else {
-      this.credential = await firebase.auth().signInAnonymously()
-    }
+    try {
+      if (whichProvider) {
+        let provider: firebase.auth.AuthProvider
+        provider = this.getProvider(whichProvider)
 
-    return this.updateUserData(this.credential.user)
+        this.credential = await this.getCredential(provider)
+      } else {
+        this.credential = await firebase.auth().signInAnonymously()
+      }
+
+      this.findErrorDialog.close()
+
+      return this.updateUserData(this.credential.user)
+    } catch (e) {
+      if (this.dialog.openDialogs.length) {
+        let modal: MatDialogRef<ErrorNoticeComponent>
+        modal = this.findErrorDialog
+
+        if (modal) {
+          modal.componentInstance.data.message = e.message
+          modal.componentInstance.changeDetectorRef.markForCheck()
+        } else {
+          this.dialog.open(ErrorNoticeComponent, {
+            data: { message: e.message }
+          })
+        }
+      } else {
+        this.dialog.open(ErrorNoticeComponent, { data: { message: e.message } })
+      }
+    }
   }
 
-  public async signout(): Promise<void> {
-    return await this.angularFireAuth.signOut()
+  public async signout(): Promise<boolean> {
+    await this.angularFireAuth.signOut()
+    this.credential = null
+    return this.router.navigate(['/'])
   }
 }

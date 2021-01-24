@@ -13,7 +13,10 @@ import localeTeExtra from '@angular/common/locales/extra/te'
 import { NgModule } from '@angular/core'
 import { AngularFireAuthModule } from '@angular/fire/auth'
 import { AngularFireModule } from '@angular/fire'
-import { AngularFirestoreModule } from '@angular/fire/firestore'
+import {
+  AngularFirestore,
+  AngularFirestoreModule
+} from '@angular/fire/firestore'
 import { FormsModule } from '@angular/forms'
 import {
   BrowserModule,
@@ -27,6 +30,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { RootComponent } from './root.component'
 import { CheckForUpdateComponent } from '../check-for-update/check-for-update.component'
 import { environment } from '../environments/environment'
+import { ErrorNoticeComponent } from '../error-notice/error-notice.component'
 import { InstallComponent } from '../install/install.component'
 import { LanguageModule } from '../language/language.module'
 import { LanguageService } from '../language/language.service'
@@ -45,6 +49,7 @@ import {
 @NgModule({
   declarations: [
     CheckForUpdateComponent,
+    ErrorNoticeComponent,
     InstallComponent,
     MainMenuComponent,
     RootComponent
@@ -68,17 +73,21 @@ import {
     TranslateModule.forRoot(translateModuleOptions)
   ],
   providers: [{ provide: ROUTE_TOKEN, useValue: 'main' }],
-  entryComponents: [CheckForUpdateComponent, InstallComponent, RootComponent],
   bootstrap: [RootComponent]
 })
 /**
  * Entry Module
  */
 export class RootModule extends LanguageModule {
-  constructor(language: LanguageService, translate: TranslateService) {
+  constructor(
+    language: LanguageService,
+    translate: TranslateService,
+    angularFireStore: AngularFirestore
+  ) {
     super()
 
     this.default(language, translate)
+    this.enablePersistance(angularFireStore)
     this.langChange(language, translate, 'RootModule')
     this.registerLocaleData()
     this.translateChange(language, translate)
@@ -94,6 +103,10 @@ export class RootModule extends LanguageModule {
 
     translate.setDefaultLang(lang)
     language.setLang(lang)
+  }
+
+  private enablePersistance(angularFireStore: AngularFirestore): void {
+    angularFireStore.firestore.enablePersistence({ synchronizeTabs: true })
   }
 
   private registerLocaleData(): void {

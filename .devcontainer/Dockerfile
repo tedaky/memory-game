@@ -32,4 +32,4 @@ RUN if [ "$USER_GID" != "1000" ] || [ "$USER_UID" != "1000" ]; then groupmod --g
 
 # [Optional] Uncomment if you want to install more global node modules
 # RUN su node -c "npm install -g <your-package-list-here>"
-RUN sudo -u node npm install -g @angular/cli electron electron-packager
+RUN sudo -u node npm install -g @angular/cli firebase-tools electron electron-packager

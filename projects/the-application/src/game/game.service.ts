@@ -81,7 +81,7 @@ export class GameService {
           .get('assets/audio/click.mp3', {
             responseType: 'arraybuffer'
           })
-          .pipe(shareReplay(1))
+          .pipe<ArrayBuffer>(shareReplay<ArrayBuffer>(1))
           .subscribe(
             (res: ArrayBuffer): void => {
               resolve(res)

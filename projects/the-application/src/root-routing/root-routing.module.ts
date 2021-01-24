@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core'
+import { AngularFireAuthGuard } from '@angular/fire/auth-guard'
 import { Routes, RouterModule } from '@angular/router'
 
 import { CanDeactivateGameGuard } from '../can-deactivate-game/can-deactivate-game.guard'
@@ -43,6 +44,7 @@ const routes: Routes = [
         path: RouteLoction.Game
       },
       {
+        canActivate: [AngularFireAuthGuard],
         loadChildren: async (): Promise<typeof HighScoresModule> => {
           const m = await import('../high-scores/high-scores.module')
           return m.HighScoresModule
@@ -57,6 +59,7 @@ const routes: Routes = [
       //   path: RouteLoction.Leaderboard
       // },
       {
+        canActivate: [AngularFireAuthGuard],
         loadChildren: async (): Promise<typeof RecentScoresModule> => {
           const m = await import('../recent-scores/recent-scores.module')
           return m.RecentScoresModule
@@ -64,6 +67,7 @@ const routes: Routes = [
         path: RouteLoction.RecentScores
       },
       {
+        canActivate: [AngularFireAuthGuard],
         loadChildren: async (): Promise<typeof SettingsModule> => {
           const m = await import('../settings/settings.module')
           return m.SettingsModule

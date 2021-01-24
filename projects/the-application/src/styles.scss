@@ -58,6 +58,11 @@ body {
   }
 }
 
+.mat-dialog-container {
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px) brightness(1.2);
+}
+
 .mat-typography {
   .mat-button,
   .mat-stroked-button,

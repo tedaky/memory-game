@@ -175,7 +175,7 @@ img,
 
   &-wrapper {
     // Fix mobile corner artifacts
-    will-change: filter opacity;
+    will-change: filter;
     filter: blur(6px);
     z-index: -1;
 

@@ -8,10 +8,12 @@ import {
   OnInit,
   PLATFORM_ID
 } from '@angular/core'
+import { loggedIn } from '@angular/fire/auth-guard'
 import { MatRipple } from '@angular/material/core'
 import { RouterLinkActive } from '@angular/router'
-import { Subscription } from 'rxjs'
+import { of, Subscription } from 'rxjs'
 
+import { AuthService } from '../auth/auth.service'
 import { GameService } from '../game/game.service'
 import { LanguageService } from '../language/language.service'
 import { MenuButton } from '../menu-button/menu-button'
@@ -37,6 +39,7 @@ export class MainMenuComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: string,
+    private auth: AuthService,
     private game: GameService,
     public language: LanguageService,
     public theme: ThemeService
@@ -100,14 +103,18 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       .fadeOut()
   }
 
-  public setTheme(
+  public async setTheme(
     event: MouseEvent,
     theme: string,
     routerLinkActive: RouterLinkActive
-  ): void {
+  ): Promise<void> {
     event.preventDefault()
 
-    if (routerLinkActive.isActive || this.game.playing.value) {
+    if (
+      routerLinkActive.isActive ||
+      this.game.playing.value ||
+      !(await loggedIn(of(this.auth.credential?.user)).toPromise())
+    ) {
       return
     }
 

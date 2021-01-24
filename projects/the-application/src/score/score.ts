@@ -75,16 +75,21 @@ export abstract class Score {
    * @param b `Statistic` compare b
    */
   private compare(a: Statistic, b: Statistic): 1 | -1 | 0 {
-    let aTime: number
-    let bTime: number
+    let aComplete: number
+    let bComplete: number
+    let aMemory: number
+    let bMemory: number
     let aWeight: number
     let bWeight: number
 
-    aTime = createTime(a.complete)
-    bTime = createTime(b.complete)
+    aComplete = createTime(a.complete)
+    bComplete = createTime(b.complete)
 
-    aWeight = a.flips * aTime
-    bWeight = b.flips * bTime
+    aMemory = createTime(a.memory)
+    bMemory = createTime(b.memory)
+
+    aWeight = a.flips * aComplete + 4 * aMemory
+    bWeight = b.flips * bComplete + 4 * bMemory
 
     if (aWeight > bWeight) {
       return 1
@@ -100,10 +105,17 @@ export abstract class Score {
       return -1
     }
 
-    if (aTime > bTime) {
+    if (aMemory > bMemory) {
       return -1
     }
-    if (aTime < bTime) {
+    if (aMemory < bMemory) {
+      return 1
+    }
+
+    if (aComplete > bComplete) {
+      return -1
+    }
+    if (aComplete < bComplete) {
       return 1
     }
 

@@ -1,39 +1,36 @@
 <mat-card class="mat-elevation-z2">
-  <mat-card-title-group>
-    <mat-card-title>
-      {{ 'MATCHES' | translate }}:
-      {{ cardsWon.length | number: '1.0':translate.currentLang }} /
-      {{ game.count.value | number: '1.0':translate.currentLang }}
-      <button
-        mat-flat-button
-        color="warn"
-        type="button"
-        (click)="profiler.profile()"
-        *ngIf="!profiler.environment"
-      >
-        {{ 'PROFILE' | translate }}
-      </button>
-    </mat-card-title>
-    <mat-card-title>
-      {{ 'FLIPS' | translate }}:
-      {{ flips | number: '1.0':translate.currentLang }}
-    </mat-card-title>
-    <mat-card-title>
-      <app-stopwatch></app-stopwatch>
-    </mat-card-title>
-  </mat-card-title-group>
-  <mat-card-title-group>
-    <mat-card-subtitle>
-      <button
-        mat-flat-button
-        color="primary"
-        type="button"
-        (click)="reset($event)"
-      >
-        {{ 'RESET' | translate }}
-      </button>
-    </mat-card-subtitle>
-  </mat-card-title-group>
+  <mat-card-title>
+    {{ 'MATCHES' | translate }}:
+    {{ cardsWon.length | number: '1.0':translate.currentLang }} /
+    {{ game.count.value | number: '1.0':translate.currentLang }}
+    <button
+      mat-flat-button
+      color="warn"
+      type="button"
+      (click)="profiler.profile()"
+      *ngIf="!profiler.environment"
+    >
+      {{ 'PROFILE' | translate }}
+    </button>
+  </mat-card-title>
+  <mat-card-title>
+    {{ 'FLIPS' | translate }}:
+    {{ flips | number: '1.0':translate.currentLang }}
+  </mat-card-title>
+  <mat-card-title>
+    <app-stopwatch></app-stopwatch>
+  </mat-card-title>
+  <mat-card-subtitle>
+    <button
+      mat-flat-button
+      color="primary"
+      type="button"
+      (click)="reset($event)"
+      style="width: 100%;"
+    >
+      {{ 'RESET' | translate }}
+    </button>
+  </mat-card-subtitle>
 </mat-card>
 <mat-card class="mat-elevation-z2" *ngIf="settings.settings.length">
   <mat-card-content>
