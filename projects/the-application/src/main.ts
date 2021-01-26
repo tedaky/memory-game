@@ -8,8 +8,8 @@ import { enableDebugTools } from '@angular/platform-browser'
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic'
 
 import { environment } from './environments/environment'
-import { RootComponent } from './root/root.component'
-import { RootModule } from './root/root.module'
+import { RootComponent } from './app/root/root.component'
+import { RootModule } from './app/root/root.module'
 
 if (environment.production) {
   enableProdMode()

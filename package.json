@@ -21,7 +21,8 @@
     "build:shell:electron": "ng run the-application:app-shell:electron",
     "build:shell:github": "ng run the-application:app-shell:github",
     "build:test": "ng test --browsers ChromeHeadlessCI --no-watch --codeCoverage",
-    "build:source-map:report": "source-map-explorer docs/**/*.js --html docs/source-map.html"
+    "build:source-map:report": "source-map-explorer docs/**/*.js --html docs/source-map.html",
+    "emulators:start": "firebase emulators:start"
   },
   "dependencies": {
     "@angular/animations": "~11.0.5",

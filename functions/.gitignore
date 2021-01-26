@@ -3,6 +3,7 @@ lib/**/*.js
 lib/**/*.js.map
 
 # Logs
+firebase-debug.log
 firestore-debug.log
 ui-debug.log
 

@@ -1,0 +1,209 @@
+@import '../../maths';
+
+@mixin reposition($placement: 0) {
+  top: $placement;
+  right: $placement;
+  bottom: $placement;
+  left: $placement;
+}
+@mixin rounded-box($change: 1.5) {
+  $rounding-radius: 10;
+  $main-radius: 46.5;
+  $n: 4;
+  $central-angle: 360deg / $n;
+  $angle: ($n - 2) * 180deg / $n;
+  $max-var-angle: 2 * (90deg - $angle / 2);
+  $precision: 20;
+  $rotated: 45deg;
+  $unit-var-angle: $max-var-angle / $precision;
+
+  $r-diff: $main-radius + $rounding-radius;
+
+  $points: ();
+
+  // Forward the points
+  // Outside
+  @for $i from 0 through $n {
+    $vertex-angle: $i * $central-angle + $rotated;
+    $vertex-x: 50% + $r-diff * cos($vertex-angle);
+    $vertex-y: 50% + $r-diff * sin($vertex-angle);
+
+    @for $j from 0 through $precision {
+      $curr-angle: $vertex-angle + ($j - 0.5 * $precision) * $unit-var-angle;
+      $x: $vertex-x + ($rounding-radius) * cos($curr-angle);
+      $y: $vertex-y + ($rounding-radius) * sin($curr-angle);
+
+      $points: $points, $x $y;
+    }
+  }
+
+  // Reverse the points
+  // Inside
+  @for $x from $n through 0 {
+    $vertex-angle: $x * $central-angle + $rotated;
+    $vertex-x: 50% + ($r-diff - $change) * cos($vertex-angle);
+    $vertex-y: 50% + ($r-diff - $change) * sin($vertex-angle);
+
+    @for $m from $precision through 0 {
+      $curr-angle: $vertex-angle + ($m - 0.5 * $precision) * $unit-var-angle;
+      $x: $vertex-x + ($rounding-radius - $change) * cos($curr-angle);
+      $y: $vertex-y + ($rounding-radius - $change) * sin($curr-angle);
+
+      $points: $points, $x $y;
+    }
+  }
+
+  clip-path: polygon($points);
+}
+
+:host {
+  display: block;
+  padding: 8px;
+}
+
+mat {
+  &-card {
+    background-color: rgba(255, 255, 255, 0.5);
+
+    &:first-of-type {
+      margin-bottom: 16px;
+    }
+
+    &-content {
+      margin: auto;
+      max-width: calc(
+        100vh - 40px - env(safe-area-inset-bottom) - env(safe-area-inset-top)
+      );
+    }
+  }
+
+  &-grid-tile {
+    overflow: visible;
+  }
+}
+
+.card-holder,
+img,
+.clip-wrapper,
+.clip {
+  @include reposition(0);
+  position: absolute;
+}
+
+.card {
+  &-wrapper {
+    @include reposition(4%);
+    position: absolute;
+    perspective: 800px {
+      origin: center;
+    }
+  }
+
+  &-holder {
+    border-radius: 10%;
+    transform-style: preserve-3d;
+    transition: transform 250ms;
+    will-change: transform;
+
+    &::before {
+      @include rounded-box(1.25);
+      @include reposition(0);
+      content: '';
+      z-index: 2;
+      border-radius: 10%;
+      will-change: background-color;
+      position: absolute;
+      transition: background-color 250ms;
+      background-color: transparent;
+      transform: rotateY(-180deg);
+    }
+
+    &.f-3-t-0 {
+      &::before {
+        background-color: red;
+      }
+    }
+
+    &.f-4-t-0 {
+      &::before {
+        background-color: green;
+      }
+    }
+  }
+
+  &-action {
+    transform: rotateY(-180deg);
+  }
+
+  &-blank,
+  &-holder {
+    transform: rotateY(0deg);
+  }
+}
+
+.f-0-t-1 {
+  .clip {
+    opacity: 1;
+  }
+}
+
+.clip {
+  @include rounded-box(1);
+  z-index: -1;
+  animation: {
+    name: animate;
+    duration: 10s;
+    iteration-count: infinite;
+    timing-function: linear;
+  }
+  background: {
+    image: repeating-linear-gradient(
+      45deg,
+      red 0,
+      orange 2.857%,
+      yellow 5.714%,
+      green 8.571%,
+      blue 11.428%,
+      indigo 14.285%,
+      violet 17.142%,
+      red 20%
+    );
+    size: 900% 100%;
+  }
+  opacity: 0;
+  transition: opacity 250ms ease-in-out 100ms;
+
+  &-wrapper {
+    // Fix mobile corner artifacts
+    will-change: filter;
+    filter: blur(6px);
+    z-index: -1;
+
+    .clip {
+      @include rounded-box(2);
+    }
+  }
+}
+
+.content {
+  @include reposition(4%);
+  position: absolute;
+  border-radius: 7.5%;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  opacity: 0.99999;
+  border-radius: 7.5%;
+}
+
+@keyframes animate {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 0%;
+  }
+}

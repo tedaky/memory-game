@@ -13,4 +13,4 @@ if (environment.production) {
 
 export { renderModule, renderModuleFactory } from '@angular/platform-server'
 
-export { RootServerModule as AppServerModule } from './root/root.server.module'
+export { RootServerModule as AppServerModule } from './app/root/root.server.module'
