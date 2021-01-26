@@ -22,7 +22,7 @@ import { LocaleModule } from '../locale/locale.module'
 import { MainMenuComponent } from '../main-menu/main-menu.component'
 import { MaterialModule } from '../material/material.module'
 import { redirect } from '../redirect/redirect'
-import { RootRoutingModule } from './routing/root-routing.module'
+import { RoutingModule } from './routing.module'
 import { ROUTE_TOKEN } from '../translate-loader/translate-browser.loader'
 
 /**
@@ -46,7 +46,7 @@ import { ROUTE_TOKEN } from '../translate-loader/translate-browser.loader'
     HttpClientModule,
     LocaleModule,
     MaterialModule,
-    RootRoutingModule,
+    RoutingModule,
     ServiceWorkerModule.register('./ngsw-worker.js', {
       enabled: environment.production
     })

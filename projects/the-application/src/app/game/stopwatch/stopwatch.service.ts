@@ -43,7 +43,7 @@ export class StopwatchService {
   private registerWorker(): void {
     if (isPlatformBrowser(this.platformId)) {
       if (!isNullOrUndefined(Worker)) {
-        this.worker = new Worker('./worker/stopwatch.worker', {
+        this.worker = new Worker('./worker/worker', {
           type: 'module',
           name: 'stopwatch'
         })

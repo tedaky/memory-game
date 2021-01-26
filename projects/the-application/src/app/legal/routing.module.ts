@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
 
-import { CookiePolicyComponent } from '../cookie-policy/cookie-policy.component'
-import { DisclaimerComponent } from '../disclaimer/disclaimer.component'
-import { LegalComponent } from '../legal.component'
-import { PrivacyPolicyComponent } from '../privacy-policy/privacy-policy.component'
-import { TermsOfServiceComponent } from '../terms-of-service/terms-of-service.component'
+import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component'
+import { DisclaimerComponent } from './disclaimer/disclaimer.component'
+import { LegalComponent } from './legal.component'
+import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component'
+import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component'
 
 const routes: Routes = [
   {
@@ -34,4 +34,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class LegalRoutingModule {}
+export class RoutingModule {}

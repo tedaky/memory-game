@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 import { GameComponent } from './game.component'
-import { GameEndComponent } from './end/game-end.component'
-import { GameRoutingModule } from './routing/game-routing.module'
+import { EndComponent } from './end/end.component'
+import { RoutingModule } from './routing.module'
 import { LanguageModule } from '../language/language.module'
 import { LanguageService } from '../language/language.service'
 import { MaterialModule } from '../material/material.module'
@@ -20,10 +20,10 @@ import { CardsService } from '../cards/cards.service'
  * Entry Module
  */
 @NgModule({
-  declarations: [GameComponent, GameEndComponent, StopwatchComponent],
+  declarations: [GameComponent, EndComponent, StopwatchComponent],
   imports: [
     CommonModule,
-    GameRoutingModule,
+    RoutingModule,
     MaterialModule,
     TranslateModule.forChild(translateModuleOptions)
   ],

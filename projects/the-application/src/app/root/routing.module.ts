@@ -2,17 +2,17 @@ import { NgModule } from '@angular/core'
 import { AngularFireAuthGuard } from '@angular/fire/auth-guard'
 import { Routes, RouterModule } from '@angular/router'
 
-import { AccountModule } from '../../account/account.module'
-import { CanDeactivateGameGuard } from '../../can-deactivate-game/can-deactivate-game.guard'
-import { GameModule } from '../../game/game.module'
-import { HighScoresModule } from '../../high-scores/high-scores.module'
-import { LeaderboardModule } from '../../leaderboard/leaderboard.module'
-import { LegalModule } from '../../legal/legal.module'
-import { RecentScoresModule } from '../../recent-scores/recent-scores.module'
-import { redirect } from '../../redirect/redirect'
-import { RouteLoction } from '../../route-location/route-location'
-import { RouteGuard } from '../../route/route.guard'
-import { SettingsModule } from '../../settings/settings.module'
+import { AccountModule } from '../account/account.module'
+import { CanDeactivateGameGuard } from '../can-deactivate-game/can-deactivate-game.guard'
+import { GameModule } from '../game/game.module'
+import { HighScoresModule } from '../high-scores/high-scores.module'
+import { LeaderboardModule } from '../leaderboard/leaderboard.module'
+import { LegalModule } from '../legal/legal.module'
+import { RecentScoresModule } from '../recent-scores/recent-scores.module'
+import { redirect } from '../redirect/redirect'
+import { RouteLoction } from '../route-location/route-location'
+import { RouteGuard } from '../route/route.guard'
+import { SettingsModule } from '../settings/settings.module'
 
 const routes: Routes = [
   {
@@ -23,7 +23,7 @@ const routes: Routes = [
   {
     path: 'legal',
     loadChildren: async (): Promise<typeof LegalModule> => {
-      const m = await import('../../legal/legal.module')
+      const m = await import('../legal/legal.module')
       return m.LegalModule
     }
   },
@@ -39,7 +39,7 @@ const routes: Routes = [
       {
         canDeactivate: [CanDeactivateGameGuard],
         loadChildren: async (): Promise<typeof GameModule> => {
-          const m = await import('../../game/game.module')
+          const m = await import('../game/game.module')
           return m.GameModule
         },
         path: RouteLoction.Game
@@ -47,7 +47,7 @@ const routes: Routes = [
       {
         canActivate: [AngularFireAuthGuard],
         loadChildren: async (): Promise<typeof HighScoresModule> => {
-          const m = await import('../../high-scores/high-scores.module')
+          const m = await import('../high-scores/high-scores.module')
           return m.HighScoresModule
         },
         path: RouteLoction.HighScores
@@ -62,7 +62,7 @@ const routes: Routes = [
       {
         canActivate: [AngularFireAuthGuard],
         loadChildren: async (): Promise<typeof RecentScoresModule> => {
-          const m = await import('../../recent-scores/recent-scores.module')
+          const m = await import('../recent-scores/recent-scores.module')
           return m.RecentScoresModule
         },
         path: RouteLoction.RecentScores
@@ -70,7 +70,7 @@ const routes: Routes = [
       {
         canActivate: [AngularFireAuthGuard],
         loadChildren: async (): Promise<typeof SettingsModule> => {
-          const m = await import('../../settings/settings.module')
+          const m = await import('../settings/settings.module')
           return m.SettingsModule
         },
         path: RouteLoction.Settings
@@ -78,7 +78,7 @@ const routes: Routes = [
       {
         canActivate: [AngularFireAuthGuard],
         loadChildren: async (): Promise<typeof AccountModule> => {
-          const m = await import('../../account/account.module')
+          const m = await import('../account/account.module')
           return m.AccountModule
         },
         path: RouteLoction.Account
@@ -99,4 +99,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class RootRoutingModule {}
+export class RoutingModule {}

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 
 import { LeaderboardComponent } from './leaderboard.component'
-import { LeaderboardRoutingModule } from './routing/leaderboard-routing.module'
+import { RoutingModule } from './routing.module'
 import { MaterialModule } from '../material/material.module'
 import { ROUTE_TOKEN, translateModuleOptions } from '../translate-loader/translate-browser.loader'
 
@@ -16,7 +16,7 @@ import { ROUTE_TOKEN, translateModuleOptions } from '../translate-loader/transla
   imports: [
     CommonModule,
     FormsModule,
-    LeaderboardRoutingModule,
+    RoutingModule,
     MaterialModule,
     TranslateModule.forChild(translateModuleOptions)
   ],

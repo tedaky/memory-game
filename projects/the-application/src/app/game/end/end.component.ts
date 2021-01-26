@@ -5,12 +5,12 @@ import { TranslateService } from '@ngx-translate/core'
 import { Statistic } from '../../statistic/statistic'
 
 @Component({
-  selector: 'app-game-end',
-  templateUrl: './game-end.component.html',
-  styleUrls: ['./game-end.component.scss'],
+  selector: 'app-end',
+  templateUrl: './end.component.html',
+  styleUrls: ['./end.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GameEndComponent {
+export class EndComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: Statistic,
     public translate: TranslateService

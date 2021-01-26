@@ -6,7 +6,7 @@ import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component'
 import { DisclaimerComponent } from './disclaimer/disclaimer.component'
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component'
 import { TermsOfServiceComponent } from './terms-of-service/terms-of-service.component'
-import { LegalRoutingModule } from './routing/legal-routing.module'
+import { RoutingModule } from './routing.module'
 import { MaterialModule } from '../material/material.module'
 
 @NgModule({
@@ -17,6 +17,6 @@ import { MaterialModule } from '../material/material.module'
     PrivacyPolicyComponent,
     TermsOfServiceComponent
   ],
-  imports: [CommonModule, LegalRoutingModule, MaterialModule]
+  imports: [CommonModule, RoutingModule, MaterialModule]
 })
 export class LegalModule {}

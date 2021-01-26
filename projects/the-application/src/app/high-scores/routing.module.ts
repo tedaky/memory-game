@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
 
-import { SettingsComponent } from '../settings.component'
+import { HighScoresComponent } from './high-scores.component'
 
 const routes: Routes = [
   {
-    component: SettingsComponent,
+    component: HighScoresComponent,
     path: ''
   }
 ]
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class SettingsRoutingModule {}
+export class RoutingModule {}

@@ -63,7 +63,7 @@ export class CardsService {
   private registerWorker(): void {
     if (isPlatformBrowser(this.platformId)) {
       if (!isNullOrUndefined(Worker)) {
-        this.worker = new Worker('./worker/cards.worker', {
+        this.worker = new Worker('./worker/worker', {
           type: 'module',
           name: 'cards'
         })

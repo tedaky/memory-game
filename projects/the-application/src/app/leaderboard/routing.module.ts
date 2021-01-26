@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
 
-import { RecentScoresComponent } from '../recent-scores.component'
+import { LeaderboardComponent } from './leaderboard.component'
 
 const routes: Routes = [
   {
-    component: RecentScoresComponent,
+    component: LeaderboardComponent,
     path: ''
   }
 ]
@@ -14,4 +14,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class RecentScoresRoutingModule {}
+export class RoutingModule {}

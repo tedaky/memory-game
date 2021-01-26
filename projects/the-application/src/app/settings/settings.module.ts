@@ -7,7 +7,7 @@ import { SettingsComponent } from './settings.component'
 import { LanguageModule } from '../language/language.module'
 import { LanguageService } from '../language/language.service'
 import { MaterialModule } from '../material/material.module'
-import { SettingsRoutingModule } from './routing/settings-routing.module'
+import { RoutingModule } from './routing.module'
 import {
   ROUTE_TOKEN,
   translateModuleOptions
@@ -22,7 +22,7 @@ import {
     CommonModule,
     FormsModule,
     MaterialModule,
-    SettingsRoutingModule,
+    RoutingModule,
     TranslateModule.forChild(translateModuleOptions)
   ],
   providers: [{ provide: ROUTE_TOKEN, useValue: 'settings' }],

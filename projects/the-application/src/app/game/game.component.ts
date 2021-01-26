@@ -19,7 +19,7 @@ import { GameService } from './game.service'
 import { ICard } from '../card/card.d'
 import { CardsService } from '../cards/cards.service'
 import { flipAnimation } from '../flip-animation/flip-animation'
-import { GameEndComponent } from './end/game-end.component'
+import { EndComponent } from './end/end.component'
 import { Statistic } from '../statistic/statistic'
 import { SettingsService } from '../settings/settings.service'
 import { StatisticsService } from '../statistics/statistics.service'
@@ -353,7 +353,7 @@ export class GameComponent implements OnDestroy, OnInit {
         .pipe<number>(take<number>(1))
         .subscribe((): void => {
           this.matDialog
-            .open(GameEndComponent, {
+            .open(EndComponent, {
               data: statistic,
               disableClose: true
             })

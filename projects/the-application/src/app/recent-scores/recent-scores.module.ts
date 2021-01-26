@@ -7,7 +7,7 @@ import { RecentScoresComponent } from './recent-scores.component'
 import { LanguageModule } from '../language/language.module'
 import { LanguageService } from '../language/language.service'
 import { MaterialModule } from '../material/material.module'
-import { RecentScoresRoutingModule } from './routing/recent-scores-routing.module'
+import { RoutingModule } from './routing.module'
 import {
   ROUTE_TOKEN,
   translateModuleOptions
@@ -22,7 +22,7 @@ import {
     CommonModule,
     FormsModule,
     MaterialModule,
-    RecentScoresRoutingModule,
+    RoutingModule,
     TranslateModule.forChild(translateModuleOptions)
   ],
   providers: [{ provide: ROUTE_TOKEN, useValue: 'recent-scores' }],

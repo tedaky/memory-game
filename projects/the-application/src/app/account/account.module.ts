@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 import { AccountComponent } from './account.component'
-import { AccountRoutingModule } from './routing/account-routing.module'
+import { RoutingModule } from './routing.module'
 import { MaterialModule } from '../material/material.module'
 import { LanguageModule } from '../language/language.module'
 import { LanguageService } from '../language/language.service'
@@ -15,7 +15,7 @@ import {
 @NgModule({
   declarations: [AccountComponent],
   imports: [
-    AccountRoutingModule,
+    RoutingModule,
     CommonModule,
     MaterialModule,
     TranslateModule.forChild(translateModuleOptions)

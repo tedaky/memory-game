@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 import { HighScoresComponent } from './high-scores.component'
-import { HighScoresRoutingModule } from './routing/high-scores-routing.module'
+import { RoutingModule } from './routing.module'
 import { LanguageModule } from '../language/language.module'
 import { LanguageService } from '../language/language.service'
 import { MaterialModule } from '../material/material.module'
@@ -21,7 +21,7 @@ import {
   imports: [
     CommonModule,
     FormsModule,
-    HighScoresRoutingModule,
+    RoutingModule,
     MaterialModule,
     TranslateModule.forChild(translateModuleOptions)
   ],
