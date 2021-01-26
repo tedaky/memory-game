@@ -20,7 +20,8 @@ export const environment = {
     location: '<your-host.com>',
     name: '<Your Name>'
   },
-  production: false
+  production: false,
+  useEmulator: true
 }
 
 /*

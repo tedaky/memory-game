@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { RouterModule } from '@angular/router'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 import { SettingsComponent } from './settings.component'
@@ -25,11 +24,9 @@ import {
     FormsModule,
     MaterialModule,
     SettingsRoutingModule,
-    RouterModule,
     TranslateModule.forChild(translateModuleOptions)
   ],
   providers: [{ provide: ROUTE_TOKEN, useValue: 'settings' }],
-  entryComponents: [SettingsComponent],
   bootstrap: [SettingsComponent]
 })
 /**

@@ -1,6 +1,6 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.154.2/containers/javascript-node-mongo
-// Update the VARIANT arg in docker-compose.yml to pick a Node.js version: 10, 12, 14 
+// Update the VARIANT arg in docker-compose.yml to pick a Node.js version: 10, 12, 14
 {
 	"name": "Memory Game",
 	"dockerComposeFile": "docker-compose.yml",
@@ -8,7 +8,7 @@
 	"workspaceFolder": "/workspace",
 
 	// Set *default* container specific settings.json values on container create.
-	"settings": { 
+	"settings": {
 		"terminal.integrated.shell.linux": "/bin/bash"
 	},
 
@@ -35,11 +35,11 @@
 		"ritwickdey.liveserver",
 		"visualstudioexptteam.vscodeintellicode",
 		"vscode-icons-team.vscode-icons",
-		"yzhang.markdown-all-in-one",
+		"yzhang.markdown-all-in-one"
 	],
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [3000, 27017, 4200, 5500, 8080],
+	"forwardPorts": [3000, 4200, 5001, 5002, 5500, 8080, 8081, 9099, 27017],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	"postCreateCommand": "npm install",

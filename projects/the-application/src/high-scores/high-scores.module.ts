@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { RouterModule } from '@angular/router'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 import { HighScoresComponent } from './high-scores.component'
@@ -24,11 +23,9 @@ import {
     FormsModule,
     HighScoresRoutingModule,
     MaterialModule,
-    RouterModule,
     TranslateModule.forChild(translateModuleOptions)
   ],
   providers: [{ provide: ROUTE_TOKEN, useValue: 'high-scores' }],
-  entryComponents: [HighScoresComponent],
   bootstrap: [HighScoresComponent]
 })
 /**

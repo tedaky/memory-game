@@ -1,11 +1,22 @@
 import { isPlatformBrowser } from '@angular/common'
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core'
+import { AngularFireAuth } from '@angular/fire/auth'
+import {
+  AngularFirestore,
+  AngularFirestoreDocument
+} from '@angular/fire/firestore'
+import firebase from 'firebase/app'
+import { Subscription } from 'rxjs'
+import { shareReplay } from 'rxjs/operators'
+import { AuthService } from '../auth/auth.service'
 
 import { createTime } from '../create-time/create-time'
 import { DatabaseService } from '../database/database.service'
+import { environment } from '../environments/environment'
 import { GameService } from '../game/game.service'
 import { Statistic } from '../statistic/statistic'
 import { Count, IStatistic, Match, Mode } from '../statistic/statistic.d'
+import { User } from '../user/user'
 import { isNullOrUndefined } from '../utilities/is-null-or-undefined'
 
 /**
@@ -17,6 +28,8 @@ export abstract class Score {
    * Holder for `scores`
    */
   private _scores: Statistic[]
+
+  private oldUser: string
 
   /**
    * Indexeddb Store Name
@@ -44,12 +57,17 @@ export abstract class Score {
   constructor(
     @Inject(PLATFORM_ID) readonly platformId: string,
     protected database: DatabaseService,
-    protected game: GameService
+    protected game: GameService,
+
+    private auth: AuthService,
+    private angularFireAuth: AngularFireAuth,
+    private angularFirestore: AngularFirestore
   ) {
     this.dataChange = new EventEmitter<string>()
 
     if (isPlatformBrowser(platformId)) {
       this.getScores(0)
+      this.subFirestore()
     }
   }
 
@@ -135,9 +153,9 @@ export abstract class Score {
   public sort(arg1?: Statistic[]): Statistic[] {
     if (isNullOrUndefined(arg1)) {
       return this.scores.sort(this.compare)
-    } else {
-      return arg1.sort(this.compare)
     }
+
+    return arg1.sort(this.compare)
   }
 
   /**
@@ -302,6 +320,9 @@ export abstract class Score {
 
           add = Statistic.toJSON(statistic)
 
+          // Firebase testing
+          this.addFirebase(add)
+
           objectStore = this.database.database
             .transaction(this.storeName, 'readwrite')
             .objectStore(this.storeName)
@@ -328,6 +349,114 @@ export abstract class Score {
         }
       }
     )
+  }
+
+  // Firebase testing
+  private async addFirebase(statistic: IStatistic): Promise<void> {
+    if (!environment.production) {
+      let currentUser: firebase.User
+      currentUser = await this.angularFireAuth.currentUser
+
+      if (currentUser) {
+        let firestore: 'high-scores' | 'recent-scores'
+
+        if (this.storeName === 'highScores') {
+          firestore = 'high-scores'
+        } else {
+          firestore = 'recent-scores'
+        }
+
+        let doc: AngularFirestoreDocument<firebase.firestore.DocumentData>
+        doc = this.angularFirestore
+          .doc<User>(`users/${currentUser.uid}`)
+          .collection<firebase.firestore.DocumentData>(firestore)
+          .doc()
+
+        statistic.createdAt = (firebase.firestore.FieldValue.serverTimestamp() as unknown) as string
+        statistic.sid = doc.ref.id
+        statistic.uid = currentUser.uid
+
+        doc.set(statistic, { merge: true })
+      }
+    }
+  }
+
+  // Firebase testing
+  private subFirestore(): void {
+    if (environment.production) {
+      return
+    }
+    let sub: Subscription
+
+    this.auth.user$.subscribe(currentUser => {
+      // Current user is null
+      if (currentUser == null) {
+        // Current user is null and so is oldUser
+        // tslint:disable-next-line: triple-equals
+        if ((currentUser as null) == this.oldUser) {
+          return
+        }
+
+        // Make them equal
+        this.oldUser = null
+
+        // Unsubscribe because user is null
+        if (sub) {
+          sub.unsubscribe()
+        }
+
+        // Don't continue
+        return
+      }
+
+      // User just signed up so uid is null
+      if (!currentUser.uid) {
+        // oldUser is also null
+        if (this.oldUser == null) {
+          return
+        }
+
+        // Make oldUser equal null because uid is null right now
+        this.oldUser = null
+
+        // Unsubscribe because user is null
+        if (sub) {
+          sub.unsubscribe()
+        }
+
+        // Don't continue
+        return
+      }
+
+      // Don't continue because the user didn't change
+      // tslint:disable-next-line: triple-equals
+      if (currentUser.uid == this.oldUser) {
+        return
+      }
+
+      // Make them equal
+      this.oldUser = currentUser.uid
+
+      // Actual subscribing following this point
+      let firestore: 'high-scores' | 'recent-scores'
+
+      if (this.storeName === 'highScores') {
+        firestore = 'high-scores'
+      } else {
+        firestore = 'recent-scores'
+      }
+
+      sub = this.angularFirestore
+        .doc<User>(`users/${currentUser.uid}`)
+        .collection<firebase.firestore.DocumentData>(firestore)
+        .valueChanges()
+        .pipe<firebase.firestore.DocumentData[]>(
+          shareReplay<firebase.firestore.DocumentData[]>(1)
+        )
+        .subscribe((value: firebase.firestore.DocumentData[]): void => {
+          console.log(value)
+        })
+    })
   }
 
   /**

@@ -1,0 +1,20 @@
+<ng-container *ngIf="isAnonymous">
+  <button type="button" (click)="authService.providerSignin('Facebook')">
+    Link with Facebook
+  </button>
+  <button type="button" (click)="authService.providerSignin('Github')">
+    Link with GitHub
+  </button>
+  <button type="button" (click)="authService.providerSignin('Google')">
+    Link with Google
+  </button>
+  <button type="button" (click)="authService.providerSignin('Microsoft')">
+    Link with Microsoft
+  </button>
+  <button type="button" (click)="authService.providerSignin('Twitter')">
+    Link with Twitter
+  </button>
+  <button type="button" (click)="authService.providerSignin('Yahoo')">
+    Link with Yahoo
+  </button>
+</ng-container>

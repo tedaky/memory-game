@@ -43,6 +43,8 @@ testem.log
 
 # Firebase
 .firebaserc
+firestore-debug.log
+ui-debug.log
 
 # Angular environment
 /**/environments/environment.ts

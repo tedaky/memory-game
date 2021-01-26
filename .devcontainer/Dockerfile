@@ -17,6 +17,19 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
 RUN apt-get update && apt-get install -y google-chrome-stable
 
+# Install OpenJDK-8
+RUN apt-get update && apt-get install -y openjdk-11-jre
+
+# Fix certificate issues
+RUN apt-get update && \
+    apt-get install ca-certificates-java && \
+    apt-get clean && \
+    update-ca-certificates -f
+
+# Setup JAVA_HOME -- useful for docker commandline
+ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64/
+RUN export JAVA_HOME
+
 # Update args in docker-compose.yaml to set the UID/GID of the "node" user.
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID

@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
 
 import { LeaderboardComponent } from './leaderboard.component'
@@ -19,11 +18,9 @@ import { ROUTE_TOKEN, translateModuleOptions } from '../translate-loader/transla
     FormsModule,
     LeaderboardRoutingModule,
     MaterialModule,
-    RouterModule,
     TranslateModule.forChild(translateModuleOptions)
   ],
   providers: [{ provide: ROUTE_TOKEN, useValue: 'leaderboard' }],
-  entryComponents: [LeaderboardComponent],
   bootstrap: [LeaderboardComponent]
 })
 /**

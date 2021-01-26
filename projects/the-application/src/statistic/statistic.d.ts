@@ -32,6 +32,26 @@ export interface IStatistic {
    * KeyID
    */
   keyID?: number
+  /**
+   * Computed time of Complete
+   */
+  completeComputed?: number
+  /**
+   * Computed time of Memory
+   */
+  memoryComputed?: number
+  /**
+   * Server Created Time Stamp
+   */
+  createdAt?: Date | number | string
+  /**
+   * User that owns this statistic
+   */
+  uid?: string
+  /**
+   * Statistic ID
+   */
+  sid?: string
 }
 
 /**

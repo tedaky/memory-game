@@ -46,7 +46,10 @@ export class AuthService {
               .pipe<User, User>(
                 map<User, User>(
                   (u: User): User => {
-                    u.providerData = user.providerData
+                    if (u) {
+                      u.providerData = user.providerData
+                    }
+
                     return u
                   }
                 ),
@@ -110,7 +113,9 @@ export class AuthService {
         this.credential = await firebase.auth().signInAnonymously()
       }
 
-      this.findErrorDialog.close()
+      if (this.findErrorDialog) {
+        this.findErrorDialog.close()
+      }
 
       return this.updateUserData(this.credential.user)
     } catch (e) {

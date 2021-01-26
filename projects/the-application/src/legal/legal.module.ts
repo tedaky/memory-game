@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
-import { RouterModule } from '@angular/router'
 
 import { LegalComponent } from './legal.component'
 import { CookiePolicyComponent } from './cookie-policy/cookie-policy.component'
@@ -18,6 +17,6 @@ import { MaterialModule } from '../material/material.module'
     PrivacyPolicyComponent,
     TermsOfServiceComponent
   ],
-  imports: [CommonModule, LegalRoutingModule, MaterialModule, RouterModule]
+  imports: [CommonModule, LegalRoutingModule, MaterialModule]
 })
 export class LegalModule {}

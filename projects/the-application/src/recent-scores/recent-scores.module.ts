@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
-import { RouterModule } from '@angular/router'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 import { RecentScoresComponent } from './recent-scores.component'
@@ -24,11 +23,9 @@ import {
     FormsModule,
     MaterialModule,
     RecentScoresRoutingModule,
-    RouterModule,
     TranslateModule.forChild(translateModuleOptions)
   ],
   providers: [{ provide: ROUTE_TOKEN, useValue: 'recent-scores' }],
-  entryComponents: [RecentScoresComponent],
   bootstrap: [RecentScoresComponent]
 })
 /**

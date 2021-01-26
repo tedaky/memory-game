@@ -3,5 +3,6 @@ export enum RouteLoction {
   HighScores = 'high-scores.html',
   Leaderboard = 'leaderboard.html',
   RecentScores = 'recent-scores.html',
-  Settings = 'settings.html'
+  Settings = 'settings.html',
+  Account = 'account.html'
 }

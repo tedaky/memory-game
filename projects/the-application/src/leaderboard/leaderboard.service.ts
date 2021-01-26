@@ -1,5 +1,8 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core'
+import { AngularFireAuth } from '@angular/fire/auth'
+import { AngularFirestore } from '@angular/fire/firestore'
 
+import { AuthService } from '../auth/auth.service'
 import { DatabaseService } from '../database/database.service'
 import { GameService } from '../game/game.service'
 import { Score } from '../score/score'
@@ -26,8 +29,11 @@ export class LeaderboardService extends Score {
   constructor(
     @Inject(PLATFORM_ID) readonly platformId: string,
     database: DatabaseService,
-    game: GameService
+    game: GameService,
+    auth: AuthService,
+    angularFireAuth: AngularFireAuth,
+    angularFirestore: AngularFirestore
   ) {
-    super(platformId, database, game)
+    super(platformId, database, game, auth, angularFireAuth, angularFirestore)
   }
 }

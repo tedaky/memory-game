@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
-import { RouterModule } from '@angular/router'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 import { GameComponent } from '../game/game.component'
@@ -25,11 +24,9 @@ import { StopwatchService } from '../stopwatch/stopwatch.service'
     CommonModule,
     GameRoutingModule,
     MaterialModule,
-    RouterModule,
     TranslateModule.forChild(translateModuleOptions)
   ],
   providers: [{ provide: ROUTE_TOKEN, useValue: 'game' }, StopwatchService],
-  entryComponents: [GameEndComponent],
   bootstrap: [GameComponent]
 })
 /**
