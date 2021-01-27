@@ -2,50 +2,50 @@
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.154.2/containers/javascript-node-mongo
 // Update the VARIANT arg in docker-compose.yml to pick a Node.js version: 10, 12, 14
 {
-	"name": "Memory Game",
-	"dockerComposeFile": "docker-compose.yml",
-	"service": "app",
-	"workspaceFolder": "/workspace",
+  "name": "Memory Game",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
 
-	// Set *default* container specific settings.json values on container create.
-	"settings": {
-		"terminal.integrated.shell.linux": "/bin/bash"
-	},
+  // Set *default* container specific settings.json values on container create.
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
 
-	// Add the IDs of extensions you want installed when the container is created.
-	"extensions": [
-		"aaron-bond.better-comments",
-		"angular.ng-template",
-		"auchenberg.vscode-browser-preview",
-		"dbaeumer.vscode-eslint",
-		"eamodio.gitlens",
-		"editorconfig.editorconfig",
-		"esbenp.prettier-vscode",
-		"firefox-devtools.vscode-firefox-debug",
-		"formulahendry.auto-rename-tag",
-		"humao.rest-client",
-		"johnpapa.angular2",
-		"jsayol.firebase-explorer",
-		"mongodb.mongodb-vscode",
-		"mechatroner.rainbow-csv",
-		"ms-vscode.vscode-typescript-tslint-plugin",
-		"ms-vsliveshare.vsliveshare",
-		"msjsdiag.debugger-for-chrome",
-		"oderwat.indent-rainbow",
-		"redhat.vscode-yaml",
-		"ritwickdey.liveserver",
-		"toba.vsfire",
-		"visualstudioexptteam.vscodeintellicode",
-		"vscode-icons-team.vscode-icons",
-		"yzhang.markdown-all-in-one"
-	],
+  // Add the IDs of extensions you want installed when the container is created.
+  "extensions": [
+    "aaron-bond.better-comments",
+    "angular.ng-template",
+    "auchenberg.vscode-browser-preview",
+    "dbaeumer.vscode-eslint",
+    "eamodio.gitlens",
+    "editorconfig.editorconfig",
+    "esbenp.prettier-vscode",
+    "firefox-devtools.vscode-firefox-debug",
+    "formulahendry.auto-rename-tag",
+    "humao.rest-client",
+    "johnpapa.angular2",
+    "jsayol.firebase-explorer",
+    "mongodb.mongodb-vscode",
+    "mechatroner.rainbow-csv",
+    "ms-vscode.vscode-typescript-tslint-plugin",
+    "ms-vsliveshare.vsliveshare",
+    "msjsdiag.debugger-for-chrome",
+    "oderwat.indent-rainbow",
+    "redhat.vscode-yaml",
+    "ritwickdey.liveserver",
+    "toba.vsfire",
+    "visualstudioexptteam.vscodeintellicode",
+    "vscode-icons-team.vscode-icons",
+    "yzhang.markdown-all-in-one"
+  ],
 
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [3000, 4200, 5001, 5002, 5500, 8080, 8081, 9099, 27017],
+  // Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "forwardPorts": [3000, 4200, 5001, 5002, 5500, 8080, 8081, 9099, 27017],
 
-	// Use 'postCreateCommand' to run commands after the container is created.
-	"postCreateCommand": "npm install",
+  // Use 'postCreateCommand' to run commands after the container is created.
+  "postCreateCommand": "npm install",
 
-	// Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "node"
+  // Comment out connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
+  "remoteUser": "node"
 }
