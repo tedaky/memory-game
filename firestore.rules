@@ -6,19 +6,19 @@ service cloud.firestore {
     }
 
     match /users/{uid} {
-    	allow read, write: if isOwner(uid);
+      allow read, write: if isOwner(uid);
     }
 
     match /users/{uid}/high-scores/{sid} {
-    	allow read, write: if isOwner(uid);
+      allow read, write: if isOwner(uid);
     }
 
     match /users/{uid}/recent-scores/{sid} {
-    	allow read, write: if isOwner(uid);
+      allow read, write: if isOwner(uid);
     }
 
     match /leaderboard/{sid} {
-    	allow read: if request.auth;
+      allow read: if request.auth;
     }
 
     function isOwner(uid) {
