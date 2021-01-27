@@ -14,11 +14,10 @@
 
 	// Add the IDs of extensions you want installed when the container is created.
 	"extensions": [
-		"dbaeumer.vscode-eslint",
-		"mongodb.mongodb-vscode",
 		"aaron-bond.better-comments",
 		"angular.ng-template",
 		"auchenberg.vscode-browser-preview",
+		"dbaeumer.vscode-eslint",
 		"eamodio.gitlens",
 		"editorconfig.editorconfig",
 		"esbenp.prettier-vscode",
@@ -26,6 +25,8 @@
 		"formulahendry.auto-rename-tag",
 		"humao.rest-client",
 		"johnpapa.angular2",
+		"jsayol.firebase-explorer",
+		"mongodb.mongodb-vscode",
 		"mechatroner.rainbow-csv",
 		"ms-vscode.vscode-typescript-tslint-plugin",
 		"ms-vsliveshare.vsliveshare",
@@ -33,6 +34,7 @@
 		"oderwat.indent-rainbow",
 		"redhat.vscode-yaml",
 		"ritwickdey.liveserver",
+		"toba.vsfire",
 		"visualstudioexptteam.vscodeintellicode",
 		"vscode-icons-team.vscode-icons",
 		"yzhang.markdown-all-in-one"
