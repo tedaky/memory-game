@@ -46,11 +46,47 @@ export class AuthService {
               .pipe<User, User>(
                 map<User, User>(
                   (u: User): User => {
+                    let data: User
+
                     if (u) {
-                      u.providerData = user.providerData
+                      data = {} as User
+                      const {
+                        displayName,
+                        email,
+                        metadata: { creationTime, lastSignInTime },
+                        providerData,
+                        phoneNumber,
+                        photoURL,
+                        uid
+                      } = user
+
+                      if (displayName) {
+                        data.displayName = displayName
+                      }
+                      if (email) {
+                        data.email = email
+                      }
+                      if (creationTime) {
+                        data.creationTime = creationTime
+                      }
+                      if (lastSignInTime) {
+                        data.lastSignInTime = lastSignInTime
+                      }
+                      if (providerData) {
+                        data.providerData = providerData
+                      }
+                      if (phoneNumber) {
+                        data.phoneNumber = phoneNumber
+                      }
+                      if (photoURL) {
+                        data.photoURL = photoURL
+                      }
+                      if (uid) {
+                        data.uid = uid
+                      }
                     }
 
-                    return u
+                    return data ?? u
                   }
                 ),
                 shareReplay<User>(1)
@@ -86,22 +122,6 @@ export class AuthService {
     return new firebase.auth[`${whichProvider}AuthProvider`]()
   }
 
-  private updateUserData(user: firebase.User): Promise<void> {
-    let userRef: AngularFirestoreDocument<User>
-    let data: User
-
-    userRef = this.angularFirestore.doc<User>(`users/${user.uid}`)
-
-    data = {
-      displayName: user.displayName,
-      email: user.email,
-      photoURL: user.photoURL,
-      uid: user.uid
-    }
-
-    return userRef.set(data, { merge: true })
-  }
-
   public async providerSignin(whichProvider: string): Promise<void> {
     try {
       if (whichProvider) {
@@ -117,7 +137,7 @@ export class AuthService {
         this.findErrorDialog.close()
       }
 
-      return this.updateUserData(this.credential.user)
+      return
     } catch (e) {
       if (this.dialog.openDialogs.length) {
         let modal: MatDialogRef<ErrorNoticeComponent>

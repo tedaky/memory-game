@@ -1,11 +1,14 @@
 # Compiled JavaScript files
-lib/**/*.js
-lib/**/*.js.map
+lib/
+
+# Keys
+adminsdk.key.json
+
+# Environment
+environment.ts
 
 # Logs
-firebase-debug.log
-firestore-debug.log
-ui-debug.log
+*-debug.log
 
 # TypeScript v1 declaration files
 typings/

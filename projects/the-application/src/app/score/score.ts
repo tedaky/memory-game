@@ -366,17 +366,15 @@ export abstract class Score {
           firestore = 'recent-scores'
         }
 
-        let doc: AngularFirestoreDocument<firebase.firestore.DocumentData>
-        doc = this.angularFirestore
-          .doc<User>(`users/${currentUser.uid}`)
-          .collection<firebase.firestore.DocumentData>(firestore)
-          .doc()
+        if (firestore === 'recent-scores') {
+          let doc: AngularFirestoreDocument<firebase.firestore.DocumentData>
+          doc = this.angularFirestore
+            .doc<User>(`users/${currentUser.uid}`)
+            .collection<firebase.firestore.DocumentData>(firestore)
+            .doc()
 
-        statistic.createdAt = (firebase.firestore.FieldValue.serverTimestamp() as unknown) as string
-        statistic.sid = doc.ref.id
-        statistic.uid = currentUser.uid
-
-        doc.set(statistic, { merge: true })
+          doc.set(statistic, { merge: true })
+        }
       }
     }
   }
@@ -454,7 +452,7 @@ export abstract class Score {
           shareReplay<firebase.firestore.DocumentData[]>(1)
         )
         .subscribe((value: firebase.firestore.DocumentData[]): void => {
-          console.log(value)
+          // console.log(value)
         })
     })
   }

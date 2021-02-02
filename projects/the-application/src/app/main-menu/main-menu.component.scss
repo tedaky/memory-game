@@ -7,9 +7,11 @@
   align-items: center;
   background-color: rgba(255, 255, 255, 0.5);
   display: flex;
+  left: 0;
+  bottom: 0;
   height: 40px;
   justify-content: space-around;
-  position: relative;
+  position: fixed;
   width: calc(100% - env(safe-area-inset-left) - env(safe-area-inset-right));
   z-index: 2;
 }

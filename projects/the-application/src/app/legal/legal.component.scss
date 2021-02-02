@@ -16,3 +16,22 @@ mat {
     }
   }
 }
+
+[fragment] {
+  cursor: pointer;
+  outline: none;
+
+  mat-icon {
+    margin-top: -3px;
+    opacity: 0.25;
+    vertical-align: middle;
+    transition: opacity 350ms;
+    will-change: opacity;
+  }
+
+  &:hover {
+    mat-icon {
+      opacity: 1;
+    }
+  }
+}
