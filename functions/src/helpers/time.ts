@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import { ITime } from '../interfaces/statistics'
 
 /**
@@ -8,12 +9,12 @@ const memoryAugment = 4
 /**
  * Combine time of `hours`, `minutes`, `seconds`, `milliseconds` for comparison.
  *
- * @param time `Time`
+ * @param {ITime} time
+ *
+ * @return {number}
  */
 export function createTime(time: ITime): number {
-  let result: number
-
-  result =
+  const result: number =
     (time.milliseconds || 0) +
     (time.seconds || 0) * 1000 +
     (time.minutes || 0) * 60 * 1000 +
@@ -25,9 +26,11 @@ export function createTime(time: ITime): number {
 /**
  * Compute the time of memory and completion.
  *
- * @param complete `ITime` Time it took to complete the game
- * @param memory `ITime` Time it took for memory
+ * @param {ITime} complete Time it took to complete the game
+ * @param {ITime} memory  Time it took for memory
+ *
+ * @return {number}
  */
-export function computeTime(complete: ITime, memory: ITime) {
+export function computeTime(complete: ITime, memory: ITime): number {
   return createTime(complete) + createTime(memory) * memoryAugment
 }

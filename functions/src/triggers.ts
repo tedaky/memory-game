@@ -2,6 +2,7 @@ import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 
 import { computeTime } from './helpers/time'
+// eslint-disable-next-line no-unused-vars
 import { IStatistic } from './interfaces/statistics'
 
 export const firestore = admin.firestore()
@@ -71,7 +72,7 @@ export const onCreateScore = functions.firestore
 
       highScoreRef.set({ ...data, sid: highScoreRef.id }, { merge: true })
 
-      firestore.doc(`users/${uid}`).collection(`high-scores`)
+      firestore.doc(`users/${uid}`).collection('high-scores')
 
       return snapshot.ref.set({ ...data, sid: sid }, { merge: true })
     }
