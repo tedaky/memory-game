@@ -127,6 +127,19 @@ export class AuthService {
     )
   }
 
+  private async unlinkProvider(
+    provider: firebase.auth.AuthProvider
+  ): Promise<firebase.User> {
+    let currentUser: firebase.User
+    currentUser = await this.angularFireAuth.currentUser
+
+    if (currentUser) {
+      if (currentUser.providerData?.length > 1) {
+        return await currentUser.unlink(provider.providerId)
+      }
+    }
+  }
+
   private async getCredential(
     provider: firebase.auth.AuthProvider
   ): Promise<firebase.auth.UserCredential> {
