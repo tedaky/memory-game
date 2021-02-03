@@ -11,7 +11,7 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: `${redirect() || 'en'}/${RouteLoction.Game}`
+    redirectTo: `${redirect() || 'en'}/login`
   },
   {
     path: 'legal',
@@ -30,7 +30,7 @@ const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: `${redirect() || 'en'}/${RouteLoction.Game}`
+    redirectTo: `${redirect() || 'en'}/login`
   }
 ]
 

@@ -1,0 +1,18 @@
+:host {
+  display: block;
+  padding: 8px;
+}
+
+h1 {
+  margin-bottom: 0;
+}
+
+mat {
+  &-card {
+    background-color: rgba(255, 255, 255, 0.75);
+
+    &:not(:last-of-type) {
+      margin-bottom: 16px;
+    }
+  }
+}

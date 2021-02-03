@@ -34,7 +34,7 @@ import { ROUTE_TOKEN } from '../translate-loader/translate-browser.loader'
     ErrorNoticeComponent,
     InstallComponent,
     MainMenuComponent,
-    RootComponent
+    RootComponent,
   ],
   imports: [
     BrowserAnimationsModule,

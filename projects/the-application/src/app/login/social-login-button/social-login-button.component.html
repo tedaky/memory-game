@@ -1,0 +1,16 @@
+<button
+  type="button"
+  mat-flat-button
+  (click)="authService.providerSignin(provider)"
+  [ngClass]="name"
+  class="mat-elevation-z3"
+  [ngStyle]="{ borderColor: colour }"
+>
+  <div>
+    <mat-icon [svgIcon]="name" aria-hidden="false"></mat-icon>
+    <ng-container *ngIf="name !== 'anonymous'; else guest">
+      Login with {{ display }}
+    </ng-container>
+    <ng-template #guest>Continue as a Guest</ng-template>
+  </div>
+</button>

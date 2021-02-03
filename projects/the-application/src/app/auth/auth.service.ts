@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { AngularFireAuth } from '@angular/fire/auth'
-import {
-  AngularFirestore,
-  AngularFirestoreDocument
-} from '@angular/fire/firestore'
+import { AngularFirestore } from '@angular/fire/firestore'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import firebase from 'firebase/app'
 import { Observable, of } from 'rxjs'
@@ -12,6 +9,8 @@ import { map, shareReplay, switchMap } from 'rxjs/operators'
 
 import { User } from '../user/user'
 import { ErrorNoticeComponent } from '../error-notice/error-notice.component'
+import { redirect } from '../redirect/redirect'
+import { RouteLoction } from '../route-location/route-location'
 
 @Injectable({
   providedIn: 'root'
@@ -86,7 +85,7 @@ export class AuthService {
                       }
                     }
 
-                    return data ?? u
+                    return data ?? u ?? user
                   }
                 ),
                 shareReplay<User>(1)
@@ -137,6 +136,7 @@ export class AuthService {
         this.findErrorDialog.close()
       }
 
+      this.router.navigate(['/', redirect(), RouteLoction.Game])
       return
     } catch (e) {
       if (this.dialog.openDialogs.length) {
