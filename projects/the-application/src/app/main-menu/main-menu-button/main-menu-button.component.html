@@ -1,0 +1,21 @@
+<a
+  mat-button
+  [attr.aria-label]="label"
+  disableRipple="true"
+  (click)="signalTheme($event, theme, rla)"
+  [routerLink]="['/', language.lang | async, route]"
+  routerLinkActive="router-link-active"
+  #rla="routerLinkActive"
+>
+  <mat-icon
+    aria-hidden="false"
+    [fontSet]="rla.isActive ? 'material-icons-outlined' : 'material-icons'"
+    [color]="rla.isActive ? 'primary' : ''"
+    [attr.aria-label]="label | translate"
+  >
+    {{ icon }}
+  </mat-icon>
+  <span>
+    {{ label | translate }}
+  </span>
+</a>

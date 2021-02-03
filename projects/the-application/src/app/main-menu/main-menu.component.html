@@ -1,23 +1,18 @@
 <ng-container *ngFor="let menu of menuButtons; trackBy: trackBy">
-  <a
-    mat-button
-    [attr.aria-label]="menu.label"
-    disableRipple="true"
-    (click)="setTheme($event, menu.theme, rla)"
-    [routerLink]="['/', language.lang | async, menu.route]"
-    routerLinkActive="router-link-active"
-    #rla="routerLinkActive"
-  >
-    <mat-icon
-      aria-hidden="false"
-      [fontSet]="rla.isActive ? 'material-icons-outlined' : 'material-icons'"
-      [color]="rla.isActive ? 'primary' : ''"
-      [attr.aria-label]="menu.label | translate"
-    >
-      {{ menu.icon }}
-    </mat-icon>
-    <span>
-      {{ menu.label | translate }}
-    </span>
-  </a>
+  <app-main-menu-button
+    [icon]="menu.icon"
+    [label]="menu.label"
+    [route]="menu.route"
+    [theme]="menu.theme"
+    (setTheme)="setTheme($event)"
+  ></app-main-menu-button>
+</ng-container>
+<ng-container *ngIf="auth.user$ | async">
+  <app-main-menu-button
+    [icon]="accountButton.icon"
+    [label]="accountButton.label"
+    [route]="accountButton.route"
+    [theme]="accountButton.theme"
+    (setTheme)="setTheme($event)"
+  ></app-main-menu-button>
 </ng-container>

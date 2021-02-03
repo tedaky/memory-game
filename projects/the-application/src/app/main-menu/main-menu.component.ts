@@ -37,23 +37,16 @@ export class MainMenuComponent implements OnInit, OnDestroy {
 
   @Input() public ripple: MatRipple
 
+  public accountButton: MenuButton
+
   constructor(
     @Inject(PLATFORM_ID) private readonly platformId: string,
-    private auth: AuthService,
     private game: GameService,
-    public language: LanguageService,
+    public auth: AuthService,
     public theme: ThemeService
   ) {}
 
-  private lang(): void {
-    this.sub = this.language.lang.subscribe((val: string): void => {
-      this.lan = val
-    })
-  }
-
   public ngOnInit(): void {
-    this.lang()
-
     this.menuButtons = []
 
     const game = new MenuButton(
@@ -86,9 +79,16 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       `${RouteLoction.Settings}`,
       'theme-purple'
     )
+    const account = new MenuButton(
+      'account_circle',
+      'ACCOUNT',
+      `${RouteLoction.Account}`,
+      'theme-green'
+    )
 
     // this.menuButtons = [game, highScores, recentScores, leaderboard, settings]
     this.menuButtons = [game, highScores, recentScores, settings]
+    this.accountButton = account
   }
 
   private launchRipple(x: number, y: number, colour: string): void {
@@ -103,13 +103,11 @@ export class MainMenuComponent implements OnInit, OnDestroy {
       .fadeOut()
   }
 
-  public async setTheme(
-    event: MouseEvent,
-    theme: string,
-    routerLinkActive: RouterLinkActive
-  ): Promise<void> {
-    event.preventDefault()
-
+  public async setTheme([event, theme, routerLinkActive]: [
+    MouseEvent,
+    string,
+    RouterLinkActive
+  ]): Promise<void> {
     if (
       routerLinkActive.isActive ||
       this.game.playing.value ||

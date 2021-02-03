@@ -11,8 +11,8 @@ import { ServiceWorkerModule } from '@angular/service-worker'
 import { TranslateService } from '@ngx-translate/core'
 
 import { RootComponent } from './root.component'
+import { RoutingModule } from './routing.module'
 import { CheckForUpdateComponent } from '../check-for-update/check-for-update.component'
-import { environment } from '../../environments/environment'
 import { ErrorNoticeComponent } from '../error-notice/error-notice.component'
 import { FirebaseModule } from '../firebase/firebase.module'
 import { InstallComponent } from '../install/install.component'
@@ -20,10 +20,11 @@ import { LanguageModule } from '../language/language.module'
 import { LanguageService } from '../language/language.service'
 import { LocaleModule } from '../locale/locale.module'
 import { MainMenuComponent } from '../main-menu/main-menu.component'
+import { MainMenuButtonComponent } from '../main-menu/main-menu-button/main-menu-button.component'
 import { MaterialModule } from '../material/material.module'
 import { redirect } from '../redirect/redirect'
-import { RoutingModule } from './routing.module'
 import { ROUTE_TOKEN } from '../translate-loader/translate-browser.loader'
+import { environment } from '../../environments/environment'
 
 /**
  * Entry Module
@@ -33,8 +34,9 @@ import { ROUTE_TOKEN } from '../translate-loader/translate-browser.loader'
     CheckForUpdateComponent,
     ErrorNoticeComponent,
     InstallComponent,
+    MainMenuButtonComponent,
     MainMenuComponent,
-    RootComponent,
+    RootComponent
   ],
   imports: [
     BrowserAnimationsModule,
