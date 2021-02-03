@@ -5,7 +5,7 @@ import { AngularFirestore } from '@angular/fire/firestore'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import firebase from 'firebase/app'
 import { Observable, of } from 'rxjs'
-import { map, shareReplay, switchMap } from 'rxjs/operators'
+import { map, shareReplay, switchMap, tap } from 'rxjs/operators'
 
 import { User } from '../user/user'
 import { ErrorNoticeComponent } from '../error-notice/error-notice.component'
@@ -34,8 +34,35 @@ export class AuthService {
     this.createUser()
   }
 
+  private navigate(user: firebase.User): void {
+    if (!user) {
+      // Routes availble to Unauthenticated user
+      if (
+        this.router.url.includes('login') ||
+        this.router.url.includes('legal')
+      ) {
+        // Return. No need to redirect
+        return
+      }
+      // Go to login because user is no longer authenticated
+      this.router.navigate(['/', redirect(), 'login'])
+    }
+
+    // Routes availble to Authenticated user
+    if (!this.router.url.includes('login')) {
+      // Return. No need to redirect
+      return
+    }
+
+    // Go to game because user is Authenticated
+    this.router.navigate(['/', redirect(), RouteLoction.Game])
+  }
+
   private createUser(): void {
-    this.user$ = this.angularFireAuth.authState.pipe<User, User>(
+    this.user$ = this.angularFireAuth.authState.pipe<firebase.User, User, User>(
+      tap<firebase.User>((user: firebase.User): void => {
+        this.navigate(user)
+      }),
       switchMap<firebase.User, Observable<User>>(
         (user: firebase.User): Observable<User> => {
           if (user) {
@@ -48,7 +75,9 @@ export class AuthService {
                     let data: User
 
                     if (u) {
+                      // Assign data
                       data = {} as User
+                      // Extract from user
                       const {
                         displayName,
                         email,
@@ -105,9 +134,11 @@ export class AuthService {
     currentUser = await this.angularFireAuth.currentUser
 
     if (currentUser) {
+      // Link the provider with the current user
       return await currentUser.linkWithPopup(provider)
     }
 
+    // Sign the user in
     return await this.angularFireAuth.signInWithPopup(provider)
   }
 
@@ -135,9 +166,6 @@ export class AuthService {
       if (this.findErrorDialog) {
         this.findErrorDialog.close()
       }
-
-      this.router.navigate(['/', redirect(), RouteLoction.Game])
-      return
     } catch (e) {
       if (this.dialog.openDialogs.length) {
         let modal: MatDialogRef<ErrorNoticeComponent>
@@ -157,9 +185,8 @@ export class AuthService {
     }
   }
 
-  public async signout(): Promise<boolean> {
+  public async signout(): Promise<void> {
     await this.angularFireAuth.signOut()
     this.credential = null
-    return this.router.navigate(['/'])
   }
 }
