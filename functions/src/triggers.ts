@@ -1,6 +1,7 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 
+import { deleteCollection } from './helpers/deleteCollection'
 import { computeTime } from './helpers/time'
 // eslint-disable-next-line no-unused-vars
 import { IStatistic } from './interfaces/statistics'
@@ -8,68 +9,10 @@ import { IStatistic } from './interfaces/statistics'
 const firestore = admin.firestore()
 
 /**
- * Delete the Collection
- *
- * @param {string} collectionPath `string` the path of the collection
- * @param {number} batchSize `number` the size to delete at one time
- */
-async function deleteCollection(
-  collectionPath: string,
-  batchSize: number
-): Promise<void> {
-  const collectionRef = firestore.collection(collectionPath)
-  const query = collectionRef.orderBy('__name__').limit(batchSize)
-
-  return new Promise(
-    (resolve: (value?: any) => void, reject: (reason?: any) => void): void => {
-      deleteQueryBatch(query, resolve).catch(reject)
-    }
-  )
-}
-
-/**
- * Delete the Query Batch
- *
- * @param {FirebaseFirestore.Query<FirebaseFirestore.DocumentData>} query
- * @param {()} resolve
- */
-async function deleteQueryBatch(
-  query: FirebaseFirestore.Query<FirebaseFirestore.DocumentData>,
-  resolve: (value?: any) => void
-) {
-  const snapshot = await query.get()
-
-  const batchSize = snapshot.size
-  if (batchSize === 0) {
-    // When there are no documents left, we are done
-    resolve()
-    return
-  }
-
-  // Delete documents in a batch
-  const batch = firestore.batch()
-  snapshot.docs.forEach(
-    (
-      // eslint-disable-next-line max-len
-      doc: FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData>
-    ): void => {
-      batch.delete(doc.ref)
-    }
-  )
-  await batch.commit()
-
-  // Recurse on the next process tick, to avoid
-  // exploding the stack.
-  process.nextTick((): void => {
-    deleteQueryBatch(query, resolve)
-  })
-}
-
-/**
  * Respond to when a user is created and add aditional information
  *
- * @param user `admin.auth.UserRecord`
- * @param context `functions.EventContext`
+ * @param {admin.auth.UserRecord} user
+ * @param {functions.EventContext} context
  */
 export const onCreateUser = functions.auth.user().onCreate(
   (
@@ -104,8 +47,8 @@ export const onCreateUser = functions.auth.user().onCreate(
 /**
  * Respond to when a user is deleted and remove the user collection
  *
- * @param user `admin.auth.UserRecord`
- * @param context `functions.EventContext`
+ * @param {admin.auth.UserRecord} user
+ * @param {functions.EventContext} context
  */
 export const onDeleteUser = functions.auth.user().onDelete(
   async (
@@ -113,9 +56,22 @@ export const onDeleteUser = functions.auth.user().onDelete(
     context: functions.EventContext
   ): Promise<FirebaseFirestore.WriteResult> => {
     const userRef = firestore.doc(`users/${user.uid}`)
+    const userCollections = await userRef.listCollections()
 
-    await deleteCollection(`users/${user.uid}/high-scores`, 50)
-    await deleteCollection(`users/${user.uid}/recent-scores`, 50)
+    if (userCollections.length) {
+      userCollections.forEach(
+        async (
+          // eslint-disable-next-line max-len
+          collection: FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData>
+        ): Promise<void> => {
+          await deleteCollection(
+            firestore,
+            `users/${user.uid}/${collection.id}`,
+            50
+          )
+        }
+      )
+    }
 
     return userRef.delete()
   }
@@ -124,13 +80,13 @@ export const onDeleteUser = functions.auth.user().onDelete(
 /**
  * Respond to when a user completes a game
  *
- * @param snapshot `functions.firestore.QueryDocumentSnapshot`
- * @param context `functions.EventContext`
+ * @param {functions.firestore.QueryDocumentSnapshot} snapshot
+ * @param {functions.EventContext} context
  */
 export const onCreateScore = functions.firestore
   .document('users/{uid}/recent-scores/{sid}')
   .onCreate(
-    (
+    async (
       snapshot: functions.firestore.QueryDocumentSnapshot,
       context: functions.EventContext
     ): Promise<FirebaseFirestore.WriteResult> => {
@@ -149,15 +105,47 @@ export const onCreateScore = functions.firestore
 
       data.computed = computeTime(data.complete, data.memory)
 
-      const highScoreRef = firestore
-        .doc(`users/${uid}`)
-        .collection('high-scores')
-        .doc()
+      // Clean up the recent scores
+      await userRecentScoresCleanup(uid, data.count, data.mode, data.match)
 
-      highScoreRef.set({ ...data, sid: highScoreRef.id }, { merge: true })
-
-      firestore.doc(`users/${uid}`).collection('high-scores')
-
-      return snapshot.ref.set({ ...data, sid: sid }, { merge: true })
+      // Update the newly added score
+      return await snapshot.ref.set({ ...data, sid: sid }, { merge: true })
     }
   )
+
+/**
+ * Clean up the users' recent scores so only 10 items remain of the set
+ *
+ * @param {string} uid User ID
+ * @param {number} count Count of matches
+ * @param {string} mode Mode of game
+ * @param {number} match Matches for each card
+ */
+async function userRecentScoresCleanup(
+  uid: string,
+  count: number,
+  mode: string,
+  match: number
+) {
+  // Get the recentScoreCollection set
+  const recentScoreCollectionRef = await firestore
+    .doc(`users/${uid}`)
+    .collection('recent-scores')
+    .where('count', '==', count)
+    .where('mode', '==', mode)
+    .where('match', '==', match)
+    .orderBy('creationTime', 'asc')
+    // Latest is not entered into result so offset at 9 instead of 10
+    .offset(9)
+    .get()
+
+  recentScoreCollectionRef.forEach(
+    async (
+      // eslint-disable-next-line max-len
+      doc: FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData>
+    ): Promise<void> => {
+      // Delete extra documents.
+      await doc.ref.delete()
+    }
+  )
+}
