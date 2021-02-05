@@ -15,6 +15,9 @@ export const environment = {
     messagingSenderId: '<your-messaging-sender-id>'
   },
   location: '/',
+  providers: [
+    '<Your Providers>',
+  ],
   policy: {
     email: '<your@email.com>',
     location: '<your-host.com>',
