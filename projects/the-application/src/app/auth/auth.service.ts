@@ -1,11 +1,16 @@
 import { Injectable } from '@angular/core'
 import { Router } from '@angular/router'
 import { AngularFireAuth } from '@angular/fire/auth'
-import { AngularFirestore } from '@angular/fire/firestore'
 import { MatDialog, MatDialogRef } from '@angular/material/dialog'
 import firebase from 'firebase/app'
 import { Observable, of } from 'rxjs'
-import { map, shareReplay, switchMap, tap } from 'rxjs/operators'
+import {
+  distinctUntilChanged,
+  map,
+  shareReplay,
+  switchMap,
+  tap
+} from 'rxjs/operators'
 
 import { User } from '../user/user'
 import { ErrorNoticeComponent } from '../error-notice/error-notice.component'
@@ -27,7 +32,6 @@ export class AuthService {
 
   constructor(
     private angularFireAuth: AngularFireAuth,
-    private angularFirestore: AngularFirestore,
     private dialog: MatDialog,
     private router: Router
   ) {
@@ -59,85 +63,113 @@ export class AuthService {
   }
 
   private createUser(): void {
-    this.user$ = this.angularFireAuth.authState.pipe<firebase.User, User, User>(
+    this.user$ = this.angularFireAuth.user.pipe<
+      firebase.User,
+      User,
+      User,
+      User
+    >(
       tap<firebase.User>((user: firebase.User): void => {
         this.navigate(user)
       }),
       switchMap<firebase.User, Observable<User>>(
         (user: firebase.User): Observable<User> => {
-          if (user) {
-            return this.angularFirestore
-              .doc<User>(`users/${user.uid}`)
-              .valueChanges()
-              .pipe<User, User>(
-                map<User, User>(
-                  (u: User): User => {
-                    let data: User
-
-                    if (u) {
-                      // Assign data
-                      data = {} as User
-                      // Extract from user
-                      const {
-                        displayName,
-                        email,
-                        metadata: { creationTime, lastSignInTime },
-                        providerData,
-                        phoneNumber,
-                        photoURL,
-                        uid
-                      } = user
-
-                      if (displayName) {
-                        data.displayName = displayName
-                      }
-                      if (email) {
-                        data.email = email
-                      }
-                      if (creationTime) {
-                        data.creationTime = creationTime
-                      }
-                      if (lastSignInTime) {
-                        data.lastSignInTime = lastSignInTime
-                      }
-                      if (providerData) {
-                        data.providerData = providerData
-                      }
-                      if (phoneNumber) {
-                        data.phoneNumber = phoneNumber
-                      }
-                      if (photoURL) {
-                        data.photoURL = photoURL
-                      }
-                      if (uid) {
-                        data.uid = uid
-                      }
-                    }
-
-                    return data ?? u ?? user
-                  }
-                ),
-                shareReplay<User>(1)
-              )
+          if (!user) {
+            return of<User>(null)
           }
-          return of<User>(null)
+
+          return of<firebase.User>(user).pipe<User, User, User>(
+            map<User, User>(
+              (u: User): User => {
+                let data: User
+
+                // Assign data
+                data = {} as User
+                // Extract from user
+                const {
+                  displayName,
+                  email,
+                  metadata: { creationTime, lastSignInTime },
+                  providerData,
+                  phoneNumber,
+                  photoURL,
+                  uid
+                } = user
+
+                if (displayName) {
+                  data.displayName = displayName
+                }
+                if (email) {
+                  data.email = email
+                }
+                if (creationTime) {
+                  data.creationTime = creationTime
+                }
+                if (lastSignInTime) {
+                  data.lastSignInTime = lastSignInTime
+                }
+                if (providerData) {
+                  data.providerData = providerData
+                }
+                if (phoneNumber) {
+                  data.phoneNumber = phoneNumber
+                }
+                if (photoURL) {
+                  data.photoURL = photoURL
+                }
+                if (uid) {
+                  data.uid = uid
+                }
+
+                return data ?? user
+              }
+            ),
+            distinctUntilChanged<User>(),
+            shareReplay<User>(1)
+          )
         }
       ),
+      distinctUntilChanged<User>(),
       shareReplay<User>(1)
     )
   }
 
-  private async unlinkProvider(
-    provider: firebase.auth.AuthProvider
-  ): Promise<firebase.User> {
+  public async delete(): Promise<void> {
     let currentUser: firebase.User
     currentUser = await this.angularFireAuth.currentUser
 
-    if (currentUser) {
-      if (currentUser.providerData?.length > 1) {
-        return await currentUser.unlink(provider.providerId)
-      }
+    if (!currentUser) {
+      return
     }
+
+    await currentUser.delete()
+  }
+
+  public async unlinkProvider(providerId: string): Promise<void> {
+    let currentUser: firebase.User
+    currentUser = await this.angularFireAuth.currentUser
+
+    if (!currentUser) {
+      return
+    }
+
+    // if (!(currentUser.providerData?.length > 1)) {
+    //   return
+    // }
+
+    const found = currentUser.providerData.findIndex(
+      (provider: firebase.UserInfo): boolean => {
+        return provider.providerId === providerId
+      }
+    )
+
+    if (found === -1) {
+      return
+    }
+
+    const updatedUser = await currentUser.unlink(providerId)
+
+    return await this.angularFireAuth.updateCurrentUser(updatedUser)
   }
 
   private async getCredential(
