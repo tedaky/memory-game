@@ -20,22 +20,10 @@ export const onCreateUser = functions.auth.user().onCreate(
     context: functions.EventContext
   ): Promise<FirebaseFirestore.WriteResult> => {
     const userRef = firestore.doc(`users/${user.uid}`)
-    const { displayName, email, phoneNumber, photoURL, uid } = user
+    const { uid } = user
 
     const data = {} as { [key: string]: string | FirebaseFirestore.FieldValue }
 
-    if (displayName) {
-      data.displayName = displayName
-    }
-    if (email) {
-      data.email = email
-    }
-    if (phoneNumber) {
-      data.phoneNumber = phoneNumber
-    }
-    if (photoURL) {
-      data.photoURL = photoURL
-    }
     if (uid) {
       data.uid = uid
     }
@@ -106,10 +94,13 @@ export const onCreateScore = functions.firestore
       data.computed = computeTime(data.complete, data.memory)
 
       // Clean up the recent scores
-      await userRecentScoresCleanup(uid, data.count, data.mode, data.match)
+      await userRecentScoresCleanup(uid, data)
+
+      // Test highScores
+      // await userHighScoresCleanup(uid, data)
 
       // Update the newly added score
-      return await snapshot.ref.set({ ...data, sid: sid }, { merge: true })
+      return await snapshot.ref.set({ ...data, sid }, { merge: true })
     }
   )
 
@@ -117,29 +108,25 @@ export const onCreateScore = functions.firestore
  * Clean up the users' recent scores so only 10 items remain of the set
  *
  * @param {string} uid User ID
- * @param {number} count Count of matches
- * @param {string} mode Mode of game
- * @param {number} match Matches for each card
+ * @param {IStatistic} data Snapshot data
  */
 async function userRecentScoresCleanup(
   uid: string,
-  count: number,
-  mode: string,
-  match: number
-) {
+  data: IStatistic
+): Promise<void> {
   // Get the recentScoreCollection set
-  const recentScoreCollectionRef = await firestore
+  const collectionRef = await firestore
     .doc(`users/${uid}`)
     .collection('recent-scores')
-    .where('count', '==', count)
-    .where('mode', '==', mode)
-    .where('match', '==', match)
+    .where('count', '==', data.count)
+    .where('mode', '==', data.mode)
+    .where('match', '==', data.match)
     .orderBy('creationTime', 'asc')
     // Latest is not entered into result so offset at 9 instead of 10
     .offset(9)
     .get()
 
-  recentScoreCollectionRef.forEach(
+  collectionRef.forEach(
     async (
       // eslint-disable-next-line max-len
       doc: FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData>
@@ -147,5 +134,58 @@ async function userRecentScoresCleanup(
       // Delete extra documents.
       await doc.ref.delete()
     }
+  )
+}
+
+/**
+ * Clean up the users' high scores so only 10 items remain of the set
+ *
+ * @param {string} uid User ID
+ * @param {IStatistic} data Snapshot data
+ */
+async function userHighScoresCleanup(
+  uid: string,
+  data: IStatistic
+): Promise<FirebaseFirestore.WriteResult> {
+  // Get the recentScoreCollection set
+  const collectionRef = await firestore
+    .doc(`users/${uid}`)
+    .collection('high-scores')
+    .where('count', '==', data.count)
+    .where('mode', '==', data.mode)
+    .where('match', '==', data.match)
+    .orderBy('computed', 'asc')
+    .offset(10)
+    .get()
+
+  if (collectionRef.size > 1) {
+    let size = 0
+
+    collectionRef.forEach(
+      async (
+        // eslint-disable-next-line max-len
+        doc: FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData>
+      ): Promise<void> => {
+        // Make sure the collection contains 10 items
+        if (size > 1) {
+          await doc.ref.delete()
+        }
+        size++
+        // Delete extra documents.
+        // await doc.ref.delete()
+        console.log(doc.data())
+      }
+    )
+  }
+
+
+  const highScoreRef = firestore
+    .doc(`users/${uid}`)
+    .collection('high-scores')
+    .doc()
+
+  return await highScoreRef.set(
+    { ...data, sid: highScoreRef.id },
+    { merge: true }
   )
 }
