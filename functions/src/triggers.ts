@@ -97,7 +97,7 @@ export const onCreateScore = functions.firestore
       await userRecentScoresCleanup(uid, data)
 
       // Test highScores
-      // await userHighScoresCleanup(uid, data)
+      await userHighScoresCleanup(uid, data)
 
       // Update the newly added score
       return await snapshot.ref.set({ ...data, sid }, { merge: true })

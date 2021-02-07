@@ -12,14 +12,4 @@ import { User } from '../user/user'
 })
 export class AccountComponent {
   constructor(public authService: AuthService) {}
-
-  public isLinkedProvider(user: User, providerId: string): boolean {
-    const found = user.providerData.findIndex(
-      (provider: firebase.UserInfo): boolean => {
-        return provider.providerId === providerId
-      }
-    )
-
-    return found !== -1
-  }
 }

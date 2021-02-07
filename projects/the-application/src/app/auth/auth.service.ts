@@ -9,6 +9,7 @@ import {
   map,
   shareReplay,
   switchMap,
+  take,
   tap
 } from 'rxjs/operators'
 
@@ -143,6 +144,31 @@ export class AuthService {
     }
 
     await currentUser.delete()
+  }
+
+  public isLinkedProvider(providerId: string): Observable<boolean> {
+    const isLink: Observable<boolean> = this.user$.pipe<
+      boolean,
+      boolean,
+      boolean
+    >(
+      map<User, boolean>((user: User): boolean => {
+        if (!user) {
+          return false
+        }
+
+        const found = user.providerData.findIndex(
+          (provider: firebase.UserInfo): boolean => {
+            return provider.providerId === providerId
+          }
+        )
+        return found !== -1
+      }),
+      distinctUntilChanged<boolean>(),
+      shareReplay<boolean>(1)
+    )
+
+    return isLink
   }
 
   public async unlinkProvider(providerId: string): Promise<void> {
