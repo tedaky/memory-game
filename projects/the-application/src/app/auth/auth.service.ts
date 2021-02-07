@@ -172,30 +172,34 @@ export class AuthService {
   }
 
   public async unlinkProvider(providerId: string): Promise<void> {
-    let currentUser: firebase.User
-    currentUser = await this.angularFireAuth.currentUser
+    try {
+      let currentUser: firebase.User
+      currentUser = await this.angularFireAuth.currentUser
 
-    if (!currentUser) {
-      return
-    }
-
-    // if (!(currentUser.providerData?.length > 1)) {
-    //   return
-    // }
-
-    const found = currentUser.providerData.findIndex(
-      (provider: firebase.UserInfo): boolean => {
-        return provider.providerId === providerId
+      if (!currentUser) {
+        return
       }
-    )
 
-    if (found === -1) {
-      return
+      // if (!(currentUser.providerData?.length > 1)) {
+      //   return
+      // }
+
+      const found = currentUser.providerData.findIndex(
+        (provider: firebase.UserInfo): boolean => {
+          return provider.providerId === providerId
+        }
+      )
+
+      if (found === -1) {
+        return
+      }
+
+      const updatedUser = await currentUser.unlink(providerId)
+
+      return await this.angularFireAuth.updateCurrentUser(updatedUser)
+    } catch (e) {
+      throw e
     }
-
-    const updatedUser = await currentUser.unlink(providerId)
-
-    return await this.angularFireAuth.updateCurrentUser(updatedUser)
   }
 
   private async getCredential(
@@ -253,6 +257,8 @@ export class AuthService {
       } else {
         this.dialog.open(ErrorNoticeComponent, { data: { message: e.message } })
       }
+
+      throw e
     }
   }
 

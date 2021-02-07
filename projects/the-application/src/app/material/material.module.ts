@@ -5,8 +5,10 @@ import { MatRippleModule } from '@angular/material/core'
 import { MatDialogModule } from '@angular/material/dialog'
 import { MatGridListModule } from '@angular/material/grid-list'
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon'
+import { MatListModule } from '@angular/material/list'
 import { MatSelectModule } from '@angular/material/select'
 import { MatSliderModule } from '@angular/material/slider'
+import { MatSlideToggleModule } from '@angular/material/slide-toggle'
 import { MatSnackBarModule } from '@angular/material/snack-bar'
 import { MatTableModule } from '@angular/material/table'
 import { DomSanitizer } from '@angular/platform-browser'
@@ -21,9 +23,11 @@ import { DomSanitizer } from '@angular/platform-browser'
     MatDialogModule,
     MatGridListModule,
     MatIconModule,
+    MatListModule,
     MatRippleModule,
     MatSelectModule,
     MatSliderModule,
+    MatSlideToggleModule,
     MatSnackBarModule,
     MatTableModule
   ]

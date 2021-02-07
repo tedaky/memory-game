@@ -10,10 +10,11 @@ import { LanguageService } from '../language/language.service'
 import {
   ROUTE_TOKEN,
   translateModuleOptions
-} from '../translate-loader/translate-browser.loader'
+} from '../translate-loader/translate-browser.loader';
+import { LinkUnlinkProviderComponent } from './link-unlink-provider/link-unlink-provider.component'
 
 @NgModule({
-  declarations: [AccountComponent],
+  declarations: [AccountComponent, LinkUnlinkProviderComponent],
   imports: [
     RoutingModule,
     CommonModule,

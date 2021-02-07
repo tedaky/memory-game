@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core'
-import firebase from 'firebase/app'
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core'
 
 import { AuthService } from '../auth/auth.service'
-import { User } from '../user/user'
+import { environment } from '../../environments/environment'
 
 @Component({
   selector: 'app-account',
@@ -10,6 +9,12 @@ import { User } from '../user/user'
   styleUrls: ['./account.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AccountComponent {
+export class AccountComponent implements OnInit {
+  public providers: string[]
+
   constructor(public authService: AuthService) {}
+
+  public ngOnInit(): void {
+    this.providers = environment.providers
+  }
 }

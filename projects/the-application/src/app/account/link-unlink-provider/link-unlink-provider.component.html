@@ -1,0 +1,21 @@
+<ng-container
+  *ngIf="{
+    value: authService.isLinkedProvider(providerId) | async
+  } as context"
+>
+  <div class="flex">
+    <div>
+      <ng-container *ngIf="!context.value; else link">Link with</ng-container>
+      <ng-template #link>Unlink</ng-template>
+      {{ provider }}
+    </div>
+    <mat-slide-toggle
+      class="example-margin"
+      (change)="click($event)"
+      [checked]="context.value"
+      [disabled]="disable"
+      labelPosition="before"
+    >
+    </mat-slide-toggle>
+  </div>
+</ng-container>
