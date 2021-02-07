@@ -311,7 +311,9 @@ export class GameComponent implements OnDestroy, OnInit {
                     card.flipped = 0
                   })
 
-                  this.clickSound(0.25 * this.effectsVolume)
+                  if (this.effectsVolume > 0) {
+                    this.clickSound(0.25 * this.effectsVolume)
+                  }
 
                   this.changeDetectorRef.markForCheck()
                 }

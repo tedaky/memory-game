@@ -7,33 +7,11 @@
   <mat-card-content>
     <h2>Play Memory Game!</h2>
     <p>Login to start playing!</p>
-    <app-social-login-button
-      colour="#3b5998"
-      display="Facebook"
-    ></app-social-login-button>
-    <app-social-login-button
-      colour="#191717"
-      display="GitHub"
-    ></app-social-login-button>
-    <app-social-login-button
-      colour="#4285f3"
-      display="Google"
-    ></app-social-login-button>
-    <app-social-login-button
-      colour="#00a4ef"
-      display="Microsoft"
-    ></app-social-login-button>
-    <app-social-login-button
-      colour="#55acee"
-      display="Twitter"
-    ></app-social-login-button>
-    <app-social-login-button
-      colour="#6001d2"
-      display="Yahoo"
-    ></app-social-login-button>
-    <app-social-login-button
-      colour="#3f3f3f"
-      display="anonymous"
-    ></app-social-login-button>
+    <ng-container *ngFor="let style of styles">
+      <app-social-login-button
+        [colour]="style.colour"
+        [display]="style.display"
+      ></app-social-login-button>
+    </ng-container>
   </mat-card-content>
 </mat-card>

@@ -80,6 +80,7 @@ export class AuthService {
           }
 
           return of<firebase.User>(user).pipe<User, User, User>(
+            distinctUntilChanged<User>(),
             map<User, User>(
               (u: User): User => {
                 let data: User
@@ -125,7 +126,6 @@ export class AuthService {
                 return data ?? user
               }
             ),
-            distinctUntilChanged<User>(),
             shareReplay<User>(1)
           )
         }

@@ -9,6 +9,11 @@ import {
 } from '@ngx-translate/core'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { Observable, Subscriber, Subscription } from 'rxjs'
+import { take, tap } from 'rxjs/operators'
+
+interface Any {
+  [key: string]: string
+}
 
 export const ROUTE_TOKEN: InjectionToken<string> = new InjectionToken<string>(
   'ROUTE_TOKEN'
@@ -33,29 +38,35 @@ export class MissingBrowserTranslateHandler
 
       subscriber.next(key)
 
-      fetcher = translate.getTranslation(lang).subscribe(
-        (val: { [key: string]: string }): void => {
-          translate.use(lang)
+      fetcher = translate
+        .getTranslation(lang)
+        .pipe<Any, Any>(
+          tap<Any>(
+            (val: { [key: string]: string }): void => {
+              translate.use(lang)
 
-          if (val[key]) {
-            subscriber.next(val[key])
-          }
-        },
-        (): void => {
-          subscriber.error(`Translation for ${key} in ${lang} not found`)
-        },
-        (): void => {
-          subscriber.complete()
+              if (val[key]) {
+                subscriber.next(val[key])
+              }
+            },
+            (): void => {
+              subscriber.error(`Translation for ${key} in ${lang} not found`)
+            },
+            (): void => {
+              subscriber.complete()
 
-          if (fetcher && fetcher instanceof Subscription) {
-            fetcher.unsubscribe()
-          }
+              if (fetcher && fetcher instanceof Subscription) {
+                fetcher.unsubscribe()
+              }
 
-          if (subscriber) {
-            subscriber.unsubscribe()
-          }
-        }
-      )
+              if (subscriber) {
+                subscriber.unsubscribe()
+              }
+            }
+          ),
+          take<Any>(1)
+        )
+        .subscribe()
     })
   }
 
