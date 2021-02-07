@@ -16,7 +16,7 @@
     "package:mac": "electron-packager . --platform=darwin",
     "postinstall": "ngcc",
     "serve:electron": "electron . --no-sandbox",
-    "run:server": "http-server -p 8080 -c-1 docs/",
+    "run:server": "http-server -p 8085 -c-1 docs/",
     "build:shell": "ng run the-application:app-shell:production",
     "build:shell:electron": "ng run the-application:app-shell:electron",
     "build:shell:github": "ng run the-application:app-shell:github",
