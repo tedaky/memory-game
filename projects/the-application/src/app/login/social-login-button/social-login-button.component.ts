@@ -17,7 +17,7 @@ export class SocialLoginButtonComponent {
       return
     }
 
-    return this.display.slice(0, this.display.length).toLocaleLowerCase()
+    return this.display.toLocaleLowerCase()
   }
 
   public get provider(): string {

@@ -16,10 +16,24 @@ import { AuthService } from '../../auth/auth.service'
 })
 export class LinkUnlinkProviderComponent {
   public disable: boolean
-  @Input() public provider: string
+  @Input() public display: string
+
+  private get provider(): string {
+    if (!this.display?.length || this.display === 'anonymous') {
+      return
+    }
+
+    let firstCharacter: string
+    let rest: string
+
+    firstCharacter = this.display.slice(0, 1)
+    rest = this.display.slice(1, this.display.length).toLocaleLowerCase()
+
+    return firstCharacter + rest
+  }
 
   public get providerId(): string {
-    return `${this.provider.toLowerCase()}.com`
+    return `${this.display.toLocaleLowerCase()}.com`
   }
 
   constructor(

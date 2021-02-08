@@ -7,7 +7,7 @@
     <div>
       <ng-container *ngIf="!context.value; else link">Link with</ng-container>
       <ng-template #link>Unlink</ng-template>
-      {{ provider }}
+      {{ display }}
     </div>
     <mat-slide-toggle
       class="example-margin"
