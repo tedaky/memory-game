@@ -6,6 +6,9 @@ import { computeTime } from './helpers/time'
 // eslint-disable-next-line no-unused-vars
 import { IStatistic } from './interfaces/statistics'
 
+// eslint-disable-next-line max-len
+type FireStoreDocumentSnapshotData = FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData>
+
 const firestore = admin.firestore()
 
 /**
@@ -71,7 +74,7 @@ export const onDeleteUser = functions.auth.user().onDelete(
  * @param {functions.firestore.QueryDocumentSnapshot} snapshot
  * @param {functions.EventContext} context
  */
-export const onCreateScore = functions.firestore
+export const onCreateRecentScore = functions.firestore
   .document('users/{uid}/recent-scores/{sid}')
   .onCreate(
     async (
@@ -96,7 +99,7 @@ export const onCreateScore = functions.firestore
       // Clean up the recent scores
       await userRecentScoresCleanup(uid, data)
 
-      // Test highScores
+      // Clean up the high scores
       await userHighScoresCleanup(uid, data)
 
       // Update the newly added score
@@ -127,16 +130,14 @@ async function userRecentScoresCleanup(
     .get()
 
   collectionRef.forEach(
-    async (
-      // eslint-disable-next-line max-len
-      doc: FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData>
-    ): Promise<void> => {
+    async (doc: FireStoreDocumentSnapshotData): Promise<void> => {
       // Delete extra documents.
       await doc.ref.delete()
     }
   )
 }
 
+// #region High Scores
 /**
  * Clean up the users' high scores so only 10 items remain of the set
  *
@@ -146,7 +147,7 @@ async function userRecentScoresCleanup(
 async function userHighScoresCleanup(
   uid: string,
   data: IStatistic
-): Promise<FirebaseFirestore.WriteResult> {
+): Promise<void> {
   // Get the recentScoreCollection set
   const collectionRef = await firestore
     .doc(`users/${uid}`)
@@ -155,37 +156,160 @@ async function userHighScoresCleanup(
     .where('mode', '==', data.mode)
     .where('match', '==', data.match)
     .orderBy('computed', 'asc')
-    .offset(10)
+    .offset(9)
     .get()
 
-  if (collectionRef.size > 1) {
+  if (collectionRef.size) {
     let size = 0
 
     collectionRef.forEach(
-      async (
-        // eslint-disable-next-line max-len
-        doc: FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData>
-      ): Promise<void> => {
+      async (doc: FireStoreDocumentSnapshotData): Promise<void> => {
         // Make sure the collection contains 10 items
         if (size > 1) {
           await doc.ref.delete()
+        } else {
+          await userHighScoreReplace(uid, data, doc)
         }
+
         size++
-        // Delete extra documents.
-        // await doc.ref.delete()
-        console.log(doc.data())
       }
     )
+  } else {
+    await userHighScoreAdd(uid, data)
+  }
+}
+
+/**
+ * Replace the users' high score
+ *
+ * @param {string} uid User ID
+ * @param {IStatistic} data Snapshot data
+ * @param {FireStoreDocumentSnapshotData} doc
+ */
+async function userHighScoreReplace(
+  uid: string,
+  data: IStatistic,
+  doc: FireStoreDocumentSnapshotData
+): Promise<boolean> {
+  const dataComputed = data.computed
+  const docComputed = (doc.data() as IStatistic).computed
+
+  let isHighScore = false
+
+  if (dataComputed && docComputed && dataComputed < docComputed) {
+    doc.ref.delete()
+
+    await userHighScoreAdd(uid, data)
+
+    isHighScore = true
   }
 
-
-  const highScoreRef = firestore
-    .doc(`users/${uid}`)
-    .collection('high-scores')
-    .doc()
-
-  return await highScoreRef.set(
-    { ...data, sid: highScoreRef.id },
-    { merge: true }
-  )
+  return isHighScore
 }
+
+/**
+ * Add the users' high score
+ *
+ * @param {string} uid User ID
+ * @param {IStatistic} data Snapshot data
+ */
+async function userHighScoreAdd(
+  uid: string,
+  data: IStatistic
+): Promise<FirebaseFirestore.WriteResult> {
+  const ref = firestore.doc(`users/${uid}`).collection('high-scores').doc()
+
+  return await ref.set({ ...data, sid: ref.id }, { merge: true })
+}
+// #endregion High Scores
+
+/**
+ * Respond to when a user completes a game
+ *
+ * @param {functions.firestore.QueryDocumentSnapshot} snapshot
+ * @param {functions.EventContext} context
+ */
+export const onCreateHighScore = functions.firestore
+  .document('users/{uid}/high-scores/{sid}')
+  .onCreate(
+    async (
+      snapshot: functions.firestore.QueryDocumentSnapshot,
+      context: functions.EventContext
+    ): Promise<void> => {
+      const data = snapshot.data() as IStatistic
+
+      // Clean up the high scores
+      await leaderboardScoresCleanup(data)
+    }
+  )
+
+// #region Leaderboard Scores
+/**
+ * Clean up the leaderboard scores so only 10 items remain of the set
+ *
+ * @param {IStatistic} data Snapshot data
+ */
+async function leaderboardScoresCleanup(data: IStatistic): Promise<void> {
+  // Get the recentScoreCollection set
+  const collectionRef = await firestore
+    .collection('leaderboard')
+    .where('count', '==', data.count)
+    .where('mode', '==', data.mode)
+    .where('match', '==', data.match)
+    .orderBy('computed', 'asc')
+    .offset(9)
+    .get()
+
+  if (collectionRef.size) {
+    let size = 0
+
+    collectionRef.forEach(
+      async (doc: FireStoreDocumentSnapshotData): Promise<void> => {
+        // Make sure the collection contains 10 items
+        if (size > 1) {
+          await doc.ref.delete()
+        } else {
+          await leaderboardScoreReplace(data, doc)
+        }
+
+        size++
+      }
+    )
+  } else {
+    await leaderboardScoreAdd(data)
+  }
+}
+
+/**
+ * Replace the score on the leaderboard
+ *
+ * @param {IStatistic} data Snapshot data
+ * @param {FireStoreDocumentSnapshotData} doc
+ */
+async function leaderboardScoreReplace(
+  data: IStatistic,
+  doc: FireStoreDocumentSnapshotData
+): Promise<void> {
+  const dataComputed = data.computed
+  const docComputed = (doc.data() as IStatistic).computed
+
+  if (dataComputed && docComputed && dataComputed < docComputed) {
+    doc.ref.delete()
+
+    await leaderboardScoreAdd(data)
+  }
+}
+
+/**
+ * Add the score to the leaderboard
+ *
+ * @param {IStatistic} data Snapshot data
+ */
+async function leaderboardScoreAdd(
+  data: IStatistic
+): Promise<FirebaseFirestore.WriteResult> {
+  const ref = firestore.collection('leaderboard').doc()
+
+  return await ref.set({ ...data, sid: ref.id }, { merge: true })
+}
+// #endregion Leaderboard Scores

@@ -432,7 +432,9 @@ export class GameComponent implements OnDestroy, OnInit {
           })
       }
 
-      this.clickSound(this.effectsVolume)
+      if (this.effectsVolume > 0) {
+        this.clickSound(0.25 * this.effectsVolume)
+      }
     }
   }
 
