@@ -17,7 +17,7 @@ service cloud.firestore {
       allow read, write: if isOwner(uid);
     }
 
-    match /leaderboard/{sid} {
+    match /leaderboard/details/scores/{sid} {
       allow read: if request.auth;
     }
 
