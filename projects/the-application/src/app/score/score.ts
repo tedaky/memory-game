@@ -369,7 +369,7 @@ export abstract class Score {
         if (firestore === 'recent-scores') {
           let doc: AngularFirestoreDocument<firebase.firestore.DocumentData>
           doc = this.angularFirestore
-            .doc<User>(`users/${currentUser.uid}`)
+            .doc<User>(`memory-game/details/users/${currentUser.uid}`)
             .collection<firebase.firestore.DocumentData>(firestore)
             .doc()
 
@@ -445,7 +445,7 @@ export abstract class Score {
       }
 
       sub = this.angularFirestore
-        .doc<User>(`users/${currentUser.uid}`)
+        .doc<User>(`memory-game/details/users/${currentUser.uid}`)
         .collection<firebase.firestore.DocumentData>(firestore)
         .valueChanges()
         .pipe<firebase.firestore.DocumentData[]>(

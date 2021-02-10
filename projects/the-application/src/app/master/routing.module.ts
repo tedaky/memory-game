@@ -4,6 +4,7 @@ import { LegalModule } from '../legal/legal.module'
 import { MainModule } from '../main/main.module'
 import { redirect } from '../redirect/redirect'
 import { RouteGuard } from '../route/route.guard'
+import { MasterComponent } from './master.component'
 
 const routes: Routes = [
   {
@@ -13,6 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'legal',
+    component: MasterComponent,
     loadChildren: async (): Promise<typeof LegalModule> => {
       const m = await import('../legal/legal.module')
       return m.LegalModule
@@ -20,6 +22,7 @@ const routes: Routes = [
   },
   {
     path: ':lang',
+    component: MasterComponent,
     canActivate: [RouteGuard],
     loadChildren: async (): Promise<typeof MainModule> => {
       const m = await import('../main/main.module')
