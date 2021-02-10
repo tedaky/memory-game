@@ -19,11 +19,9 @@ import { InstallComponent } from '../install/install.component'
 import { LanguageModule } from '../language/language.module'
 import { LanguageService } from '../language/language.service'
 import { LocaleModule } from '../locale/locale.module'
-import { MainMenuComponent } from '../main-menu/main-menu.component'
-import { MainMenuButtonComponent } from '../main-menu/main-menu-button/main-menu-button.component'
 import { MaterialModule } from '../material/material.module'
-import { redirect } from '../redirect/redirect'
 import { ROUTE_TOKEN } from '../translate-loader/translate-browser.loader'
+import { redirect } from '../redirect/redirect'
 import { environment } from '../../environments/environment'
 
 /**
@@ -34,8 +32,6 @@ import { environment } from '../../environments/environment'
     CheckForUpdateComponent,
     ErrorNoticeComponent,
     InstallComponent,
-    MainMenuButtonComponent,
-    MainMenuComponent,
     RootComponent
   ],
   imports: [
@@ -56,9 +52,6 @@ import { environment } from '../../environments/environment'
   providers: [{ provide: ROUTE_TOKEN, useValue: 'main' }],
   bootstrap: [RootComponent]
 })
-/**
- * Entry Module
- */
 export class RootModule extends LanguageModule {
   constructor(language: LanguageService, translate: TranslateService) {
     super()

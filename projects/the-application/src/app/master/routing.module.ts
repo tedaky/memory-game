@@ -1,17 +1,21 @@
 import { NgModule } from '@angular/core'
-import { Routes, RouterModule } from '@angular/router'
-
+import { RouterModule, Routes } from '@angular/router'
+import { LegalModule } from '../legal/legal.module'
 import { MainModule } from '../main/main.module'
-import { MasterModule } from '../master/master.module'
 import { redirect } from '../redirect/redirect'
 import { RouteGuard } from '../route/route.guard'
 
 const routes: Routes = [
   {
     path: '',
-    loadChildren: async (): Promise<typeof MasterModule> => {
-      const m = await import('../master/master.module')
-      return m.MasterModule
+    pathMatch: 'full',
+    redirectTo: `${redirect() || 'en'}/login`
+  },
+  {
+    path: 'legal',
+    loadChildren: async (): Promise<typeof LegalModule> => {
+      const m = await import('../legal/legal.module')
+      return m.LegalModule
     }
   },
   {
@@ -21,20 +25,11 @@ const routes: Routes = [
       const m = await import('../main/main.module')
       return m.MainModule
     }
-  },
-  {
-    path: '**',
-    redirectTo: `${redirect() || 'en'}/login`
   }
 ]
 
 @NgModule({
-  imports: [
-    RouterModule.forRoot(routes, {
-      anchorScrolling: 'enabled',
-      scrollPositionRestoration: 'enabled'
-    })
-  ],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
 export class RoutingModule {}

@@ -5,31 +5,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Attach Angular",
-      "port": 9222,
-      "request": "attach",
-      "type": "pwa-chrome",
-      "webRoot": "${workspaceFolder}",
-      "sourceMaps": true,
-      "sourceMapPathOverrides": {
-        // https://github.com/microsoft/vscode-recipes/tree/master/Angular-CLI
-        "webpack:/*": "${webRoot}/*",
-        "/./*": "${webRoot}/*",
-        "/src/*": "${webRoot}/*",
-        "/*": "*",
-        "/./~/*": "${webRoot}/node_modules/*"
-      }
-    },
-    {
       "name": "Launch Angular",
       "request": "launch",
       "type": "pwa-chrome",
       "url": "http://localhost:4200",
       "webRoot": "${workspaceFolder}",
-      "runtimeArgs": [
-        "--remote-debugging-port=9222"
-      ],
       "sourceMaps": true,
+      "preLaunchTask": "npm: start",
       "sourceMapPathOverrides": {
         // https://github.com/microsoft/vscode-recipes/tree/master/Angular-CLI
         "webpack:/*": "${webRoot}/*",
