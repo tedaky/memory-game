@@ -5,28 +5,20 @@ import { deleteCollection } from './helpers/deleteCollection'
 import { computeTime } from './helpers/time'
 // eslint-disable-next-line no-unused-vars
 import { IStatistic } from './interfaces/statistics'
+import {
+  // eslint-disable-next-line no-unused-vars
+  Data,
+  // eslint-disable-next-line no-unused-vars
+  FireStoreDocumentSnapshotData,
+  // eslint-disable-next-line no-unused-vars
+  Score,
+  // eslint-disable-next-line no-unused-vars
+  UserData
+} from './interfaces/data'
 
-// eslint-disable-next-line max-len
-// type FireStoreQueryDocumentSnapshotData = FirebaseFirestore.QueryDocumentSnapshot<FirebaseFirestore.DocumentData>
-// eslint-disable-next-line max-len
-type FireStoreDocumentSnapshotData = FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>
-// type UserScoreKeys = `${'r' | 'h'}_co:${Count}_ma:${Match}_mo:${Mode}`
-type Data = {
-  [key: string]: Score
-  // [key in UserScoreKeys]: Score
-}
-type UserData = Data & {
-  /**
-   * User ID
-   */
-  uid: string
-}
-
-interface Score {
-  count: number
-  score: IStatistic
-}
-
+/**
+ * The Admin firestore
+ */
 const firestore = admin.firestore()
 
 /**
@@ -53,6 +45,7 @@ async function deleteUser(
   // Collections that the user has
   const userCollections = await userRef.listCollections()
 
+  // If collections exists delete them
   if (userCollections.length) {
     // Loop each collection to delete
     userCollections.forEach(
