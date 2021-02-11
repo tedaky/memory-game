@@ -12,10 +12,16 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: create-environment
+      - name: create-environment-prod
         uses: jsdaniell/create-json@1.1.2
         with:
           name: "environment.prod.ts"
+          json: ${{ secrets.FIREBASE_ANGULAR_ENVIRONMENT }}
+          dir: "projects/the-application/src/environments"
+      - name: create-environment
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "environment.ts"
           json: ${{ secrets.FIREBASE_ANGULAR_ENVIRONMENT }}
           dir: "projects/the-application/src/environments"
       - name: create-firebaserc
