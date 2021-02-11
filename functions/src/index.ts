@@ -3,15 +3,14 @@
 
 import * as admin from 'firebase-admin'
 
-import { production, databaseURL } from './environment'
+import { production } from './environment'
 
 if (production) {
   admin.initializeApp()
 } else {
   const serviceAccount = require('../adminsdk.key.json')
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    databaseURL
+    credential: admin.credential.cert(serviceAccount)
   })
 }
 

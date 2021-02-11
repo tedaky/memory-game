@@ -1,4 +1,3 @@
 // Find from https://console.firebase.google.com/project/<project_id>/settings/serviceaccounts/adminsdk
 // the "databaseURL" in the sample code
-export const databaseURL = '<databaseURL>'
 export const production = true
