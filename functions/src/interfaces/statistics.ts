@@ -55,7 +55,7 @@ export interface IStatistic {
   /**
    * Server Created Time Stamp
    */
-  creationTime?: Date | number | string
+  createTime?: Date | number | string | FirebaseFirestore.Timestamp
   /**
    * User that owns this statistic
    */

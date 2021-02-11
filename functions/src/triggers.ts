@@ -11,12 +11,17 @@ import { IStatistic } from './interfaces/statistics'
 // eslint-disable-next-line max-len
 type FireStoreDocumentSnapshotData = FirebaseFirestore.DocumentSnapshot<FirebaseFirestore.DocumentData>
 // type UserScoreKeys = `${'r' | 'h'}_co:${Count}_ma:${Match}_mo:${Mode}`
-type UserData = {
+type Data = {
   [key: string]: Score
   // [key in UserScoreKeys]: Score
-} & {
+}
+type UserData = Data & {
+  /**
+   * User ID
+   */
   uid: string
 }
+
 interface Score {
   count: number
   score: IStatistic
@@ -25,33 +30,9 @@ interface Score {
 const firestore = admin.firestore()
 
 /**
- * Respond to when a user is created and add aditional information
- *
- * @param {admin.auth.UserRecord} user
- * @param {functions.EventContext} context
+ * Delete User Trigger
  */
-// export const onCreateUser = functions.auth.user().onCreate(
-//   (
-//     user: admin.auth.UserRecord,
-//     context: functions.EventContext
-//   ): Promise<FirebaseFirestore.WriteResult> => {
-//     const userRef = firestore
-//       .collection('memory-game')
-//       .doc('details')
-//       .collection('users')
-//       .doc(user.uid)
-//     const { uid } = user
-
-// eslint-disable-next-line max-len
-//     const data = {} as { [key: string]: string | FirebaseFirestore.FieldValue }
-
-//     if (uid) {
-//       data.uid = uid
-//     }
-
-//     return userRef.set(data, { merge: true })
-//   }
-// )
+export const onDeleteUser = functions.auth.user().onDelete(deleteUser)
 
 /**
  * Respond to when a user is deleted and remove the user collection
@@ -59,36 +40,46 @@ const firestore = admin.firestore()
  * @param {admin.auth.UserRecord} user
  * @param {functions.EventContext} context
  */
-export const onDeleteUser = functions.auth.user().onDelete(
-  async (
-    user: admin.auth.UserRecord,
-    context: functions.EventContext
-  ): Promise<FirebaseFirestore.WriteResult> => {
-    const userRef = firestore
-      .collection('memory-game')
-      .doc('details')
-      .collection('users')
-      .doc(user.uid)
-    const userCollections = await userRef.listCollections()
+async function deleteUser(
+  user: admin.auth.UserRecord,
+  context: functions.EventContext
+): Promise<FirebaseFirestore.WriteResult> {
+  // Get the firestore user document
+  const userRef = firestore
+    .collection('memory-game')
+    .doc('details')
+    .collection('users')
+    .doc(user.uid)
+  // Collections that the user has
+  const userCollections = await userRef.listCollections()
 
-    if (userCollections.length) {
-      userCollections.forEach(
-        async (
-          // eslint-disable-next-line max-len
-          collection: FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData>
-        ): Promise<void> => {
-          await deleteCollection(
-            firestore,
-            `memory-game/details/users/${user.uid}/${collection.id}`,
-            50
-          )
-        }
-      )
-    }
-
-    return userRef.delete()
+  if (userCollections.length) {
+    // Loop each collection to delete
+    userCollections.forEach(
+      async (
+        // eslint-disable-next-line max-len
+        collection: FirebaseFirestore.CollectionReference<FirebaseFirestore.DocumentData>
+      ): Promise<void> => {
+        // Delete the collection
+        await deleteCollection(
+          firestore,
+          `memory-game/details/users/${user.uid}/${collection.id}`,
+          50
+        )
+      }
+    )
   }
-)
+
+  // Finally delete the user document
+  return userRef.delete()
+}
+
+/**
+ * Create Recent Score Trigger
+ */
+export const onCreateRecentScore = functions.firestore
+  .document('memory-game/details/users/{uid}/recent-scores/{sid}')
+  .onCreate(createRecentScore)
 
 /**
  * Respond to when a user completes a game
@@ -96,45 +87,42 @@ export const onDeleteUser = functions.auth.user().onDelete(
  * @param {functions.firestore.QueryDocumentSnapshot} snapshot
  * @param {functions.EventContext} context
  */
-export const onCreateRecentScore = functions.firestore
-  .document('memory-game/details/users/{uid}/recent-scores/{sid}')
-  .onCreate(
-    async (
-      snapshot: functions.firestore.QueryDocumentSnapshot,
-      context: functions.EventContext
-    ): Promise<FirebaseFirestore.WriteResult> => {
-      const {
-        params: { uid, sid },
-        timestamp: creationTime
-      } = context
-      const data = snapshot.data() as IStatistic
+async function createRecentScore(
+  snapshot: functions.firestore.QueryDocumentSnapshot,
+  context: functions.EventContext
+): Promise<FirebaseFirestore.WriteResult> {
+  // Extract properties
+  const {
+    params: { uid, sid }
+  } = context
+  const data = snapshot.data() as IStatistic
+  const { createTime } = snapshot
 
-      if (creationTime) {
-        data.creationTime = creationTime
-      }
-      if (uid) {
-        data.uid = uid
-      }
+  if (createTime) {
+    data.createTime = createTime
+  }
+  if (uid) {
+    data.uid = uid
+  }
 
-      data.computed = computeTime(data.complete, data.memory)
+  data.computed = computeTime(data.complete, data.memory)
 
-      const userRef = await firestore
-        .collection('memory-game')
-        .doc('details')
-        .collection('users')
-        .doc(uid)
-        .get()
+  const userRef = await firestore
+    .collection('memory-game')
+    .doc('details')
+    .collection('users')
+    .doc(uid)
+    .get()
 
-      // Clean up the recent scores
-      await userRecentScoresCleanup(uid, sid, userRef, data)
+  // Clean up the recent scores
+  await userRecentScoresCleanup(uid, sid, userRef, data)
 
-      // Clean up the high scores
-      await userHighScoresCleanup(uid, userRef, data)
+  // Clean up the high scores
+  await userHighScoresCleanup(uid, userRef, data)
 
-      // Update the newly added score
-      return await snapshot.ref.set({ ...data, sid }, { merge: true })
-    }
-  )
+  // Update the newly added score
+  return await snapshot.ref.set({ ...data, sid }, { merge: true })
+}
 
 // #region Recent Scores
 /**
@@ -236,7 +224,10 @@ async function userHighScoresCleanup(
 
   if (dataComputed && userComputed && dataComputed < userComputed) {
     const ref = firestore
-      .doc(`memory-game/details/users/${uid}`)
+      .collection('memory-game')
+      .doc('details')
+      .collection('users')
+      .doc(uid)
       .collection('high-scores')
       .doc()
     let sid = ref.id
@@ -302,48 +293,36 @@ async function updateUserScoreDoc(
 }
 
 /**
- * Replace the users' high score
+ * Update the User score document
  *
- * @param {string} uid User ID
+ * @param {string} sid Score ID
+ * @param {FireStoreDocumentSnapshotData} leaderboardRef User Ref
  * @param {IStatistic} data Snapshot data
- * @param {FireStoreQueryDocumentSnapshotData} doc
+ * @param {string} key Specific key for the map
+ * @param {number} count Count of documents
  */
-// async function userHighScoreReplace(
-//   uid: string,
-//   data: IStatistic,
-//   doc: FireStoreQueryDocumentSnapshotData
-// ): Promise<boolean> {
-//   const dataComputed = data.computed
-//   const docComputed = (doc.data() as IStatistic).computed
+async function updateLeaderboardDoc(
+  sid: string,
+  leaderboardRef: FireStoreDocumentSnapshotData,
+  data: IStatistic,
+  key: string,
+  count: number
+): Promise<FirebaseFirestore.WriteResult> {
+  const full = ({
+    [key]: {
+      score: { ...data, sid },
+      count
+    }
+  } as any) as UserData
 
-//   let isHighScore = false
-
-//   if (dataComputed && docComputed && dataComputed < docComputed) {
-//     doc.ref.delete()
-
-//     await userHighScoreAdd(uid, data)
-
-//     isHighScore = true
-//   }
-
-//   return isHighScore
-// }
-
+  return await leaderboardRef.ref.set(full, { merge: true })
+}
 /**
- * Add the users' high score
- *
- * @param {string} uid User ID
- * @param {IStatistic} data Snapshot data
+ * Create High Score Trigger
  */
-// async function userHighScoreAdd(
-//   uid: string,
-//   data: IStatistic
-// ): Promise<FirebaseFirestore.WriteResult> {
-//   const ref = firestore.doc(`users/${uid}`).collection('high-scores').doc()
-
-//   return await ref.set({ ...data, sid: ref.id }, { merge: true })
-// }
-// #endregion High Scores
+export const onCreateHighScore = functions.firestore
+  .document('memory-game/details/users/{uid}/high-scores/{sid}')
+  .onCreate(createHighScore)
 
 /**
  * Respond to when a user completes a game
@@ -351,87 +330,121 @@ async function updateUserScoreDoc(
  * @param {functions.firestore.QueryDocumentSnapshot} snapshot
  * @param {functions.EventContext} context
  */
-export const onCreateHighScore = functions.firestore
-  .document('memory-game/details/users/{uid}/high-scores/{sid}')
-  .onCreate(
-    async (
-      snapshot: functions.firestore.QueryDocumentSnapshot,
-      context: functions.EventContext
-    ): Promise<void> => {
-      // const data = snapshot.data() as IStatistic
-      // Clean up the high scores
-      // await leaderboardScoresCleanup(data)
-    }
-  )
+async function createHighScore(
+  snapshot: functions.firestore.QueryDocumentSnapshot,
+  context: functions.EventContext
+): Promise<void> {
+  // Extract properties
+  const data = snapshot.data() as IStatistic
+  // Get the firestore leaderboard document
+  const leaderboardRef = await firestore
+    .collection('memory-game')
+    .doc('details')
+    .collection('leaderboard')
+    .doc('details')
+    .get()
 
-// #region Leaderboard Scores
+  await leaderboardCleanup(leaderboardRef, data)
+}
+
 /**
  * Clean up the leaderboard scores so only 10 items remain of the set
  *
+ * @param {FireStoreDocumentSnapshotData} leaderboardRef Leaderboard Ref
  * @param {IStatistic} data Snapshot data
  */
-// async function leaderboardScoresCleanup(data: IStatistic): Promise<void> {
-//   // Get the recentScoreCollection set
-//   const collectionRef = await firestore
-//     .doc('leaderboard/details')
-//     .collection('scores')
-//     .where('count', '==', data.count)
-//     .where('mode', '==', data.mode)
-//     .where('match', '==', data.match)
-//     .orderBy('computed', 'asc')
-//     .where('computed', '>', data.computed)
-//     .get()
+async function leaderboardCleanup(
+  leaderboardRef: FireStoreDocumentSnapshotData,
+  data: IStatistic
+) {
+  const leaderboardData = leaderboardRef.data() as Data
+  const key = `co:${data.count}_ma:${data.match}_mo:${data.mode}`
 
-//   if (collectionRef.size) {
-//     let size = 0
+  let leaderboardScoreData = {} as Score
 
-//     collectionRef.forEach(
-//       async (doc: FireStoreQueryDocumentSnapshotData): Promise<void> => {
-//         // Make sure the collection contains 10 items
-//         if (size > 1) {
-//           await doc.ref.delete()
-//         } else {
-//           await leaderboardScoreReplace(data, doc)
-//         }
+  if (leaderboardData) {
+    leaderboardScoreData = leaderboardData[key]
+  }
 
-//         size++
-//       }
-//     )
-//   } else {
-//     await leaderboardScoreAdd(data)
-//   }
-// }
+  const dataComputed = data.computed
+  const leaderboardComputed = leaderboardScoreData?.score?.computed
 
-/**
- * Replace the score on the leaderboard
- *
- * @param {IStatistic} data Snapshot data
- * @param {FireStoreQueryDocumentSnapshotData} doc
- */
-// async function leaderboardScoreReplace(
-//   data: IStatistic,
-//   doc: FireStoreQueryDocumentSnapshotData
-// ): Promise<void> {
-//   const dataComputed = data.computed
-//   const docComputed = (doc.data() as IStatistic).computed
+  let countValue = leaderboardScoreData?.count
 
-//   if (dataComputed && docComputed && dataComputed < docComputed) {
-//     doc.ref.delete()
+  if (!countValue || countValue < 10) {
+    countValue = (admin.firestore.FieldValue.increment(1) as any) as number
 
-//     await leaderboardScoreAdd(data)
-//   }
-// }
+    const ref = firestore
+      .collection('memory-game')
+      .doc('details')
+      .collection('leaderboard')
+      .doc('details')
+      .collection('scores')
+      .doc()
 
-/**
- * Add the score to the leaderboard
- *
- * @param {IStatistic} data Snapshot data
- */
-// async function leaderboardScoreAdd(
-//   data: IStatistic
-// ): Promise<FirebaseFirestore.WriteResult> {
-//   const ref = firestore.collection('leaderboard').doc()
+    await ref.set({ ...data, sid: ref.id }, { merge: true })
 
-//   return await ref.set({ ...data, sid: ref.id }, { merge: true })
-// }
-// #endregion Leaderboard Scores
+    if (!dataComputed || !leaderboardComputed) {
+      await updateLeaderboardDoc(ref.id, leaderboardRef, data, key, countValue)
+      return
+    }
+
+    if (dataComputed > leaderboardComputed) {
+      await updateLeaderboardDoc(ref.id, leaderboardRef, data, key, countValue)
+      return
+    }
+
+    await leaderboardRef.ref.set(
+      { [key]: { count: countValue } },
+      { merge: true }
+    )
+    return
+  }
+
+  if (
+    dataComputed &&
+    leaderboardComputed &&
+    dataComputed < leaderboardComputed
+  ) {
+    const ref = firestore
+      .collection('memory-game')
+      .doc('details')
+      .collection('leaderboard')
+      .doc('details')
+      .collection('scores')
+      .doc()
+    let sid = ref.id
+    const collectionRef = await firestore
+      .collection('memory-game')
+      .doc('details')
+      .collection('leaderboard')
+      .doc('details')
+      .collection('scores')
+      .where('count', '==', data.count)
+      .where('mode', '==', data.mode)
+      .where('match', '==', data.match)
+      .where('computed', '>', data.computed)
+      .orderBy('computed', 'asc')
+      .startAt(data.computed)
+      .limitToLast(2)
+      .get()
+
+    let latest = data
+    const length = collectionRef.docs.length
+
+    if (length === 2) {
+      latest = collectionRef.docs[0].data() as IStatistic
+      await collectionRef.docs[1].ref.delete()
+    } else {
+      await collectionRef.docs[0].ref.delete()
+    }
+
+    if (latest.sid) {
+      sid = latest.sid
+    }
+
+    await ref.set({ ...data, sid: ref.id }, { merge: true })
+
+    await updateLeaderboardDoc(sid, leaderboardRef, latest, key, countValue)
+  }
+}
