@@ -67,7 +67,6 @@ export abstract class Score {
 
     if (isPlatformBrowser(platformId)) {
       this.getScores(0)
-      this.subFirestore()
     }
   }
 
@@ -353,37 +352,32 @@ export abstract class Score {
 
   // Firebase testing
   private async addFirebase(statistic: IStatistic): Promise<void> {
-    if (!environment.production) {
-      let currentUser: firebase.User
-      currentUser = await this.angularFireAuth.currentUser
+    let currentUser: firebase.User
+    currentUser = await this.angularFireAuth.currentUser
 
-      if (currentUser) {
-        let firestore: 'high-scores' | 'recent-scores'
+    if (currentUser) {
+      let firestore: 'high-scores' | 'recent-scores'
 
-        if (this.storeName === 'highScores') {
-          firestore = 'high-scores'
-        } else {
-          firestore = 'recent-scores'
-        }
+      if (this.storeName === 'highScores') {
+        firestore = 'high-scores'
+      } else {
+        firestore = 'recent-scores'
+      }
 
-        if (firestore === 'recent-scores') {
-          let doc: AngularFirestoreDocument<firebase.firestore.DocumentData>
-          doc = this.angularFirestore
-            .doc<User>(`memory-game/details/users/${currentUser.uid}`)
-            .collection<firebase.firestore.DocumentData>(firestore)
-            .doc()
+      if (firestore === 'recent-scores') {
+        let doc: AngularFirestoreDocument<firebase.firestore.DocumentData>
+        doc = this.angularFirestore
+          .doc<User>(`memory-game/details/users/${currentUser.uid}`)
+          .collection<firebase.firestore.DocumentData>(firestore)
+          .doc()
 
-          doc.set(statistic, { merge: true })
-        }
+        doc.set(statistic, { merge: true })
       }
     }
   }
 
   // Firebase testing
   private subFirestore(): void {
-    if (environment.production) {
-      return
-    }
     let sub: Subscription
 
     this.auth.user$.subscribe(currentUser => {
