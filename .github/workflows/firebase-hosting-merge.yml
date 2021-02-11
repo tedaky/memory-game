@@ -10,9 +10,24 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - run: 'npm ci && npm run build:shell'
-      - uses: FirebaseExtended/action-hosting-deploy@v0
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: install-and-build
+        run: 'npm ci && npm run build:shell'
+      - name: create-environment
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: "environment.prod.ts"
+          json: ${{ secrets.FIREBASE_ANGULAR_ENVIRONMENT }}
+          dir: "projects/the-application/src/environments"
+      - name: create-firebaserc
+        uses: jsdaniell/create-json@1.1.2
+        with:
+          name: ".firebaserc"
+          json: ${{ secrets.FIREBASE_ANGULAR_RC }}
+          dir: ".firebaserc"
+      - name: firebase
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_TEDAKY_GAMES }}'
