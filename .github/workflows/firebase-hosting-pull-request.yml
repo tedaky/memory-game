@@ -10,17 +10,15 @@ jobs:
       - name: checkout
         uses: actions/checkout@v2
       - name: create-environment-prod
-        uses: jsdaniell/create-json@1.1.2
-        with:
-          name: "environment.prod.ts"
-          json: ${{ secrets.FIREBASE_ANGULAR_ENVIRONMENT }}
-          dir: "projects/the-application/src/environments"
+        uses: "finnp/create-file-action@master"
+        env:
+          FILE_NAME: "projects/the-application/src/environments/environment.prod.ts"
+          FILE_DATA: ${{ secrets.FIREBASE_ANGULAR_ENVIRONMENT }}
       - name: create-environment
-        uses: jsdaniell/create-json@1.1.2
-        with:
-          name: "environment.ts"
-          json: ${{ secrets.FIREBASE_ANGULAR_ENVIRONMENT }}
-          dir: "projects/the-application/src/environments"
+        uses: "finnp/create-file-action@master"
+        env:
+          FILE_NAME: "projects/the-application/src/environments/environment.ts"
+          FILE_DATA: ${{ secrets.FIREBASE_ANGULAR_ENVIRONMENT }}
       - name: create-firebaserc
         uses: jsdaniell/create-json@1.1.2
         with:
