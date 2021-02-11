@@ -9,8 +9,6 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: install-and-build
-        run: 'npm ci && npm run build:shell'
       - name: create-environment
         uses: jsdaniell/create-json@1.1.2
         with:
@@ -23,6 +21,8 @@ jobs:
           name: ".firebaserc"
           json: ${{ secrets.FIREBASE_ANGULAR_RC }}
           dir: ".firebaserc"
+      - name: install-and-build
+        run: 'npm ci && npm run build:shell'
       - name: firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
