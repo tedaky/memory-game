@@ -33,9 +33,7 @@
               "projects/the-application/src/manifest.kn.webmanifest",
               "projects/the-application/src/manifest.te.webmanifest"
             ],
-            "styles": [
-              "projects/the-application/src/styles.scss"
-            ],
+            "styles": ["projects/the-application/src/styles.scss"],
             "scripts": [],
             "webWorkerTsConfig": "projects/the-application/tsconfig.worker.json"
           },
@@ -198,9 +196,7 @@
               "projects/the-application/src/manifest.kn.webmanifest",
               "projects/the-application/src/manifest.te.webmanifest"
             ],
-            "styles": [
-              "projects/the-application/src/styles.scss"
-            ],
+            "styles": ["projects/the-application/src/styles.scss"],
             "scripts": []
           }
         },
