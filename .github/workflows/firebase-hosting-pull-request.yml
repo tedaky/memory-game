@@ -20,7 +20,7 @@ jobs:
         with:
           name: ".firebaserc"
           json: ${{ secrets.FIREBASE_ANGULAR_RC }}
-          dir: ".firebaserc"
+          dir: "."
       - name: install-and-build
         run: 'npm ci && npm run build:shell'
       - name: firebase
