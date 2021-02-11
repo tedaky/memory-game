@@ -8,18 +8,21 @@ const envConfigFile = `export const environment = ${process.env.FIREBASE_ANGULAR
 const envRCFile = process.env.FIREBASE_ANGULAR_RC
 
 writeFile(targetProdPath, envConfigFile, 'utf8', err => {
+  console.log(envConfigFile)
   if (err) {
     return console.log(err)
   }
 })
 
 writeFile(targetPath, envConfigFile, 'utf8', err => {
+  console.log(envConfigFile)
   if (err) {
     return console.log(err)
   }
 })
 
 writeFile(targetRCPath, envRCFile, 'utf8', err => {
+  console.log(envRCFile)
   if (err) {
     return console.log(err)
   }
