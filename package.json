@@ -12,6 +12,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "make-config": "node config.js",
     "package:windows": "electron-packager . --platform=win32",
     "package:mac": "electron-packager . --platform=darwin",
     "postinstall": "ngcc",

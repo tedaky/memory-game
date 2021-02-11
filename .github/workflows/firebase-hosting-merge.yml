@@ -12,24 +12,15 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - name: create-environment-prod
-        uses: "finnp/create-file-action@master"
-        env:
-          FILE_NAME: "projects/the-application/src/environments/environment.prod.ts"
-          FILE_DATA: ${{ secrets.FIREBASE_ANGULAR_ENVIRONMENT }}
+      - name: install
+        run: 'npm ci'
       - name: create-environment
-        uses: "finnp/create-file-action@master"
+        run: 'npm run make-config'
         env:
-          FILE_NAME: "projects/the-application/src/environments/environment.ts"
-          FILE_DATA: ${{ secrets.FIREBASE_ANGULAR_ENVIRONMENT }}
-      - name: create-firebaserc
-        uses: jsdaniell/create-json@1.1.2
-        with:
-          name: ".firebaserc"
-          json: ${{ secrets.FIREBASE_ANGULAR_RC }}
-          dir: "."
-      - name: install-and-build
-        run: 'npm ci && npm run build:shell'
+          FIREBASE_ANGULAR_ENVIRONMENT: ${{ secrets.FIREBASE_ANGULAR_ENVIRONMENT }}
+          FIREBASE_ANGULAR_RC: ${{ secrets.FIREBASE_ANGULAR_RC }}
+      - name: build
+        run: 'npm run build:shell'
       - name: firebase
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
